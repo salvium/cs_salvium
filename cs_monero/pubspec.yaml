@@ -10,13 +10,8 @@ environment:
 # Add regular dependencies here.
 dependencies:
   ffi: ^2.0.1
-  hive: ^2.2.3
   logger: ^2.4.0
-
-  stack_wallet_backup:
-    git:
-      url: https://github.com/cypherstack/stack_wallet_backup.git
-      ref: 5efe8f8f259317d32b6f037cf91f62e06125c040
+  meta: ^1.15.0
 
 # TODO: git and hash for monero.dart
   monero:
@@ -24,7 +19,6 @@ dependencies:
 
   compat:
     path: ../compat
-  meta: ^1.15.0
 
 dev_dependencies:
   lints: ^4.0.0
