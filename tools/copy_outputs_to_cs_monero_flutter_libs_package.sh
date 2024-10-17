@@ -14,27 +14,27 @@ fi
 if [[ -d "${OUTPUTS_DIR}/ios/Frameworks" ]];
 then
   IOS_LIBS_DIR="${LIBS_PACKAGE_DIR}/ios/Frameworks"
-  rm -rf "${IOS_LIBS_DIR}/*.framework"
-  cp -r "${OUTPUTS_DIR}/ios/Frameworks/*.framework" "${IOS_LIBS_DIR}/"
+  rm -rf "${IOS_LIBS_DIR}"
+  cp -r "${OUTPUTS_DIR}/ios/Frameworks" "${IOS_LIBS_DIR}"
 fi
 
 if [[ -d "${OUTPUTS_DIR}/macos/Frameworks" ]];
 then
   MACOS_LIBS_DIR="${LIBS_PACKAGE_DIR}/macos/Frameworks"
-  rm -rf "${MACOS_LIBS_DIR}/*.framework"
-  cp -r "${OUTPUTS_DIR}/macos/Frameworks/*.framework" "${MACOS_LIBS_DIR}/"
+  rm -rf "${MACOS_LIBS_DIR}"
+  cp -r "${OUTPUTS_DIR}/macos/Frameworks" "${MACOS_LIBS_DIR}"
 fi
 
 if [[ -d "${OUTPUTS_DIR}/linux" ]];
 then
-  LINUX_LIBS_DIR="${LIBS_PACKAGE_DIR}/linux"
-  rm -rf "${LINUX_LIBS_DIR}/*.so"
-  cp -r "${OUTPUTS_DIR}/linux/*.so" "${LINUX_LIBS_DIR}/"
+  LINUX_LIBS_DIR="${LIBS_PACKAGE_DIR}/linux/lib"
+  rm -rf "${LINUX_LIBS_DIR}"
+  cp -r "${OUTPUTS_DIR}/linux" "${LINUX_LIBS_DIR}"
 fi
 
 if [[ -d "${OUTPUTS_DIR}/windows" ]];
 then
-  WINDOWS_LIBS_DIR="${LIBS_PACKAGE_DIR}/windows"
-  rm -rf "${WINDOWS_LIBS_DIR}/*.dll"
-  cp -r "${OUTPUTS_DIR}/windows/*.dll" "${WINDOWS_LIBS_DIR}/"
+  WINDOWS_LIBS_DIR="${LIBS_PACKAGE_DIR}/windows/lib"
+  rm -rf "${WINDOWS_LIBS_DIR}"
+  cp -r "${OUTPUTS_DIR}/windows" "${WINDOWS_LIBS_DIR}"
 fi
