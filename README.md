@@ -3,7 +3,7 @@ Refactored and organized version of flutter_libmonero based on https://github.co
 
 ## Usage
 #### Option 1
-Add this repo as a git submodule, [build](https://github.com/cypherstack/cs_monero/README.md#building-monero_c) the wanted platforms, and finally add `cs_monero`, `cs_monero_flutter_libs`, (and `compat` if needed) to your pubspec.yaml as relative dependencies.
+Add this repo as a git submodule, [build](README.md#building-monero_c) the wanted platforms, and finally add `cs_monero`, `cs_monero_flutter_libs`, (and `compat` if needed) to your pubspec.yaml as relative dependencies.
 
 #### Option 2
 Coming soon.
