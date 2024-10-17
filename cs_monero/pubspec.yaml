@@ -1,15 +1,30 @@
 name: cs_monero
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
+repository: https://github.com/cypherstack/cs_monero
 publish_to: none
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.5.3
 
 # Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
+  ffi: ^2.0.1
+  hive: ^2.2.3
+  logger: ^2.4.0
+
+  stack_wallet_backup:
+    git:
+      url: https://github.com/cypherstack/stack_wallet_backup.git
+      ref: 5efe8f8f259317d32b6f037cf91f62e06125c040
+
+# TODO: git and hash for monero.dart
+  monero:
+    path: ../build/monero_c/impls/monero.dart
+
+  compat:
+    path: ../compat
+  meta: ^1.15.0
 
 dev_dependencies:
   lints: ^4.0.0
