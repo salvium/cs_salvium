@@ -6,8 +6,9 @@ import 'package:cs_monero_flutter_libs/cs_monero_flutter_libs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'monero_example.dart';
-import 'wownero_example.dart';
+import 'views/create_wallet_view.dart';
+import 'views/open_wallet_view.dart';
+import 'views/restore_wallet_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,39 +16,30 @@ void main() async {
   Logging.useLogger = true;
 
   runApp(
-    MaterialApp(
-      home: MyApp(),
+    const MaterialApp(
+      home: ExampleApp(),
     ),
   );
 }
 
-class MyApp extends StatefulWidget {
+class ExampleApp extends StatefulWidget {
+  const ExampleApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<ExampleApp> createState() => _ExampleAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _ExampleAppState extends State<ExampleApp> {
   String? _platformVersion = 'Unknown';
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String? platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await CsMoneroFlutterLibs().getPlatformVersion();
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
@@ -56,10 +48,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lib monero example app'),
+        title: const Text('cs_monero example app'),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -70,21 +69,31 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => MoneroExample(),
+                        builder: (context) => const CreateWalletView(),
                       ),
                     );
                   },
-                  child: Text("Monero"),
+                  child: const Text("Create a wallet"),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => WowneroExample(),
+                        builder: (context) => const OpenWalletView(),
                       ),
                     );
                   },
-                  child: Text("Wownero"),
+                  child: const Text("Open a wallet"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RestoreWalletView(),
+                      ),
+                    );
+                  },
+                  child: const Text("Restore a wallet"),
                 ),
               ],
             ),

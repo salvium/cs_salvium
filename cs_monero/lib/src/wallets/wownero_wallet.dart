@@ -63,7 +63,7 @@ class WowneroWallet extends Wallet with Polling {
 
   // static factory constructor functions
 
-  static Future<WowneroWallet> createWallet({
+  static Future<WowneroWallet> create({
     required String path,
     required String password,
     String language = "English",
@@ -919,18 +919,24 @@ class WowneroWallet extends Wallet with Polling {
     });
   }
 
-  // @override
-  // Future<void> close({bool save = false}) async {
-  //   if (isClosed()) return;
-  //
-  //   if (save) {
-  //     await this.save();
-  //   }
-  //
-  //   _walletPointer = null;
-  //   _openedWalletsByPath.remove(_path);
-  //   wownero.WalletManager_closeWallet(_wmPtr, _getWalletPointer(), save);
-  // }
+  // TODO probably get rid of this. Not a good API/Design
+  bool isClosing = false;
+  @override
+  Future<void> close({bool save = false}) async {
+    if (isClosed() || isClosing) return;
+    isClosing = true;
+    stopSyncing();
+    stopListeners();
+
+    if (save) {
+      await this.save();
+    }
+
+    wownero.WalletManager_closeWallet(_wmPtr, _getWalletPointer(), save);
+    _walletPointer = null;
+    _openedWalletsByPath.remove(_path);
+    isClosing = false;
+  }
 
   @override
   bool isClosed() {

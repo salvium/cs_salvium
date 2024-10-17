@@ -27,7 +27,28 @@ Future<String> pathForWallet({
   required String type,
 }) async =>
     await pathForWalletDir(name: name, type: type)
-        .then((path) => path + '/$name');
+        .then((path) => '$path/$name');
+
+Future<List<String>> loadWalletNames(String walletType) async {
+  String path = await pathForWalletDir(name: "dummy", type: walletType);
+
+  path = path.substring(0, path.lastIndexOf("/dummy"));
+
+  final dir = Directory(path);
+
+  if (!dir.existsSync()) {
+    return [];
+  }
+
+  final names = dir
+      .listSync()
+      .whereType<Directory>()
+      .map((e) => e.path.split("/").last)
+      .toList();
+  names.remove("dummy");
+
+  return names;
+}
 
 Future<void> printWalletInfo(Wallet wallet) async {
   await wallet.refreshTransactions();

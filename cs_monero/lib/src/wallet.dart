@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 
 import '../cs_monero.dart';
 import 'models/account.dart';
-import 'models/address.dart';
 
 abstract class Wallet {
   // ===============================
@@ -236,6 +235,6 @@ abstract class Wallet {
   String getPassword();
   void changePassword(String newPassword);
   Future<void> save();
-  // Future<void> close({bool save = false});
+  Future<void> close({bool save = false});
   bool isClosed();
 }

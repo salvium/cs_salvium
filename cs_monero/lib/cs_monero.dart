@@ -10,6 +10,7 @@ export 'src/exceptions/creation_transaction_exception.dart';
 export 'src/logging.dart';
 export 'src/mixins/polling.dart';
 export 'src/mnemonics/mnemonics.dart';
+export 'src/models/address.dart';
 export 'src/models/output.dart';
 export 'src/models/pending_transaction.dart';
 export 'src/models/recipient.dart';

@@ -14,7 +14,6 @@ import '../exceptions/wallet_opening_exception.dart';
 import '../exceptions/wallet_restore_from_keys_exception.dart';
 import '../exceptions/wallet_restore_from_seed_exception.dart';
 import '../models/account.dart';
-import '../models/address.dart';
 
 class MoneroWallet extends Wallet with Polling {
   // internal constructor
@@ -860,18 +859,24 @@ class MoneroWallet extends Wallet with Polling {
     });
   }
 
-  // @override
-  // Future<void> close({bool save = false}) async {
-  //   if (isClosed()) return;
-  //
-  //   if (save) {
-  //     await this.save();
-  //   }
-  //
-  //   _walletPointer = null;
-  //   _openedWalletsByPath.remove(_path);
-  //   monero.WalletManager_closeWallet(_wmPtr, _getWalletPointer(), save);
-  // }
+  // TODO probably get rid of this. Not a good API/Design
+  bool isClosing = false;
+  @override
+  Future<void> close({bool save = false}) async {
+    if (isClosed() || isClosing) return;
+    isClosing = true;
+    stopSyncing();
+    stopListeners();
+
+    if (save) {
+      await this.save();
+    }
+
+    monero.WalletManager_closeWallet(_wmPtr, _getWalletPointer(), save);
+    _walletPointer = null;
+    _openedWalletsByPath.remove(_path);
+    isClosing = false;
+  }
 
   @override
   bool isClosed() {
