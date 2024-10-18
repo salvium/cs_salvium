@@ -12,8 +12,9 @@ Future<String> pathForWalletDir({
     root = (await getLibraryDirectory());
   }
 
-  final walletsDir = Directory('${root.path}/wallets');
-  final walletDire = Directory('${walletsDir.path}/$type/$name');
+  final walletsDir = Directory('${root.path}${Platform.pathSeparator}wallets');
+  final walletDire = Directory(
+      '${walletsDir.path}${Platform.pathSeparator}$type${Platform.pathSeparator}$name');
 
   if (!walletDire.existsSync()) {
     walletDire.createSync(recursive: true);
@@ -27,12 +28,12 @@ Future<String> pathForWallet({
   required String type,
 }) async =>
     await pathForWalletDir(name: name, type: type)
-        .then((path) => '$path/$name');
+        .then((path) => '$path${Platform.pathSeparator}$name');
 
 Future<List<String>> loadWalletNames(String walletType) async {
   String path = await pathForWalletDir(name: "dummy", type: walletType);
 
-  path = path.substring(0, path.lastIndexOf("/dummy"));
+  path = path.substring(0, path.lastIndexOf("${Platform.pathSeparator}dummy"));
 
   final dir = Directory(path);
 
@@ -43,7 +44,7 @@ Future<List<String>> loadWalletNames(String walletType) async {
   final names = dir
       .listSync()
       .whereType<Directory>()
-      .map((e) => e.path.split("/").last)
+      .map((e) => e.path.split(Platform.pathSeparator).last)
       .toList();
   names.remove("dummy");
 
