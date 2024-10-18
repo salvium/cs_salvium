@@ -26,3 +26,4 @@ Run the `build_<platform>.sh` script in `tools/build_scripts` to generate the pl
 
 ## Known Limitations
  - No iOS simulator support
+ - No Android i686 support
