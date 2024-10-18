@@ -39,7 +39,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
         wallet = await WowneroWallet.create(
           path: path,
           password: password,
-          seedType: WowneroSeedType.fourteen,
+          seedType: WowneroSeedType.twentyFive,
         );
         break;
 
