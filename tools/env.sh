@@ -11,6 +11,11 @@ OUTPUTS_DIR="${PROJECT_DIR}/built_outputs"
 MONERO_C_HASH="d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e"
 
 
+if [[ ! -d "${BUILD_DIR}" ]];
+then
+  mkdir -p "${BUILD_DIR}"
+fi
+
 if [[ ! -d "${OUTPUTS_DIR}" ]];
 then
   mkdir -p "${OUTPUTS_DIR}"
