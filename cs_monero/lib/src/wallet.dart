@@ -3,10 +3,91 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 
 import '../cs_monero.dart';
-import 'models/account.dart';
 
 abstract class Wallet {
-  // ===============================
+  Timer? _pollingTimer;
+  final List<WalletListener> _listeners = [];
+
+  void addListener(WalletListener listener) {
+    _listeners.add(listener);
+  }
+
+  void removeListener(WalletListener listener) {
+    _listeners.remove(listener);
+  }
+
+  List<WalletListener> getListeners() => List.unmodifiable(_listeners);
+
+  Duration pollingInterval = const Duration(seconds: 5);
+  void Function()? pollingLoop;
+
+  /// Start polling the wallet.
+  /// Additional calls to [startListeners] will be ignored if it is already running.
+  void startListeners() {
+    _pollingTimer ??= Timer.periodic(
+      pollingInterval,
+      (_) {
+        try {
+          pollingLoop?.call();
+        } catch (error, stackTrace) {
+          for (final listener in getListeners()) {
+            listener.onError?.call(error, stackTrace);
+          }
+        }
+      },
+    );
+  }
+
+  void stopListeners() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
+  }
+
+  int? _lastDaemonHeight;
+  int? _lastSyncHeight;
+  int? _lastBalanceUnlocked;
+  int? _lastBalanceFull;
+
+  void _poll() async {
+    Logging.log?.d("Polling");
+
+    final full = getBalance();
+    final unlocked = getUnlockedBalance();
+    if (unlocked != _lastBalanceUnlocked || full != _lastBalanceFull) {
+      Logging.log?.d("listener.onBalancesChanged");
+      for (final listener in getListeners()) {
+        listener.onBalancesChanged
+            ?.call(newBalance: full, newUnlockedBalance: unlocked);
+      }
+    }
+    _lastBalanceUnlocked = unlocked;
+    _lastBalanceFull = full;
+
+    final nodeHeight = getDaemonHeight();
+    final heightChanged = nodeHeight != _lastDaemonHeight;
+    if (heightChanged) {
+      Logging.log?.d("listener.onNewBlock");
+      for (final listener in getListeners()) {
+        listener.onNewBlock?.call(nodeHeight);
+      }
+    }
+    _lastDaemonHeight = nodeHeight;
+
+    final currentSyncingHeight = syncHeight();
+    if (currentSyncingHeight >= 0 &&
+        currentSyncingHeight <= nodeHeight &&
+        (heightChanged || currentSyncingHeight != _lastSyncHeight)) {
+      Logging.log?.d("listener.onSyncingUpdate");
+      for (final listener in getListeners()) {
+        listener.onSyncingUpdate?.call(
+          syncHeight: currentSyncingHeight,
+          nodeHeight: nodeHeight,
+        );
+      }
+    }
+
+    _lastSyncHeight = currentSyncingHeight;
+  }
 
   Timer? _autoSaveTimer;
   Duration autoSaveInterval = const Duration(minutes: 2);
@@ -121,12 +202,12 @@ abstract class Wallet {
   int getBalance({int accountIndex = 0});
   int getUnlockedBalance({int accountIndex = 0});
 
-  List<Account> getAccounts({bool includeSubaddresses = false, String? tag});
-  Account getAccount(int accountIdx, {bool includeSubaddresses = false});
-  void createAccount({String? label});
-
-  void setAccountLabel(int accountIdx, String label);
-  void setSubaddressLabel(int accountIdx, int addressIdx, String label);
+  // Disable for now
+  // List<Account> getAccounts({bool includeSubaddresses = false});
+  // Account getAccount(int accountIdx, {bool includeSubaddresses = false});
+  // void createAccount({String? label});
+  // void setAccountLabel(int accountIdx, String label);
+  // void setSubaddressLabel(int accountIdx, int addressIdx, String label);
 
   String getTxKey(String txid);
   Transaction getTx(String txid);

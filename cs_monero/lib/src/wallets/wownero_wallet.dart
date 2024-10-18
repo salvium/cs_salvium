@@ -16,8 +16,6 @@ import '../exceptions/wallet_opening_exception.dart';
 import '../exceptions/wallet_restore_from_keys_exception.dart';
 import '../exceptions/wallet_restore_from_seed_exception.dart';
 import '../logging.dart';
-import '../mixins/polling.dart';
-import '../models/account.dart';
 import '../models/address.dart';
 import '../models/output.dart';
 import '../models/pending_transaction.dart';
@@ -25,7 +23,7 @@ import '../models/recipient.dart';
 import '../models/transaction.dart';
 import '../wallet.dart';
 
-class WowneroWallet extends Wallet with Polling {
+class WowneroWallet extends Wallet {
   // internal constructor
   WowneroWallet._(wownero.wallet pointer, String path)
       : _walletPointer = pointer,
@@ -287,7 +285,7 @@ class WowneroWallet extends Wallet with Polling {
     final status = wownero.Wallet_status(wallet._getWalletPointer());
     if (status != 0) {
       final err = wownero.Wallet_errorString(wallet._getWalletPointer());
-      Logging.log?.e("status: " + err);
+      Logging.log?.e("status: $err");
 
       throw WalletOpeningException(message: err);
     }
@@ -548,54 +546,75 @@ class WowneroWallet extends Wallet with Polling {
         accountIndex: accountIndex,
       );
 
-  @override
-  List<Account> getAccounts({bool includeSubaddresses = false, String? tag}) {
-    final accountsCount =
-        wownero.Wallet_numSubaddressAccounts(_getWalletPointer());
-    final accountsPointer =
-        wownero.Wallet_subaddressAccount(_getWalletPointer());
-    final accountsSize = wownero.AddressBook_getAll_size(accountsPointer);
-
-    // TODO:
-    // for (int i = 0 ; i < accountsCount; i++) {
-    //   final primaryAddress = getAddress(accountIndex: i, addressIndex: 0);
-    //
-    //   final account = Account(index: i, primaryAddress: primaryAddress.value,
-    //       balance: balance,
-    //       unlockedBalance: unlockedBalance,
-    //       tag: tag,
-    //       subaddresses: subaddresses,
-    //   );
-    // }
-    //
-    throw UnimplementedError("TODO");
-  }
-
-  @override
-  Account getAccount(int accountIdx, {bool includeSubaddresses = false}) {
-    throw UnimplementedError("TODO");
-  }
-
-  @override
-  void createAccount({String? label}) {
-    wownero.Wallet_addSubaddressAccount(_getWalletPointer(),
-        label: label ?? "");
-  }
-
-  @override
-  void setAccountLabel(int accountIdx, String label) {
-    throw UnimplementedError("TODO");
-  }
-
-  @override
-  void setSubaddressLabel(int accountIdx, int addressIdx, String label) {
-    wownero.Wallet_setSubaddressLabel(
-      _getWalletPointer(),
-      accountIndex: accountIdx,
-      addressIndex: addressIdx,
-      label: label,
-    );
-  }
+  // @override
+  // List<Account> getAccounts({bool includeSubaddresses = false}) {
+  //   final accountsCount =
+  //       wownero.Wallet_numSubaddressAccounts(_getWalletPointer());
+  //   final accountsPointer =
+  //       wownero.Wallet_subaddressAccount(_getWalletPointer());
+  //   final accountsSize = wownero.AddressBook_getAll_size(accountsPointer);
+  //
+  //   print("accountsSize: $accountsSize");
+  //   print("accountsCount: $accountsCount");
+  //
+  //   final List<Account> accounts = [];
+  //
+  //   for (int i = 0; i < accountsCount; i++) {
+  //     final primaryAddress = getAddress(accountIndex: i, addressIndex: 0);
+  //     final List<Address> subAddresses = [];
+  //
+  //     if (includeSubaddresses) {
+  //       final subaddressCount = wownero.Wallet_numSubaddresses(
+  //         _getWalletPointer(),
+  //         accountIndex: i,
+  //       );
+  //       for (int j = 0; j < subaddressCount; j++) {
+  //         final address = getAddress(accountIndex: i, addressIndex: j);
+  //         subAddresses.add(address);
+  //       }
+  //     }
+  //
+  //     final account = Account(
+  //       index: i,
+  //       primaryAddress: primaryAddress.value,
+  //       balance: BigInt.from(getBalance(accountIndex: i)),
+  //       unlockedBalance: BigInt.from(getUnlockedBalance(accountIndex: i)),
+  //       subaddresses: subAddresses,
+  //     );
+  //
+  //     accounts.add(account);
+  //   }
+  //
+  //   return accounts;
+  //
+  //   // throw UnimplementedError("TODO");
+  // }
+  //
+  // @override
+  // Account getAccount(int accountIdx, {bool includeSubaddresses = false}) {
+  //   throw UnimplementedError("TODO");
+  // }
+  //
+  // @override
+  // void createAccount({String? label}) {
+  //   wownero.Wallet_addSubaddressAccount(_getWalletPointer(),
+  //       label: label ?? "");
+  // }
+  //
+  // @override
+  // void setAccountLabel(int accountIdx, String label) {
+  //   throw UnimplementedError("TODO");
+  // }
+  //
+  // @override
+  // void setSubaddressLabel(int accountIdx, int addressIdx, String label) {
+  //   wownero.Wallet_setSubaddressLabel(
+  //     _getWalletPointer(),
+  //     accountIndex: accountIdx,
+  //     addressIndex: addressIdx,
+  //     label: label,
+  //   );
+  // }
 
   @override
   String getTxKey(String txid) {
