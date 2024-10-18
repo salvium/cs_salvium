@@ -13,7 +13,7 @@
 1. [Build](README.md#building-monero_c) the platforms you want.
 2. Run `tools/copy_outputs_to_cs_monero_flutter_libs_package.sh` to copy the binaries to where fluter can find them.
 
-#### Use precompiled binaries (at your own risk!!!)
+#### Option 2: Use precompiled binaries (at your own risk!!!)
 1. Run `tools/use_precompiled_at_your_own_risk.sh` to copy the precompiled binaries so flutter can find them.
 
 
