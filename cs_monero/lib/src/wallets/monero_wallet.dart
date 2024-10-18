@@ -539,16 +539,16 @@ class MoneroWallet extends Wallet with Polling {
   }
 
   @override
-  String getTxKey(String txId) {
-    return monero.Wallet_getTxKey(_getWalletPointer(), txid: txId);
+  String getTxKey(String txid) {
+    return monero.Wallet_getTxKey(_getWalletPointer(), txid: txid);
   }
 
   @override
-  Transaction getTx(String txId) {
+  Transaction getTx(String txid) {
     return Transaction(
       txInfo: monero.TransactionHistory_transactionById(
         _transactionHistoryPointer!,
-        txid: txId,
+        txid: txid,
       ),
       getTxKey: getTxKey,
     );

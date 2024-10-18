@@ -598,16 +598,16 @@ class WowneroWallet extends Wallet with Polling {
   }
 
   @override
-  String getTxKey(String txId) {
-    return wownero.Wallet_getTxKey(_getWalletPointer(), txid: txId);
+  String getTxKey(String txid) {
+    return wownero.Wallet_getTxKey(_getWalletPointer(), txid: txid);
   }
 
   @override
-  Transaction getTx(String txId) {
+  Transaction getTx(String txid) {
     return Transaction(
       txInfo: wownero.TransactionHistory_transactionById(
         _transactionHistoryPointer!,
-        txid: txId,
+        txid: txid,
       ),
       getTxKey: getTxKey,
     );
