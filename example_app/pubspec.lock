@@ -44,9 +44,11 @@ packages:
   compat:
     dependency: transitive
     description:
-      path: "../compat"
-      relative: true
-    source: path
+      path: compat
+      ref: d4947cb84b2a54da25cb96675a8c2e9026266495
+      resolved-ref: d4947cb84b2a54da25cb96675a8c2e9026266495
+      url: "https://github.com/cypherstack/cs_monero"
+    source: git
     version: "1.0.0"
   crypto:
     dependency: transitive
@@ -179,9 +181,11 @@ packages:
   monero:
     dependency: transitive
     description:
-      path: "../build/monero_c/impls/monero.dart"
-      relative: true
-    source: path
+      path: "impls/monero.dart"
+      ref: d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e
+      resolved-ref: d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e
+      url: "https://github.com/cypherstack/monero_c"
+    source: git
     version: "0.0.0"
   path:
     dependency: transitive

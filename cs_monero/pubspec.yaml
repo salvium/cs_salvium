@@ -14,6 +14,12 @@ dependencies:
   meta: ^1.15.0
 
 # TODO: git and hash for monero.dart
+#    # THIS HASH MUST MATCH `MONERO_C_HASH` in env.sh!!!!
+#    monero:
+#      git:
+#        url: https://github.com/cypherstack/monero_c
+#        ref: d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e
+#        path: impls/monero.dart
   monero:
     path: ../build/monero_c/impls/monero.dart
 

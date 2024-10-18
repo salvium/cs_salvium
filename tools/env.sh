@@ -5,8 +5,9 @@ TOOLS_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PROJECT_DIR=$( realpath "${TOOLS_DIR}/.." )
 BUILD_DIR="${TOOLS_DIR}/../build"
 MONERO_C_DIR="${BUILD_DIR}/monero_c"
-MONERO_C_HASH="6eb571ea498ed7b854934785f00fabfd0dadf75b"
 OUTPUTS_DIR="${PROJECT_DIR}/built_outputs"
+
+MONERO_C_HASH="d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e"
 
 
 if [[ ! -d "${OUTPUTS_DIR}" ]];
