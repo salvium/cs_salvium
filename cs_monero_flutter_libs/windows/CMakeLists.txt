@@ -54,6 +54,9 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE flutter flutter_wrapper_plugin)
 set(cs_monero_flutter_libs_bundled_libraries
   "${CMAKE_CURRENT_SOURCE_DIR}/lib/monero_libwallet2_api_c.dll"
   "${CMAKE_CURRENT_SOURCE_DIR}/lib/wownero_libwallet2_api_c.dll"
+  "${CMAKE_CURRENT_SOURCE_DIR}/lib/libpolyseed.dll"
+  "${CMAKE_CURRENT_SOURCE_DIR}/lib/libssp-0.dll"
+  "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwinpthread-1.dll"
   PARENT_SCOPE
 )
 
