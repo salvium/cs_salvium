@@ -7,6 +7,7 @@ BUILD_DIR="${TOOLS_DIR}/../build"
 MONERO_C_DIR="${BUILD_DIR}/monero_c"
 OUTPUTS_DIR="${PROJECT_DIR}/built_outputs"
 
+# If this gets changed, update it in cs_monero/pubspec.yaml as well!
 MONERO_C_HASH="d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e"
 
 

@@ -179,9 +179,11 @@ packages:
   monero:
     dependency: transitive
     description:
-      path: "../build/monero_c/impls/monero.dart"
-      relative: true
-    source: path
+      path: "impls/monero.dart"
+      ref: d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e
+      resolved-ref: d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e
+      url: "https://github.com/cypherstack/monero_c"
+    source: git
     version: "0.0.0"
   path:
     dependency: transitive
