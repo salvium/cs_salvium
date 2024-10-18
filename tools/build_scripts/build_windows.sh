@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+cd "$(dirname "$0")"
 source ../env.sh
 set -x -e
 
@@ -23,12 +24,11 @@ pushd "${MONERO_C_DIR}"
       fi
     done
   done
-
-  # based on the windows cmakelists file from stack wallet...
-  cp "${MONERO_C_RELEASE_DIR}/monero/x86_64-w64-mingw32_libwallet2_api_c.dll" "${WIN_OUTPUTS_DIR}/monero_libwallet2_api_c.dll"
-  cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libwallet2_api_c.dll" "${WIN_OUTPUTS_DIR}/wownero_libwallet2_api_c.dll"
-  cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libpolyseed.dll" "${WIN_OUTPUTS_DIR}/libpolyseed.dll"
-  cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libssp-0.dll" "${WIN_OUTPUTS_DIR}/libssp-0.dll"
-  cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libwinpthread-1.dll" "${WIN_OUTPUTS_DIR}/libwinpthread-1.dll"
-
 popd
+
+# based on the windows cmakelists file from stack wallet...
+cp "${MONERO_C_RELEASE_DIR}/monero/x86_64-w64-mingw32_libwallet2_api_c.dll" "${WIN_OUTPUTS_DIR}/monero_libwallet2_api_c.dll"
+cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libwallet2_api_c.dll" "${WIN_OUTPUTS_DIR}/wownero_libwallet2_api_c.dll"
+cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libpolyseed.dll" "${WIN_OUTPUTS_DIR}/libpolyseed.dll"
+cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libssp-0.dll" "${WIN_OUTPUTS_DIR}/libssp-0.dll"
+cp "${MONERO_C_RELEASE_DIR}/wownero/x86_64-w64-mingw32_libwinpthread-1.dll" "${WIN_OUTPUTS_DIR}/libwinpthread-1.dll"

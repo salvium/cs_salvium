@@ -6,7 +6,7 @@ PROJECT_DIR=$( realpath "${TOOLS_DIR}/.." )
 BUILD_DIR="${TOOLS_DIR}/../build"
 MONERO_C_DIR="${BUILD_DIR}/monero_c"
 MONERO_C_HASH="6eb571ea498ed7b854934785f00fabfd0dadf75b"
-OUTPUTS_DIR="${BUILD_DIR}/outputs"
+OUTPUTS_DIR="${PROJECT_DIR}/built_outputs"
 
 
 if [[ ! -d "${OUTPUTS_DIR}" ]];
