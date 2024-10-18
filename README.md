@@ -23,3 +23,6 @@ Run the `build_<platform>.sh` script in `tools/build_scripts` to generate the pl
 ##### Building instructions
 - This repo just has some wrapper scripts. For details and requirements see https://github.com/MrCyjaneK/monero_c/
 - To do a clean/fresh build, just the delete the top level `build` dir
+
+## Known Limitations
+ - No iOS simulator support
