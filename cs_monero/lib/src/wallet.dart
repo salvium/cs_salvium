@@ -171,6 +171,7 @@ abstract class Wallet {
   // DaemonConnection getDaemonConnection();
   void setProxyUri(String proxyUri);
   Future<bool> isConnectedToDaemon();
+  Future<bool> isSynced();
   // Version getVersion();
   // NetworkType getNetworkType();
   String getPath();

@@ -369,6 +369,15 @@ class MoneroWallet extends Wallet {
   }
 
   @override
+  Future<bool> isSynced() async {
+    final address = _getWalletPointer().address;
+    final result = await Isolate.run(() {
+      return monero.Wallet_synchronized(Pointer.fromAddress(address));
+    });
+    return result;
+  }
+
+  @override
   String getPath() {
     final path = monero.Wallet_path(_getWalletPointer());
     return path;
