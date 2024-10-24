@@ -46,7 +46,7 @@ class _WalletViewState extends State<WalletView> {
   void initState() {
     super.initState();
 
-    (widget.wallet as Polling).addListener(
+    widget.wallet.addListener(
       WalletListener(
         onSyncingUpdate: ({
           required int syncHeight,
@@ -77,7 +77,7 @@ class _WalletViewState extends State<WalletView> {
       ),
     );
 
-    update().then((_) => (widget.wallet as Polling).startListeners());
+    update().then((_) => widget.wallet.startListeners());
   }
 
   @override
