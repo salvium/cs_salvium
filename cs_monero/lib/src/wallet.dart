@@ -19,7 +19,6 @@ abstract class Wallet {
   List<WalletListener> getListeners() => List.unmodifiable(_listeners);
 
   Duration pollingInterval = const Duration(seconds: 5);
-  void Function()? pollingLoop;
 
   /// Start polling the wallet.
   /// Additional calls to [startListeners] will be ignored if it is already running.
@@ -28,7 +27,7 @@ abstract class Wallet {
       pollingInterval,
       (_) {
         try {
-          pollingLoop?.call();
+          _poll();
         } catch (error, stackTrace) {
           for (final listener in getListeners()) {
             listener.onError?.call(error, stackTrace);
