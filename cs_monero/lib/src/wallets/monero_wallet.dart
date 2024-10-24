@@ -370,11 +370,24 @@ class MoneroWallet extends Wallet {
 
   @override
   Future<bool> isSynced() async {
-    final address = _getWalletPointer().address;
-    final result = await Isolate.run(() {
-      return monero.Wallet_synchronized(Pointer.fromAddress(address));
-    });
-    return result;
+    // So `Wallet_synchronized` will return true even if doing a rescan.
+    // As such, we'll just do an approximation and assume (probably wrongly so)
+    // that current sync/scan height and daemon height calls will return sane
+    // values.
+    final current = syncHeight();
+    final daemonHeight = getDaemonHeight();
+
+    // if difference is less than an arbitrary low but non zero value, then make
+    // the call to `Wallet_synchronized`
+    if (daemonHeight > 0 && daemonHeight - current < 10) {
+      final address = _getWalletPointer().address;
+      final result = await Isolate.run(() {
+        return monero.Wallet_synchronized(Pointer.fromAddress(address));
+      });
+      return result;
+    }
+
+    return false;
   }
 
   @override
