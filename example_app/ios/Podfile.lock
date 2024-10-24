@@ -5,14 +5,11 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - stack_wallet_backup (0.0.1):
-    - Flutter
 
 DEPENDENCIES:
   - cs_monero_flutter_libs (from `.symlinks/plugins/cs_monero_flutter_libs/ios`)
   - Flutter (from `Flutter`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - stack_wallet_backup (from `.symlinks/plugins/stack_wallet_backup/ios`)
 
 EXTERNAL SOURCES:
   cs_monero_flutter_libs:
@@ -21,14 +18,11 @@ EXTERNAL SOURCES:
     :path: Flutter
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
-  stack_wallet_backup:
-    :path: ".symlinks/plugins/stack_wallet_backup/ios"
 
 SPEC CHECKSUMS:
   cs_monero_flutter_libs: 43cda3474c2bc907f2b2b5bb26fd89cb864fcfc6
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  stack_wallet_backup: 5b8563aba5d8ffbf2ce1944331ff7294a0ec7c03
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
