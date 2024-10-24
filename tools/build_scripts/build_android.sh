@@ -33,8 +33,8 @@ mkdir -p "${JNI_LIBS_OUTPUT_DIR}/arm64-v8a"
 
 for COIN in monero wownero;
 do
-  cp "${MONERO_C_DIR}/release/${COIN}/x86_64-linux-android_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/x86_64/libmonero_libwallet2_api_c.so"
-#  cp "${MONERO_C_DIR}/release/${COIN}/i686-linux-android_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/i686/libmonero_libwallet2_api_c.so"
-  cp "${MONERO_C_DIR}/release/${COIN}/aarch64-linux-android_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/arm64-v8a/libmonero_libwallet2_api_c.so"
-  cp "${MONERO_C_DIR}/release/${COIN}/armv7a-linux-androideabi_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/armeabi-v7a/libmonero_libwallet2_api_c.so"
+  cp "${MONERO_C_DIR}/release/${COIN}/x86_64-linux-android_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/x86_64/lib${COIN}_libwallet2_api_c.so"
+#  cp "${MONERO_C_DIR}/release/${COIN}/i686-linux-android_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/i686/lib${COIN}_libwallet2_api_c.so"
+  cp "${MONERO_C_DIR}/release/${COIN}/aarch64-linux-android_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/arm64-v8a/lib${COIN}_libwallet2_api_c.so"
+  cp "${MONERO_C_DIR}/release/${COIN}/armv7a-linux-androideabi_libwallet2_api_c.so" "${JNI_LIBS_OUTPUT_DIR}/armeabi-v7a/lib${COIN}_libwallet2_api_c.so"
 done
