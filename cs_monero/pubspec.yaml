@@ -18,7 +18,7 @@ dependencies:
   monero:
     git:
       url: https://github.com/cypherstack/monero_c
-      ref: d04dcf67ec042fca76b48ffc09ea9d2ea4b5106e
+      ref: 614b5c731fb671d112f860fd57b5fd0c8c11e92c
       path: impls/monero.dart
 #  monero:
 #    path: ../build/monero_c/impls/monero.dart
