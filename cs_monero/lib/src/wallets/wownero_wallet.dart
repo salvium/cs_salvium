@@ -55,10 +55,7 @@ class WowneroWallet extends Wallet {
 
   Set<int> _subaddressIndexesFrom(wownero.TransactionInfo infoPointer) {
     final indexesString = wownero.TransactionInfo_subaddrIndex(infoPointer);
-    print(indexesString);
-    final indexes =
-        indexesString.split(wownero.defaultSeparatorStr).map(int.parse);
-    print(indexes);
+    final indexes = indexesString.split(", ").map(int.parse);
     return indexes.toSet();
   }
 

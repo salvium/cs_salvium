@@ -55,20 +55,11 @@ class MoneroWallet extends Wallet {
 
   Set<int> _subaddressIndexesFrom(monero.TransactionInfo infoPointer) {
     final indexesString = monero.TransactionInfo_subaddrIndex(infoPointer);
-    print(indexesString);
-    final indexes =
-        indexesString.split(monero.defaultSeparatorStr).map(int.parse);
-    print(indexes);
+    final indexes = indexesString.split(", ").map(int.parse);
     return indexes.toSet();
   }
 
   Transaction _transactionFrom(monero.TransactionInfo infoPointer) {
-    final indexesString = monero.TransactionInfo_subaddrIndex(infoPointer);
-    print(indexesString);
-    final indexes =
-        indexesString.split(monero.defaultSeparatorStr).map(int.parse);
-    print(indexes);
-
     return Transaction(
       displayLabel: monero.TransactionInfo_label(infoPointer),
       description: monero.TransactionInfo_description(infoPointer),
