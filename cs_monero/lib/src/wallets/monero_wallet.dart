@@ -586,7 +586,11 @@ class MoneroWallet extends Wallet {
   }
 
   @override
-  Transaction getTx(String txid) {
+  Future<Transaction> getTx(String txid, {bool refresh = false}) async {
+    if (refresh) {
+      await refreshTransactions();
+    }
+
     return Transaction(
       txInfo: monero.TransactionHistory_transactionById(
         _transactionHistoryPointer!,
@@ -597,7 +601,11 @@ class MoneroWallet extends Wallet {
   }
 
   @override
-  List<Transaction> getTxs() {
+  Future<List<Transaction>> getTxs({bool refresh = false}) async {
+    if (refresh) {
+      await refreshTransactions();
+    }
+
     final size = transactionCount();
 
     return List.generate(
@@ -613,15 +621,20 @@ class MoneroWallet extends Wallet {
   }
 
   @override
-  Future<List<Output>> getOutputs({bool includeSpent = false}) async {
+  Future<List<Output>> getOutputs({
+    bool includeSpent = false,
+    bool refresh = false,
+  }) async {
     try {
-      await refreshOutputs();
+      if (refresh) {
+        await refreshOutputs();
+      }
 
       // final count = monero.Coins_getAll_size(_coinsPointer!);
       // why tho?
       final count = monero.Coins_count(_coinsPointer!);
 
-      Logging.log?.i("monero::found_utxo_count=$count");
+      Logging.log?.i("monero outputs found=$count");
 
       final List<Output> result = [];
 
@@ -795,8 +808,8 @@ class MoneroWallet extends Wallet {
       }
 
       return PendingTransaction(
-        amount: monero.PendingTransaction_amount(pendingTxPointer),
-        fee: monero.PendingTransaction_fee(pendingTxPointer),
+        amount: BigInt.from(monero.PendingTransaction_amount(pendingTxPointer)),
+        fee: BigInt.from(monero.PendingTransaction_fee(pendingTxPointer)),
         txid: monero.PendingTransaction_txid(pendingTxPointer, ''),
         hex: monero.PendingTransaction_hex(pendingTxPointer, ""),
         pointerAddress: pendingTxPointer.address,
@@ -851,8 +864,8 @@ class MoneroWallet extends Wallet {
         );
       }
       return PendingTransaction(
-        amount: monero.PendingTransaction_amount(pendingTxPointer),
-        fee: monero.PendingTransaction_fee(pendingTxPointer),
+        amount: BigInt.from(monero.PendingTransaction_amount(pendingTxPointer)),
+        fee: BigInt.from(monero.PendingTransaction_fee(pendingTxPointer)),
         txid: monero.PendingTransaction_txid(pendingTxPointer, ''),
         hex: monero.PendingTransaction_hex(pendingTxPointer, ''),
         pointerAddress: pendingTxPointer.address,

@@ -11,25 +11,25 @@ class Transaction {
         ),
         isSpend = monero.TransactionInfo_direction(txInfo) ==
             monero.TransactionInfo_Direction.Out,
-        amount = monero.TransactionInfo_amount(txInfo),
+        amount = BigInt.from(monero.TransactionInfo_amount(txInfo)),
         paymentId = monero.TransactionInfo_paymentId(txInfo),
         accountIndex = monero.TransactionInfo_subaddrAccount(txInfo),
-        blockheight = monero.TransactionInfo_blockHeight(txInfo),
+        blockHeight = monero.TransactionInfo_blockHeight(txInfo),
         confirmations = monero.TransactionInfo_confirmations(txInfo),
-        fee = monero.TransactionInfo_fee(txInfo),
+        fee = BigInt.from(monero.TransactionInfo_fee(txInfo)),
         description = monero.TransactionInfo_description(txInfo),
         key = getTxKey(monero.TransactionInfo_hash(txInfo));
 
   final String displayLabel;
   final String description;
-  final int fee;
+  final BigInt fee;
   final int confirmations;
   late final bool isPending = confirmations < 10;
-  final int blockheight;
+  final int blockHeight;
   final int addressIndex = 0;
   final int accountIndex;
   final String paymentId;
-  final int amount;
+  final BigInt amount;
   final bool isSpend;
   late DateTime timeStamp;
   late final bool isConfirmed = !isPending;
@@ -43,7 +43,7 @@ class Transaction {
       "fee": fee,
       "confirmations": confirmations,
       "isPending": isPending,
-      "blockheight": blockheight,
+      "blockHeight": blockHeight,
       "accountIndex": accountIndex,
       "addressIndex": addressIndex,
       "paymentId": paymentId,

@@ -644,7 +644,11 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  Transaction getTx(String txid) {
+  Future<Transaction> getTx(String txid, {bool refresh = false}) async {
+    if (refresh) {
+      await refreshTransactions();
+    }
+
     return Transaction(
       txInfo: wownero.TransactionHistory_transactionById(
         _transactionHistoryPointer!,
@@ -655,7 +659,11 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  List<Transaction> getTxs() {
+  Future<List<Transaction>> getTxs({bool refresh = false}) async {
+    if (refresh) {
+      await refreshTransactions();
+    }
+
     final size = transactionCount();
 
     return List.generate(
@@ -671,15 +679,20 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  Future<List<Output>> getOutputs({bool includeSpent = false}) async {
+  Future<List<Output>> getOutputs({
+    bool includeSpent = false,
+    bool refresh = false,
+  }) async {
     try {
-      await refreshOutputs();
+      if (refresh) {
+        await refreshOutputs();
+      }
 
       // final count = wownero.Coins_getAll_size(_coinsPointer!);
       // why tho?
       final count = wownero.Coins_count(_coinsPointer!);
 
-      Logging.log?.i("monero::found_utxo_count=$count");
+      Logging.log?.i("wownero outputs found=$count");
 
       final List<Output> result = [];
 
@@ -853,8 +866,9 @@ class WowneroWallet extends Wallet {
       }
 
       return PendingTransaction(
-        amount: wownero.PendingTransaction_amount(pendingTxPointer),
-        fee: wownero.PendingTransaction_fee(pendingTxPointer),
+        amount:
+            BigInt.from(wownero.PendingTransaction_amount(pendingTxPointer)),
+        fee: BigInt.from(wownero.PendingTransaction_fee(pendingTxPointer)),
         txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
         hex: wownero.PendingTransaction_hex(pendingTxPointer, ""),
         pointerAddress: pendingTxPointer.address,
@@ -909,8 +923,9 @@ class WowneroWallet extends Wallet {
         );
       }
       return PendingTransaction(
-        amount: wownero.PendingTransaction_amount(pendingTxPointer),
-        fee: wownero.PendingTransaction_fee(pendingTxPointer),
+        amount:
+            BigInt.from(wownero.PendingTransaction_amount(pendingTxPointer)),
+        fee: BigInt.from(wownero.PendingTransaction_fee(pendingTxPointer)),
         txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
         hex: wownero.PendingTransaction_hex(pendingTxPointer, ''),
         pointerAddress: pendingTxPointer.address,

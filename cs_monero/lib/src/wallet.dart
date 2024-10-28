@@ -300,10 +300,13 @@ abstract class Wallet {
   // void setSubaddressLabel(int accountIdx, int addressIdx, String label);
 
   String getTxKey(String txid);
-  Transaction getTx(String txid);
-  List<Transaction> getTxs();
+  Future<Transaction> getTx(String txid, {bool refresh = false});
+  Future<List<Transaction>> getTxs({bool refresh = false});
   // List<Transfer> getTransfers({int? accountIdx, int? subaddressIdx});
-  Future<List<Output>> getOutputs({bool includeSpent = false});
+  Future<List<Output>> getOutputs({
+    bool includeSpent = false,
+    bool refresh = false,
+  });
 
   Future<bool> exportKeyImages({required String filename, bool all = false});
   Future<bool> importKeyImages({required String filename});
