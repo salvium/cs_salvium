@@ -3,3 +3,6 @@
 *.ipr
 *.iws
 .idea/
+
+build
+built_outputs

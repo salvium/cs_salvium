@@ -1,15 +1,29 @@
 name: cs_monero
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
+repository: https://github.com/cypherstack/cs_monero
 publish_to: none
-# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.5.3
 
 # Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
+  ffi: ^2.0.1
+  logger: ^2.4.0
+  meta: ^1.15.0
+
+  # THIS HASH MUST MATCH `MONERO_C_HASH` in env.sh!!!!
+  monero:
+    git:
+      url: https://github.com/cypherstack/monero_c
+      ref: 614b5c731fb671d112f860fd57b5fd0c8c11e92c
+      path: impls/monero.dart
+
+  # required for package:compat/old_cw_core/get_height_by_date.dart
+  # This should be removed when possible
+  compat:
+    path: ../compat
 
 dev_dependencies:
   lints: ^4.0.0

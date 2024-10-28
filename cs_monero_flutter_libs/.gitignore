@@ -27,3 +27,9 @@ migrate_working_dir/
 **/doc/api/
 .dart_tool/
 build/
+
+android/src/main/jniLibs
+ios/Frameworks
+macos/Frameworks
+linux/lib
+windows/lib
