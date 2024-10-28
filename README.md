@@ -31,3 +31,6 @@ Run the `build_<platform>.sh` script in `tools/build_scripts` to generate the pl
 ## TODO
  - Tests? (at least what is possible)
  - Accounts API?
+ - Use FFI project skeleton for libs vs Platform Plugin?
+ - Cleaner/more user friendly API
+ - Remove cs_monero's compat dependency (aka add get height by date functionality to cs_monero)
