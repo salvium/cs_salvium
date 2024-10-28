@@ -8,6 +8,7 @@ import 'package:monero/monero.dart' as monero;
 import 'package:monero/src/generated_bindings_monero.g.dart' as monero_gen;
 
 import '../../cs_monero.dart';
+import '../enums/min_confirms.dart';
 import '../exceptions/setup_wallet_exception.dart';
 import '../exceptions/wallet_creation_exception.dart';
 import '../exceptions/wallet_opening_exception.dart';
@@ -48,6 +49,45 @@ class MoneroWallet extends Wallet {
       );
     }
     return _walletPointer!;
+  }
+
+  // private helpers
+
+  Set<int> _subaddressIndexesFrom(monero.TransactionInfo infoPointer) {
+    final indexesString = monero.TransactionInfo_subaddrIndex(infoPointer);
+    print(indexesString);
+    final indexes =
+        indexesString.split(monero.defaultSeparatorStr).map(int.parse);
+    print(indexes);
+    return indexes.toSet();
+  }
+
+  Transaction _transactionFrom(monero.TransactionInfo infoPointer) {
+    final indexesString = monero.TransactionInfo_subaddrIndex(infoPointer);
+    print(indexesString);
+    final indexes =
+        indexesString.split(monero.defaultSeparatorStr).map(int.parse);
+    print(indexes);
+
+    return Transaction(
+      displayLabel: monero.TransactionInfo_label(infoPointer),
+      description: monero.TransactionInfo_description(infoPointer),
+      fee: BigInt.from(monero.TransactionInfo_fee(infoPointer)),
+      confirmations: monero.TransactionInfo_confirmations(infoPointer),
+      blockHeight: monero.TransactionInfo_blockHeight(infoPointer),
+      accountIndex: monero.TransactionInfo_subaddrAccount(infoPointer),
+      addressIndexes: _subaddressIndexesFrom(infoPointer),
+      paymentId: monero.TransactionInfo_paymentId(infoPointer),
+      amount: BigInt.from(monero.TransactionInfo_amount(infoPointer)),
+      isSpend: monero.TransactionInfo_direction(infoPointer) ==
+          monero.TransactionInfo_Direction.Out,
+      hash: monero.TransactionInfo_hash(infoPointer),
+      key: getTxKey(monero.TransactionInfo_hash(infoPointer)),
+      timeStamp: DateTime.fromMillisecondsSinceEpoch(
+        monero.TransactionInfo_timestamp(infoPointer) * 1000,
+      ),
+      minConfirms: MinConfirms.monero,
+    );
   }
 
   // ===========================================================================
@@ -591,12 +631,11 @@ class MoneroWallet extends Wallet {
       await refreshTransactions();
     }
 
-    return Transaction(
-      txInfo: monero.TransactionHistory_transactionById(
+    return _transactionFrom(
+      monero.TransactionHistory_transactionById(
         _transactionHistoryPointer!,
         txid: txid,
       ),
-      getTxKey: getTxKey,
     );
   }
 
@@ -610,12 +649,11 @@ class MoneroWallet extends Wallet {
 
     return List.generate(
       size,
-      (index) => Transaction(
-        txInfo: monero.TransactionHistory_transaction(
+      (index) => _transactionFrom(
+        monero.TransactionHistory_transaction(
           _transactionHistoryPointer!,
           index: index,
         ),
-        getTxKey: getTxKey,
       ),
     );
   }

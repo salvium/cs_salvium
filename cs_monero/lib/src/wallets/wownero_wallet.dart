@@ -7,21 +7,13 @@ import 'package:meta/meta.dart';
 import 'package:monero/src/generated_bindings_wownero.g.dart' as wownero_gen;
 import 'package:monero/wownero.dart' as wownero;
 
-import '../enums/transaction_priority.dart';
-import '../enums/wownero_seed_type.dart';
-import '../exceptions/creation_transaction_exception.dart';
+import '../../cs_monero.dart';
+import '../enums/min_confirms.dart';
 import '../exceptions/setup_wallet_exception.dart';
 import '../exceptions/wallet_creation_exception.dart';
 import '../exceptions/wallet_opening_exception.dart';
 import '../exceptions/wallet_restore_from_keys_exception.dart';
 import '../exceptions/wallet_restore_from_seed_exception.dart';
-import '../logging.dart';
-import '../models/address.dart';
-import '../models/output.dart';
-import '../models/pending_transaction.dart';
-import '../models/recipient.dart';
-import '../models/transaction.dart';
-import '../wallet.dart';
 
 class WowneroWallet extends Wallet {
   // internal constructor
@@ -57,6 +49,39 @@ class WowneroWallet extends Wallet {
       );
     }
     return _walletPointer!;
+  }
+
+  // private helpers
+
+  Set<int> _subaddressIndexesFrom(wownero.TransactionInfo infoPointer) {
+    final indexesString = wownero.TransactionInfo_subaddrIndex(infoPointer);
+    print(indexesString);
+    final indexes =
+        indexesString.split(wownero.defaultSeparatorStr).map(int.parse);
+    print(indexes);
+    return indexes.toSet();
+  }
+
+  Transaction _transactionFrom(wownero.TransactionInfo infoPointer) {
+    return Transaction(
+      displayLabel: wownero.TransactionInfo_label(infoPointer),
+      description: wownero.TransactionInfo_description(infoPointer),
+      fee: BigInt.from(wownero.TransactionInfo_fee(infoPointer)),
+      confirmations: wownero.TransactionInfo_confirmations(infoPointer),
+      blockHeight: wownero.TransactionInfo_blockHeight(infoPointer),
+      accountIndex: wownero.TransactionInfo_subaddrAccount(infoPointer),
+      addressIndexes: _subaddressIndexesFrom(infoPointer),
+      paymentId: wownero.TransactionInfo_paymentId(infoPointer),
+      amount: BigInt.from(wownero.TransactionInfo_amount(infoPointer)),
+      isSpend: wownero.TransactionInfo_direction(infoPointer) ==
+          wownero.TransactionInfo_Direction.Out,
+      hash: wownero.TransactionInfo_hash(infoPointer),
+      key: getTxKey(wownero.TransactionInfo_hash(infoPointer)),
+      timeStamp: DateTime.fromMillisecondsSinceEpoch(
+        wownero.TransactionInfo_timestamp(infoPointer) * 1000,
+      ),
+      minConfirms: MinConfirms.wownero,
+    );
   }
 
   // static factory constructor functions
@@ -649,12 +674,11 @@ class WowneroWallet extends Wallet {
       await refreshTransactions();
     }
 
-    return Transaction(
-      txInfo: wownero.TransactionHistory_transactionById(
+    return _transactionFrom(
+      wownero.TransactionHistory_transactionById(
         _transactionHistoryPointer!,
         txid: txid,
       ),
-      getTxKey: getTxKey,
     );
   }
 
@@ -668,12 +692,11 @@ class WowneroWallet extends Wallet {
 
     return List.generate(
       size,
-      (index) => Transaction(
-        txInfo: wownero.TransactionHistory_transaction(
+      (index) => _transactionFrom(
+        wownero.TransactionHistory_transaction(
           _transactionHistoryPointer!,
           index: index,
         ),
-        getTxKey: getTxKey,
       ),
     );
   }
