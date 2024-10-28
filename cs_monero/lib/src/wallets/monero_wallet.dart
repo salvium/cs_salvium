@@ -685,6 +685,8 @@ class MoneroWallet extends Wallet {
               isUnlocked: monero.CoinsInfo_unlocked(coinPointer),
               vout: monero.CoinsInfo_internalOutputIndex(coinPointer),
               spent: spent,
+              spentHeight:
+                  spent ? monero.CoinsInfo_spentHeight(coinPointer) : null,
               height: monero.CoinsInfo_blockHeight(coinPointer),
               coinbase: monero.CoinsInfo_coinbase(coinPointer),
             );

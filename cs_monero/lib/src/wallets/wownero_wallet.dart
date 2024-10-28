@@ -734,6 +734,8 @@ class WowneroWallet extends Wallet {
               isUnlocked: wownero.CoinsInfo_unlocked(coinPointer),
               vout: wownero.CoinsInfo_internalOutputIndex(coinPointer),
               spent: spent,
+              spentHeight:
+                  spent ? wownero.CoinsInfo_spentHeight(coinPointer) : null,
               height: wownero.CoinsInfo_blockHeight(coinPointer),
               coinbase: wownero.CoinsInfo_coinbase(coinPointer),
             );
