@@ -638,7 +638,7 @@ class MoneroWallet extends Wallet {
               address: monero.CoinsInfo_address(coinPointer),
               hash: hash,
               keyImage: monero.CoinsInfo_keyImage(coinPointer),
-              value: monero.CoinsInfo_amount(coinPointer),
+              value: BigInt.from(monero.CoinsInfo_amount(coinPointer)),
               isFrozen: monero.CoinsInfo_frozen(coinPointer),
               isUnlocked: monero.CoinsInfo_unlocked(coinPointer),
               vout: monero.CoinsInfo_internalOutputIndex(coinPointer),
@@ -729,95 +729,139 @@ class MoneroWallet extends Wallet {
 
   @override
   Future<PendingTransaction> createTx({
-    required String address,
-    required String paymentId,
+    required Recipient output,
     required TransactionPriority priority,
-    String? amount,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    List<Output>? preferredInputs,
+    String paymentId = "",
+    bool sweep = false,
   }) async {
-    final amt = amount == null ? 0 : monero.Wallet_amountFromString(amount);
-
-    final addressPointer = address.toNativeUtf8();
-    final paymentIdAddress = paymentId.toNativeUtf8();
-    final preferredInputsPointer =
-        preferredInputs.join(monero.defaultSeparatorStr).toNativeUtf8();
-
-    final walletPointerAddress = _getWalletPointer().address;
-    final addressPointerAddress = addressPointer.address;
-    final paymentIdPointerAddress = paymentIdAddress.address;
-    final preferredInputsPointerAddress = preferredInputsPointer.address;
-    final separatorPointerAddress = monero.defaultSeparator.address;
-    final pendingTxPointer = Pointer<Void>.fromAddress(await Isolate.run(() {
-      final tx = monero_gen.MoneroC(DynamicLibrary.open(monero.libPath))
-          .MONERO_Wallet_createTransaction(
-        Pointer.fromAddress(walletPointerAddress),
-        Pointer.fromAddress(addressPointerAddress).cast(),
-        Pointer.fromAddress(paymentIdPointerAddress).cast(),
-        amt,
-        1,
-        priority.value,
-        accountIndex,
-        Pointer.fromAddress(preferredInputsPointerAddress).cast(),
-        Pointer.fromAddress(separatorPointerAddress),
+    final List<String>? processedInputs;
+    if (preferredInputs != null) {
+      processedInputs = await checkAndProcessInputs(
+        inputs: preferredInputs,
+        sendAmount: output.amount,
+        sweep: sweep,
       );
-      return tx.address;
-    }));
-    calloc.free(addressPointer);
-    calloc.free(paymentIdAddress);
-    calloc.free(preferredInputsPointer);
-    final String? error = (() {
-      final status = monero.PendingTransaction_status(pendingTxPointer);
-      if (status == 0) {
-        return null;
-      }
-      return monero.PendingTransaction_errorString(pendingTxPointer);
-    })();
-
-    if (error != null) {
-      final message = error;
-      throw CreationTransactionException(message: message);
+    } else {
+      processedInputs = null;
     }
+    final inputsToUse = preferredInputs ?? <Output>[];
 
-    return PendingTransaction(
-      amount: monero.PendingTransaction_amount(pendingTxPointer),
-      fee: monero.PendingTransaction_fee(pendingTxPointer),
-      txid: monero.PendingTransaction_txid(pendingTxPointer, ''),
-      hex: monero.PendingTransaction_hex(pendingTxPointer, ""),
-      pointerAddress: pendingTxPointer.address,
-    );
+    try {
+      final amt = sweep ? 0 : output.amount.toInt();
+
+      final addressPointer = output.address.toNativeUtf8();
+      final paymentIdAddress = paymentId.toNativeUtf8();
+      final preferredInputsPointer = inputsToUse
+          .map((e) => e.keyImage)
+          .join(monero.defaultSeparatorStr)
+          .toNativeUtf8();
+
+      final walletPointerAddress = _getWalletPointer().address;
+      final addressPointerAddress = addressPointer.address;
+      final paymentIdPointerAddress = paymentIdAddress.address;
+      final preferredInputsPointerAddress = preferredInputsPointer.address;
+      final separatorPointerAddress = monero.defaultSeparator.address;
+      final pendingTxPointer = Pointer<Void>.fromAddress(await Isolate.run(() {
+        final tx = monero_gen.MoneroC(DynamicLibrary.open(monero.libPath))
+            .MONERO_Wallet_createTransaction(
+          Pointer.fromAddress(walletPointerAddress),
+          Pointer.fromAddress(addressPointerAddress).cast(),
+          Pointer.fromAddress(paymentIdPointerAddress).cast(),
+          amt,
+          0, // mixin count/ring size. Ignored here, core code will use appropriate value
+          priority.value,
+          accountIndex,
+          Pointer.fromAddress(preferredInputsPointerAddress).cast(),
+          Pointer.fromAddress(separatorPointerAddress),
+        );
+        return tx.address;
+      }));
+      calloc.free(addressPointer);
+      calloc.free(paymentIdAddress);
+      calloc.free(preferredInputsPointer);
+      final String? error = (() {
+        final status = monero.PendingTransaction_status(pendingTxPointer);
+        if (status == 0) {
+          return null;
+        }
+        return monero.PendingTransaction_errorString(pendingTxPointer);
+      })();
+
+      if (error != null) {
+        final message = error;
+        throw CreationTransactionException(message: message);
+      }
+
+      return PendingTransaction(
+        amount: monero.PendingTransaction_amount(pendingTxPointer),
+        fee: monero.PendingTransaction_fee(pendingTxPointer),
+        txid: monero.PendingTransaction_txid(pendingTxPointer, ''),
+        hex: monero.PendingTransaction_hex(pendingTxPointer, ""),
+        pointerAddress: pendingTxPointer.address,
+      );
+    } finally {
+      if (processedInputs != null) {
+        await postProcessInputs(keyImages: processedInputs);
+      }
+    }
   }
 
   @override
   Future<PendingTransaction> createTxMultiDest({
     required List<Recipient> outputs,
-    required String paymentId,
     required TransactionPriority priority,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    String paymentId = "",
+    List<Output>? preferredInputs,
+    bool sweep = false,
   }) async {
-    final pendingTxPointer = monero.Wallet_createTransactionMultDest(
-      _getWalletPointer(),
-      dstAddr: outputs.map((e) => e.address).toList(),
-      isSweepAll: false,
-      amounts:
-          outputs.map((e) => monero.Wallet_amountFromString(e.amount)).toList(),
-      mixinCount: 0,
-      pendingTransactionPriority: priority.value,
-      subaddr_account: accountIndex,
-    );
-    if (monero.PendingTransaction_status(pendingTxPointer) != 0) {
-      throw CreationTransactionException(
-        message: monero.PendingTransaction_errorString(pendingTxPointer),
+    final List<String>? processedInputs;
+    if (preferredInputs != null) {
+      processedInputs = await checkAndProcessInputs(
+        inputs: preferredInputs,
+        sendAmount: outputs.map((e) => e.amount).fold(
+              BigInt.zero,
+              (p, e) => p + e,
+            ),
+        sweep: sweep,
       );
+    } else {
+      processedInputs = null;
     }
-    return PendingTransaction(
-      amount: monero.PendingTransaction_amount(pendingTxPointer),
-      fee: monero.PendingTransaction_fee(pendingTxPointer),
-      txid: monero.PendingTransaction_txid(pendingTxPointer, ''),
-      hex: monero.PendingTransaction_hex(pendingTxPointer, ''),
-      pointerAddress: pendingTxPointer.address,
-    );
+    final inputsToUse = preferredInputs ?? <Output>[];
+
+    try {
+      final pendingTxPointer = monero.Wallet_createTransactionMultDest(
+        _getWalletPointer(),
+        paymentId: paymentId,
+        dstAddr: outputs.map((e) => e.address).toList(),
+        isSweepAll: sweep,
+        amounts: outputs.map((e) => e.amount.toInt()).toList(),
+        mixinCount:
+            0, // mixin count/ring size. Ignored here, core code will use appropriate value
+        pendingTransactionPriority: priority.value,
+        subaddr_account: accountIndex,
+        preferredInputs: inputsToUse.map((e) => e.keyImage).toList(),
+      );
+      if (monero.PendingTransaction_status(pendingTxPointer) != 0) {
+        throw CreationTransactionException(
+          message: monero.PendingTransaction_errorString(pendingTxPointer),
+        );
+      }
+      return PendingTransaction(
+        amount: monero.PendingTransaction_amount(pendingTxPointer),
+        fee: monero.PendingTransaction_fee(pendingTxPointer),
+        txid: monero.PendingTransaction_txid(pendingTxPointer, ''),
+        hex: monero.PendingTransaction_hex(pendingTxPointer, ''),
+        pointerAddress: pendingTxPointer.address,
+      );
+    } finally {
+      if (processedInputs != null) {
+        await postProcessInputs(keyImages: processedInputs);
+      }
+    }
   }
 
   @override

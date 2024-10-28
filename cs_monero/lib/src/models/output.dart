@@ -14,7 +14,7 @@ class Output {
 
   final String address;
   final String hash;
-  final int value;
+  final BigInt value;
   final String keyImage;
   final bool isFrozen;
   final bool isUnlocked;
@@ -22,4 +22,17 @@ class Output {
   final int vout;
   final bool spent;
   final bool coinbase;
+
+  Output copyWithFrozen(bool isFrozen) => Output(
+        address: address,
+        hash: hash,
+        keyImage: keyImage,
+        value: value,
+        isFrozen: isFrozen,
+        isUnlocked: isUnlocked,
+        height: height,
+        vout: vout,
+        spent: spent,
+        coinbase: coinbase,
+      );
 }

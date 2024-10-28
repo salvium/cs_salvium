@@ -696,7 +696,7 @@ class WowneroWallet extends Wallet {
               address: wownero.CoinsInfo_address(coinPointer),
               hash: hash,
               keyImage: wownero.CoinsInfo_keyImage(coinPointer),
-              value: wownero.CoinsInfo_amount(coinPointer),
+              value: BigInt.from(wownero.CoinsInfo_amount(coinPointer)),
               isFrozen: wownero.CoinsInfo_frozen(coinPointer),
               isUnlocked: wownero.CoinsInfo_unlocked(coinPointer),
               vout: wownero.CoinsInfo_internalOutputIndex(coinPointer),
@@ -787,96 +787,139 @@ class WowneroWallet extends Wallet {
 
   @override
   Future<PendingTransaction> createTx({
-    required String address,
-    required String paymentId,
+    required Recipient output,
     required TransactionPriority priority,
-    String? amount,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    List<Output>? preferredInputs,
+    String paymentId = "",
+    bool sweep = false,
   }) async {
-    final amt = amount == null ? 0 : wownero.Wallet_amountFromString(amount);
-
-    final addressPointer = address.toNativeUtf8();
-    final paymentIdAddress = paymentId.toNativeUtf8();
-    final preferredInputsPointer =
-        preferredInputs.join(wownero.defaultSeparatorStr).toNativeUtf8();
-
-    final walletPointerAddress = _getWalletPointer().address;
-    final addressPointerAddress = addressPointer.address;
-    final paymentIdPointerAddress = paymentIdAddress.address;
-    final preferredInputsPointerAddress = preferredInputsPointer.address;
-    final separatorPointerAddress = wownero.defaultSeparator.address;
-    final pendingTxPointer = Pointer<Void>.fromAddress(await Isolate.run(() {
-      final tx = wownero_gen.WowneroC(DynamicLibrary.open(wownero.libPath))
-          .WOWNERO_Wallet_createTransaction(
-        Pointer.fromAddress(walletPointerAddress),
-        Pointer.fromAddress(addressPointerAddress).cast(),
-        Pointer.fromAddress(paymentIdPointerAddress).cast(),
-        amt,
-        1,
-        priority.value,
-        accountIndex,
-        Pointer.fromAddress(preferredInputsPointerAddress).cast(),
-        Pointer.fromAddress(separatorPointerAddress),
+    final List<String>? processedInputs;
+    if (preferredInputs != null) {
+      processedInputs = await checkAndProcessInputs(
+        inputs: preferredInputs,
+        sendAmount: output.amount,
+        sweep: sweep,
       );
-      return tx.address;
-    }));
-    calloc.free(addressPointer);
-    calloc.free(paymentIdAddress);
-    calloc.free(preferredInputsPointer);
-    final String? error = (() {
-      final status = wownero.PendingTransaction_status(pendingTxPointer);
-      if (status == 0) {
-        return null;
-      }
-      return wownero.PendingTransaction_errorString(pendingTxPointer);
-    })();
-
-    if (error != null) {
-      final message = error;
-      throw CreationTransactionException(message: message);
+    } else {
+      processedInputs = null;
     }
+    final inputsToUse = preferredInputs ?? <Output>[];
 
-    return PendingTransaction(
-      amount: wownero.PendingTransaction_amount(pendingTxPointer),
-      fee: wownero.PendingTransaction_fee(pendingTxPointer),
-      txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
-      hex: wownero.PendingTransaction_hex(pendingTxPointer, ""),
-      pointerAddress: pendingTxPointer.address,
-    );
+    try {
+      final amt = sweep ? 0 : output.amount.toInt();
+
+      final addressPointer = output.address.toNativeUtf8();
+      final paymentIdAddress = paymentId.toNativeUtf8();
+      final preferredInputsPointer = inputsToUse
+          .map((e) => e.keyImage)
+          .join(wownero.defaultSeparatorStr)
+          .toNativeUtf8();
+
+      final walletPointerAddress = _getWalletPointer().address;
+      final addressPointerAddress = addressPointer.address;
+      final paymentIdPointerAddress = paymentIdAddress.address;
+      final preferredInputsPointerAddress = preferredInputsPointer.address;
+      final separatorPointerAddress = wownero.defaultSeparator.address;
+      final pendingTxPointer = Pointer<Void>.fromAddress(await Isolate.run(() {
+        final tx = wownero_gen.WowneroC(DynamicLibrary.open(wownero.libPath))
+            .WOWNERO_Wallet_createTransaction(
+          Pointer.fromAddress(walletPointerAddress),
+          Pointer.fromAddress(addressPointerAddress).cast(),
+          Pointer.fromAddress(paymentIdPointerAddress).cast(),
+          amt,
+          0, // mixin count/ring size. Ignored here, core code will use appropriate value
+          priority.value,
+          accountIndex,
+          Pointer.fromAddress(preferredInputsPointerAddress).cast(),
+          Pointer.fromAddress(separatorPointerAddress),
+        );
+        return tx.address;
+      }));
+      calloc.free(addressPointer);
+      calloc.free(paymentIdAddress);
+      calloc.free(preferredInputsPointer);
+      final String? error = (() {
+        final status = wownero.PendingTransaction_status(pendingTxPointer);
+        if (status == 0) {
+          return null;
+        }
+        return wownero.PendingTransaction_errorString(pendingTxPointer);
+      })();
+
+      if (error != null) {
+        final message = error;
+        throw CreationTransactionException(message: message);
+      }
+
+      return PendingTransaction(
+        amount: wownero.PendingTransaction_amount(pendingTxPointer),
+        fee: wownero.PendingTransaction_fee(pendingTxPointer),
+        txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
+        hex: wownero.PendingTransaction_hex(pendingTxPointer, ""),
+        pointerAddress: pendingTxPointer.address,
+      );
+    } finally {
+      if (processedInputs != null) {
+        await postProcessInputs(keyImages: processedInputs);
+      }
+    }
   }
 
   @override
   Future<PendingTransaction> createTxMultiDest({
     required List<Recipient> outputs,
-    required String paymentId,
     required TransactionPriority priority,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    String paymentId = "",
+    List<Output>? preferredInputs,
+    bool sweep = false,
   }) async {
-    final pendingTxPointer = wownero.Wallet_createTransactionMultDest(
-      _getWalletPointer(),
-      dstAddr: outputs.map((e) => e.address).toList(),
-      isSweepAll: false,
-      amounts: outputs
-          .map((e) => wownero.Wallet_amountFromString(e.amount))
-          .toList(),
-      mixinCount: 0,
-      pendingTransactionPriority: priority.value,
-      subaddr_account: accountIndex,
-    );
-    if (wownero.PendingTransaction_status(pendingTxPointer) != 0) {
-      throw CreationTransactionException(
-        message: wownero.PendingTransaction_errorString(pendingTxPointer),
+    final List<String>? processedInputs;
+    if (preferredInputs != null) {
+      processedInputs = await checkAndProcessInputs(
+        inputs: preferredInputs,
+        sendAmount: outputs.map((e) => e.amount).fold(
+              BigInt.zero,
+              (p, e) => p + e,
+            ),
+        sweep: sweep,
       );
+    } else {
+      processedInputs = null;
     }
-    return PendingTransaction(
-      amount: wownero.PendingTransaction_amount(pendingTxPointer),
-      fee: wownero.PendingTransaction_fee(pendingTxPointer),
-      txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
-      hex: wownero.PendingTransaction_hex(pendingTxPointer, ''),
-      pointerAddress: pendingTxPointer.address,
-    );
+    final inputsToUse = preferredInputs ?? <Output>[];
+
+    try {
+      final pendingTxPointer = wownero.Wallet_createTransactionMultDest(
+        _getWalletPointer(),
+        paymentId: paymentId,
+        dstAddr: outputs.map((e) => e.address).toList(),
+        isSweepAll: sweep,
+        amounts: outputs.map((e) => e.amount.toInt()).toList(),
+        mixinCount:
+            0, // mixin count/ring size. Ignored here, core code will use appropriate value
+        pendingTransactionPriority: priority.value,
+        subaddr_account: accountIndex,
+        preferredInputs: inputsToUse.map((e) => e.keyImage).toList(),
+      );
+      if (wownero.PendingTransaction_status(pendingTxPointer) != 0) {
+        throw CreationTransactionException(
+          message: wownero.PendingTransaction_errorString(pendingTxPointer),
+        );
+      }
+      return PendingTransaction(
+        amount: wownero.PendingTransaction_amount(pendingTxPointer),
+        fee: wownero.PendingTransaction_fee(pendingTxPointer),
+        txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
+        hex: wownero.PendingTransaction_hex(pendingTxPointer, ''),
+        pointerAddress: pendingTxPointer.address,
+      );
+    } finally {
+      if (processedInputs != null) {
+        await postProcessInputs(keyImages: processedInputs);
+      }
+    }
   }
 
   @override
