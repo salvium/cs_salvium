@@ -23,16 +23,18 @@ class WowneroWallet extends Wallet {
   final String _path;
 
   // shared pointer
-  static wownero.WalletManager? __wmPtr;
-  static final wownero.WalletManager _wmPtr = Pointer.fromAddress((() {
+  static wownero.WalletManager? _walletManagerPointerCached;
+  static final wownero.WalletManager _walletManagerPointer =
+      Pointer.fromAddress((() {
     try {
       // wownero.printStarts = true;
-      __wmPtr ??= wownero.WalletManagerFactory_getWalletManager();
-      Logging.log?.i("ptr: $__wmPtr");
+      _walletManagerPointerCached ??=
+          wownero.WalletManagerFactory_getWalletManager();
+      Logging.log?.i("ptr: $_walletManagerPointerCached");
     } catch (e, s) {
       Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
     }
-    return __wmPtr!.address;
+    return _walletManagerPointerCached!.address;
   })());
 
   // internal map of wallets
@@ -51,7 +53,8 @@ class WowneroWallet extends Wallet {
     return _walletPointer!;
   }
 
-  // private helpers
+  // ===========================================================================
+  //  ==== private helpers =====================================================
 
   Set<int> _subaddressIndexesFrom(wownero.TransactionInfo infoPointer) {
     final indexesString = wownero.TransactionInfo_subaddrIndex(infoPointer);
@@ -81,7 +84,8 @@ class WowneroWallet extends Wallet {
     );
   }
 
-  // static factory constructor functions
+  // ===========================================================================
+  //  ==== static factory constructor functions ================================
 
   static Future<WowneroWallet> create({
     required String path,
@@ -114,13 +118,13 @@ class WowneroWallet extends Wallet {
       case WowneroSeedType.sixteen:
         final seed = wownero.Wallet_createPolyseed(language: language);
         walletPointer = wownero.WalletManager_createWalletFromPolyseed(
-          _wmPtr,
+          _walletManagerPointer,
           path: path,
           password: password,
           mnemonic: seed,
           seedOffset: '',
           newWallet: true,
-          restoreHeight: 0,
+          restoreHeight: 0, // ignored by core underlying code
           kdfRounds: 1,
           networkType: networkType,
         );
@@ -128,7 +132,7 @@ class WowneroWallet extends Wallet {
 
       case WowneroSeedType.twentyFive:
         walletPointer = wownero.WalletManager_createWallet(
-          _wmPtr,
+          _walletManagerPointer,
           path: path,
           password: password,
           language: language,
@@ -164,24 +168,25 @@ class WowneroWallet extends Wallet {
     final seedLength = seed.split(' ').length;
     if (seedLength == 25) {
       walletPointer = wownero.WalletManager_recoveryWallet(
-        _wmPtr,
+        _walletManagerPointer,
         path: path,
         password: password,
         mnemonic: seed,
         restoreHeight: restoreHeight,
         seedOffset: '',
-        networkType: 0,
+        networkType: networkType,
       );
     } else if (seedLength == 16) {
       walletPointer = wownero.WalletManager_createWalletFromPolyseed(
-        _wmPtr,
+        _walletManagerPointer,
         path: path,
         password: password,
         mnemonic: seed,
         seedOffset: '',
         newWallet: false,
-        restoreHeight: restoreHeight,
+        restoreHeight: 0, // ignored by core underlying code
         kdfRounds: 1,
+        networkType: networkType,
       );
     } else if (seedLength == 14) {
       walletPointer = wownero.WOWNERO_deprecated_restore14WordSeed(
@@ -223,7 +228,7 @@ class WowneroWallet extends Wallet {
     int restoreHeight = 0,
   }) {
     final walletPointer = wownero.WalletManager_createWalletFromKeys(
-      _wmPtr,
+      _walletManagerPointer,
       path: path,
       password: password,
       restoreHeight: restoreHeight,
@@ -248,7 +253,6 @@ class WowneroWallet extends Wallet {
   static WowneroWallet restoreWalletFromSpendKey({
     required String path,
     required String password,
-    // required String seed,
     required String language,
     required String spendKey,
     int networkType = 0,
@@ -256,13 +260,14 @@ class WowneroWallet extends Wallet {
   }) {
     final walletPointer =
         wownero.WalletManager_createDeterministicWalletFromSpendKey(
-      _wmPtr,
+      _walletManagerPointer,
       path: path,
       password: password,
       language: language,
       spendKeyString: spendKey,
       newWallet: true, // TODO(mrcyjanek): safe to remove
       restoreHeight: restoreHeight,
+      networkType: networkType,
     );
 
     final status = wownero.Wallet_status(walletPointer);
@@ -295,8 +300,10 @@ class WowneroWallet extends Wallet {
     }
 
     try {
-      final walletPointer = wownero.WalletManager_openWallet(_wmPtr,
-          path: path, password: password);
+      final walletPointer = wownero.WalletManager_openWallet(
+          _walletManagerPointer,
+          path: path,
+          password: password);
       wallet = WowneroWallet._(walletPointer, path);
       _openedWalletsByPath[path] = wallet;
     } catch (e, s) {
@@ -315,14 +322,13 @@ class WowneroWallet extends Wallet {
   }
 
   // ===========================================================================
-
   // special check to see if wallet exists
   static bool isWalletExist(String path) =>
-      wownero.WalletManager_walletExists(_wmPtr, path);
+      wownero.WalletManager_walletExists(_walletManagerPointer, path);
 
-// ===========================================================================
-
+  // ===========================================================================
   // === Internal overrides ====================================================
+
   @override
   @protected
   Future<void> refreshOutputs() async {
@@ -545,8 +551,12 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  void startSyncing({Duration interval = const Duration(seconds: 20)}) {
-    // TODO: duration
+  void startSyncing({Duration interval = const Duration(seconds: 10)}) {
+    // 10 seconds seems to be the default in monero core
+    wownero.Wallet_setAutoRefreshInterval(
+      _getWalletPointer(),
+      millis: interval.inMilliseconds,
+    );
     wownero.Wallet_refreshAsync(_getWalletPointer());
     wownero.Wallet_startRefresh(_getWalletPointer());
   }
@@ -707,9 +717,6 @@ class WowneroWallet extends Wallet {
       if (refresh) {
         await refreshOutputs();
       }
-
-      // final count = wownero.Coins_getAll_size(_coinsPointer!);
-      // why tho?
       final count = wownero.Coins_count(_coinsPointer!);
 
       Logging.log?.i("wownero outputs found=$count");
@@ -1053,7 +1060,8 @@ class WowneroWallet extends Wallet {
       await this.save();
     }
 
-    wownero.WalletManager_closeWallet(_wmPtr, _getWalletPointer(), save);
+    wownero.WalletManager_closeWallet(
+        _walletManagerPointer, _getWalletPointer(), save);
     _walletPointer = null;
     _openedWalletsByPath.remove(_path);
     isClosing = false;

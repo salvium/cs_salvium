@@ -23,16 +23,18 @@ class MoneroWallet extends Wallet {
   final String _path;
 
   // shared pointer
-  static monero.WalletManager? __wmPtr;
-  static final monero.WalletManager _wmPtr = Pointer.fromAddress((() {
+  static monero.WalletManager? _walletManagerPointerCached;
+  static final monero.WalletManager _walletManagerPointer =
+      Pointer.fromAddress((() {
     try {
       // monero.printStarts = true;
-      __wmPtr ??= monero.WalletManagerFactory_getWalletManager();
-      Logging.log?.i("ptr: $__wmPtr");
+      _walletManagerPointerCached ??=
+          monero.WalletManagerFactory_getWalletManager();
+      Logging.log?.i("ptr: $_walletManagerPointerCached");
     } catch (e, s) {
       Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
     }
-    return __wmPtr!.address;
+    return _walletManagerPointerCached!.address;
   })());
 
   // internal map of wallets
@@ -83,6 +85,7 @@ class MoneroWallet extends Wallet {
 
   // ===========================================================================
   //  ==== static factory constructor functions ================================
+
   static Future<MoneroWallet> create({
     required String path,
     required String password,
@@ -90,33 +93,50 @@ class MoneroWallet extends Wallet {
     required MoneroSeedType seedType,
     int networkType = 0,
   }) async {
-    final seed = monero.Wallet_createPolyseed();
-    final wptr = monero.WalletManager_createWalletFromPolyseed(
-      _wmPtr,
-      path: path,
-      password: password,
-      mnemonic: seed,
-      seedOffset: '',
-      newWallet: true,
-      restoreHeight: 0,
-      kdfRounds: 1,
-    );
+    final Pointer<Void> walletPointer;
+    switch (seedType) {
+      case MoneroSeedType.sixteen:
+        final seed = monero.Wallet_createPolyseed();
+        walletPointer = monero.WalletManager_createWalletFromPolyseed(
+          _walletManagerPointer,
+          path: path,
+          password: password,
+          mnemonic: seed,
+          seedOffset: '',
+          newWallet: true,
+          restoreHeight: 0, // ignored by core underlying code
+          kdfRounds: 1,
+        );
+        break;
 
-    final status = monero.Wallet_status(wptr);
-    if (status != 0) {
-      throw WalletCreationException(message: monero.Wallet_errorString(wptr));
+      case MoneroSeedType.twentyFive:
+        walletPointer = monero.WalletManager_createWallet(
+          _walletManagerPointer,
+          path: path,
+          password: password,
+          language: language,
+          networkType: networkType,
+        );
+        break;
     }
 
-    final address = wptr.address;
+    final status = monero.Wallet_status(walletPointer);
+    if (status != 0) {
+      throw WalletCreationException(
+          message: monero.Wallet_errorString(walletPointer));
+    }
+
+    final address = walletPointer.address;
     await Isolate.run(() {
       monero.Wallet_store(Pointer.fromAddress(address), path: path);
     });
 
-    final wallet = MoneroWallet._(wptr, path);
+    final wallet = MoneroWallet._(walletPointer, path);
     _openedWalletsByPath[path] = wallet;
     return wallet;
   }
 
+  /// 16 word polyseed restores will ignore the [restoreHeight] param.
   static Future<MoneroWallet> restoreWalletFromSeed({
     required String path,
     required String password,
@@ -124,11 +144,11 @@ class MoneroWallet extends Wallet {
     int networkType = 0,
     int restoreHeight = 0,
   }) async {
-    final monero.wallet wptr;
+    final monero.wallet walletPointer;
     final seedLength = seed.split(' ').length;
     if (seedLength == 25) {
-      wptr = monero.WalletManager_recoveryWallet(
-        _wmPtr,
+      walletPointer = monero.WalletManager_recoveryWallet(
+        _walletManagerPointer,
         path: path,
         password: password,
         mnemonic: seed,
@@ -137,14 +157,14 @@ class MoneroWallet extends Wallet {
         networkType: networkType,
       );
     } else if (seedLength == 16) {
-      wptr = monero.WalletManager_createWalletFromPolyseed(
-        _wmPtr,
+      walletPointer = monero.WalletManager_createWalletFromPolyseed(
+        _walletManagerPointer,
         path: path,
         password: password,
         mnemonic: seed,
         seedOffset: '',
         newWallet: false,
-        restoreHeight: restoreHeight,
+        restoreHeight: 0, // ignored by core underlying code
         kdfRounds: 1,
         networkType: networkType,
       );
@@ -152,19 +172,19 @@ class MoneroWallet extends Wallet {
       throw Exception("Bad seed length: $seedLength");
     }
 
-    final status = monero.Wallet_status(wptr);
+    final status = monero.Wallet_status(walletPointer);
 
     if (status != 0) {
-      final error = monero.Wallet_errorString(wptr);
+      final error = monero.Wallet_errorString(walletPointer);
       throw WalletRestoreFromSeedException(message: error);
     }
 
-    final address = wptr.address;
+    final address = walletPointer.address;
     await Isolate.run(() {
       monero.Wallet_store(Pointer.fromAddress(address), path: path);
     });
 
-    final wallet = MoneroWallet._(wptr, path);
+    final wallet = MoneroWallet._(walletPointer, path);
     _openedWalletsByPath[path] = wallet;
     return wallet;
   }
@@ -176,11 +196,11 @@ class MoneroWallet extends Wallet {
     required String address,
     required String viewKey,
     required String spendKey,
-    int nettype = 0,
+    int networkType = 0,
     int restoreHeight = 0,
   }) {
-    final wptr = monero.WalletManager_createWalletFromKeys(
-      _wmPtr,
+    final walletPointer = monero.WalletManager_createWalletFromKeys(
+      _walletManagerPointer,
       path: path,
       password: password,
       restoreHeight: restoreHeight,
@@ -190,14 +210,14 @@ class MoneroWallet extends Wallet {
       nettype: 0,
     );
 
-    final status = monero.Wallet_status(wptr);
+    final status = monero.Wallet_status(walletPointer);
     if (status != 0) {
       throw WalletRestoreFromKeysException(
-        message: monero.Wallet_errorString(wptr),
+        message: monero.Wallet_errorString(walletPointer),
       );
     }
 
-    final wallet = MoneroWallet._(wptr, path);
+    final wallet = MoneroWallet._(walletPointer, path);
     _openedWalletsByPath[path] = wallet;
     return wallet;
   }
@@ -205,14 +225,14 @@ class MoneroWallet extends Wallet {
   static MoneroWallet restoreWalletFromSpendKey({
     required String path,
     required String password,
-    // required String seed,
     required String language,
     required String spendKey,
-    int nettype = 0,
+    int networkType = 0,
     int restoreHeight = 0,
   }) {
-    final wptr = monero.WalletManager_createDeterministicWalletFromSpendKey(
-      _wmPtr,
+    final walletPointer =
+        monero.WalletManager_createDeterministicWalletFromSpendKey(
+      _walletManagerPointer,
       path: path,
       password: password,
       language: language,
@@ -221,16 +241,16 @@ class MoneroWallet extends Wallet {
       restoreHeight: restoreHeight,
     );
 
-    final status = monero.Wallet_status(wptr);
+    final status = monero.Wallet_status(walletPointer);
 
     if (status != 0) {
-      final err = monero.Wallet_errorString(wptr);
+      final err = monero.Wallet_errorString(walletPointer);
       Logging.log?.e("err: $err", stackTrace: StackTrace.current);
       throw WalletRestoreFromKeysException(message: err);
     }
 
-    // monero.Wallet_setCacheAttribute(wptr, key: "cakewallet.seed", value: seed);
-    final wallet = MoneroWallet._(wptr, path);
+    // monero.Wallet_setCacheAttribute(walletPointer, key: "cakewallet.seed", value: seed);
+    final wallet = MoneroWallet._(walletPointer, path);
     wallet.save();
     _openedWalletsByPath[path] = wallet;
     return wallet;
@@ -247,12 +267,12 @@ class MoneroWallet extends Wallet {
     }
 
     try {
-      final wptr = monero.WalletManager_openWallet(
-        _wmPtr,
+      final walletPointer = monero.WalletManager_openWallet(
+        _walletManagerPointer,
         path: path,
         password: password,
       );
-      wallet = MoneroWallet._(wptr, path);
+      wallet = MoneroWallet._(walletPointer, path);
       _openedWalletsByPath[path] = wallet;
     } catch (e, s) {
       Logging.log?.e("", error: e, stackTrace: s);
@@ -268,11 +288,12 @@ class MoneroWallet extends Wallet {
     return wallet;
   }
 
+  // ===========================================================================
   // special check to see if wallet exists
   static bool isWalletExist(String path) =>
-      monero.WalletManager_walletExists(_wmPtr, path);
+      monero.WalletManager_walletExists(_walletManagerPointer, path);
 
-// ===========================================================================
+  // ===========================================================================
   // === Internal overrides ====================================================
 
   @override
@@ -497,8 +518,12 @@ class MoneroWallet extends Wallet {
   }
 
   @override
-  void startSyncing({Duration interval = const Duration(seconds: 20)}) {
-    // TODO: duration
+  void startSyncing({Duration interval = const Duration(seconds: 10)}) {
+    // 10 seconds seems to be the default in monero core
+    monero.Wallet_setAutoRefreshInterval(
+      _getWalletPointer(),
+      millis: interval.inMilliseconds,
+    );
     monero.Wallet_refreshAsync(_getWalletPointer());
     monero.Wallet_startRefresh(_getWalletPointer());
   }
@@ -658,9 +683,6 @@ class MoneroWallet extends Wallet {
       if (refresh) {
         await refreshOutputs();
       }
-
-      // final count = monero.Coins_getAll_size(_coinsPointer!);
-      // why tho?
       final count = monero.Coins_count(_coinsPointer!);
 
       Logging.log?.i("monero outputs found=$count");
@@ -1002,7 +1024,8 @@ class MoneroWallet extends Wallet {
       await this.save();
     }
 
-    monero.WalletManager_closeWallet(_wmPtr, _getWalletPointer(), save);
+    monero.WalletManager_closeWallet(
+        _walletManagerPointer, _getWalletPointer(), save);
     _walletPointer = null;
     _openedWalletsByPath.remove(_path);
     isClosing = false;
