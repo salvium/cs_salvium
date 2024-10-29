@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cs_monero/cs_monero.dart';
@@ -62,6 +63,8 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
         default:
           throw Exception("Unknown wallet type: $type");
       }
+
+      unawaited(wallet.rescanBlockchain());
 
       return wallet;
     } catch (e) {

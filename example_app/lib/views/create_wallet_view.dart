@@ -57,6 +57,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
             path: path,
             password: password,
             seedType: _selectedWowType!,
+            overrideDeprecated14WordSeedException: true,
           );
           break;
 

@@ -120,7 +120,7 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
           break;
 
         case "wownero":
-          daemonAddress = "eu-west-2.wow.xmr.pm:34568";
+          daemonAddress = "wownero.stackwallet.com:34568";
           wallet = WowneroWallet.loadWallet(
             path: path,
             password: pw,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cs_monero/cs_monero.dart';
@@ -66,6 +67,8 @@ class _CreateViewOnlyWalletViewState extends State<CreateViewOnlyWalletView> {
         default:
           throw Exception("Unknown wallet type: $type");
       }
+
+      unawaited(wallet.rescanBlockchain());
 
       return wallet;
     } catch (e) {

@@ -118,6 +118,10 @@ class _WalletViewState extends State<WalletView> {
           icon: const Icon(Icons.close),
         ),
         actions: [
+          TextButton(
+            onPressed: widget.wallet.rescanBlockchain,
+            child: const Text("Rescan"),
+          ),
           TextButton(onPressed: update, child: const Text("Update")),
           // TextButton(onPressed: doThing, child: const Text("doThing")),
           TextButton(onPressed: widget.wallet.save, child: const Text("Save")),
