@@ -6,17 +6,21 @@ import 'package:path_provider/path_provider.dart';
 Future<String> pathForWalletDir({
   required String name,
   required String type,
+  required bool createIfNotExists,
 }) async {
   Directory root = await getApplicationDocumentsDirectory();
   if (Platform.isIOS) {
     root = (await getLibraryDirectory());
   }
 
-  final walletsDir = Directory('${root.path}${Platform.pathSeparator}wallets');
+  final walletsDir = Directory(
+    '${root.path}${Platform.pathSeparator}cs_monero_example_app${Platform.pathSeparator}wallets',
+  );
   final walletDire = Directory(
-      '${walletsDir.path}${Platform.pathSeparator}$type${Platform.pathSeparator}$name');
+    '${walletsDir.path}${Platform.pathSeparator}$type${Platform.pathSeparator}$name',
+  );
 
-  if (!walletDire.existsSync()) {
+  if (createIfNotExists && !walletDire.existsSync()) {
     walletDire.createSync(recursive: true);
   }
 
@@ -26,12 +30,20 @@ Future<String> pathForWalletDir({
 Future<String> pathForWallet({
   required String name,
   required String type,
+  required bool createIfNotExists,
 }) async =>
-    await pathForWalletDir(name: name, type: type)
-        .then((path) => '$path${Platform.pathSeparator}$name');
+    await pathForWalletDir(
+      name: name,
+      type: type,
+      createIfNotExists: createIfNotExists,
+    ).then((path) => '$path${Platform.pathSeparator}$name');
 
 Future<List<String>> loadWalletNames(String walletType) async {
-  String path = await pathForWalletDir(name: "dummy", type: walletType);
+  String path = await pathForWalletDir(
+    name: "dummy",
+    type: walletType,
+    createIfNotExists: true,
+  );
 
   path = path.substring(0, path.lastIndexOf("${Platform.pathSeparator}dummy"));
 
@@ -86,6 +98,7 @@ void onSyncingUpdate({
   Logging.log?.i("nodeHeight: $nodeHeight");
   Logging.log?.i("remaining: ${nodeHeight - syncHeight}");
   Logging.log?.i(
-      "sync percent: ${(syncHeight / nodeHeight * 100).toStringAsFixed(2)}");
+    "sync percent: ${(syncHeight / nodeHeight * 100).toStringAsFixed(2)}",
+  );
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }

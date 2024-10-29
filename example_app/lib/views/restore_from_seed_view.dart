@@ -6,24 +6,27 @@ import 'package:flutter/material.dart';
 import '../util.dart';
 import '../widgets/coin_selector_widget.dart';
 
-class CreateWalletView extends StatefulWidget {
-  const CreateWalletView({super.key});
+class RestoreFromSeedView extends StatefulWidget {
+  const RestoreFromSeedView({super.key});
 
   @override
-  State<CreateWalletView> createState() => _CreateWalletViewState();
+  State<RestoreFromSeedView> createState() => _RestoreFromSeedViewState();
 }
 
-class _CreateWalletViewState extends State<CreateWalletView> {
+class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
   final nameController = TextEditingController();
   final pwController = TextEditingController();
+  final seedController = TextEditingController();
+  final heightController = TextEditingController();
 
   String _type = "monero";
   bool _locked = false;
 
-  WowneroSeedType? _selectedWowType;
-  MoneroSeedType? _selectedXmrType;
-
-  Future<Wallet> createWallet(String type, String name, String password) async {
+  Future<Wallet> restoreWallet(
+    String type,
+    String name,
+    String password,
+  ) async {
     final existing = await loadWalletNames(type);
     if (existing.contains(name)) {
       throw Exception("Wallet with name: \"$name\" already exists");
@@ -32,31 +35,26 @@ class _CreateWalletViewState extends State<CreateWalletView> {
     final path = await pathForWallet(
       name: name,
       type: type,
-      createIfNotExists: true,
+      createIfNotExists: false,
     );
-
     try {
       final Wallet wallet;
       switch (type) {
         case "monero":
-          if (_selectedXmrType == null) {
-            throw Exception("Select seed length!");
-          }
-          wallet = await MoneroWallet.create(
+          wallet = await MoneroWallet.restoreWalletFromSeed(
             path: path,
             password: password,
-            seedType: _selectedXmrType!,
+            seed: seedController.text,
+            restoreHeight: int.tryParse(heightController.text) ?? 0,
           );
           break;
 
         case "wownero":
-          if (_selectedWowType == null) {
-            throw Exception("Select seed length!");
-          }
-          wallet = await WowneroWallet.create(
+          wallet = await WowneroWallet.restoreWalletFromSeed(
             path: path,
             password: password,
-            seedType: _selectedWowType!,
+            seed: seedController.text,
+            restoreHeight: int.tryParse(heightController.text) ?? 0,
           );
           break;
 
@@ -84,7 +82,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
     });
 
     try {
-      final wallet = await createWallet(
+      final wallet = await restoreWallet(
         _type,
         nameController.text,
         pwController.text,
@@ -123,6 +121,8 @@ class _CreateWalletViewState extends State<CreateWalletView> {
   void dispose() {
     nameController.dispose();
     pwController.dispose();
+    heightController.dispose();
+    seedController.dispose();
     super.dispose();
   }
 
@@ -130,61 +130,20 @@ class _CreateWalletViewState extends State<CreateWalletView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create a wallet'),
+        title: const Text('Restore from seed'),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: CoinSelectorWidget(
-          onChanged: (value) => setState(() => _type = value),
+          onChanged: (value) {
+            setState(() {
+              _type = value;
+            });
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton(
-                      hint: const Text("Select seed length"),
-                      isExpanded: true,
-                      value: _type == "wownero"
-                          ? _selectedWowType
-                          : _selectedXmrType,
-                      items: [
-                        if (_type == "wownero")
-                          ...WowneroSeedType.values.map(
-                            (e) => DropdownMenuItem(
-                              value: e,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(e.name),
-                              ),
-                            ),
-                          ),
-                        if (_type == "monero")
-                          ...MoneroSeedType.values.map(
-                            (e) => DropdownMenuItem(
-                              value: e,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(e.name),
-                              ),
-                            ),
-                          ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          if (value is MoneroSeedType) {
-                            _selectedXmrType = value;
-                          } else if (value is WowneroSeedType) {
-                            _selectedWowType = value;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 16),
               TextField(
                 controller: nameController,
@@ -202,11 +161,27 @@ class _CreateWalletViewState extends State<CreateWalletView> {
                 ),
               ),
               const SizedBox(height: 16),
+              TextField(
+                controller: seedController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Seed',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: heightController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Restore height (For 25 word seeds - OPTIONAL)',
+                ),
+              ),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextButton(
                   onPressed: _locked ? null : _onPressed,
-                  child: const Text("Create"),
+                  child: const Text("Restore"),
                 ),
               ),
             ],

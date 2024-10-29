@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 
 import 'views/create_wallet_view.dart';
 import 'views/open_wallet_view.dart';
-import 'views/restore_wallet_view.dart';
+import 'views/restore_from_seed_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,11 +89,11 @@ class _ExampleAppState extends State<ExampleApp> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const RestoreWalletView(),
+                        builder: (context) => const RestoreFromSeedView(),
                       ),
                     );
                   },
-                  child: const Text("Restore a wallet"),
+                  child: const Text("Restore from seed"),
                 ),
               ],
             ),

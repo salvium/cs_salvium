@@ -25,11 +25,11 @@ class _WalletViewState extends State<WalletView> {
   String path = "";
 
   Future<void> update() async {
-    await widget.wallet.refreshTransactions();
-    await widget.wallet.refreshOutputs();
     connected = await widget.wallet.isConnectedToDaemon();
-    txCount = widget.wallet.transactionCount();
-    outputCount = (await widget.wallet.getOutputs(includeSpent: true)).length;
+    txCount = (await widget.wallet.getTxs(refresh: true)).length;
+    outputCount =
+        (await widget.wallet.getOutputs(includeSpent: true, refresh: true))
+            .length;
     path = widget.wallet.getPath();
     password = widget.wallet.getPassword();
     daemonHeight = widget.wallet.getDaemonHeight();
@@ -39,8 +39,15 @@ class _WalletViewState extends State<WalletView> {
     mnemonic = widget.wallet.getSeed();
     balance = widget.wallet.getBalance();
     unlocked = widget.wallet.getUnlockedBalance();
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
+
+  // Future<void> doThing() async {
+  //   final other = widget.wallet.getBalance(accountIndex: 2);
+  //   print(other);
+  // }
 
   @override
   void initState() {
@@ -53,19 +60,23 @@ class _WalletViewState extends State<WalletView> {
           required int nodeHeight,
           String? message,
         }) {
-          setState(() {
-            this.syncHeight = syncHeight;
-            daemonHeight = nodeHeight;
-          });
+          if (mounted) {
+            setState(() {
+              this.syncHeight = syncHeight;
+              daemonHeight = nodeHeight;
+            });
+          }
         },
         onBalancesChanged: ({
           required int newBalance,
           required int newUnlockedBalance,
         }) {
-          setState(() {
-            balance = newBalance;
-            unlocked = newUnlockedBalance;
-          });
+          if (mounted) {
+            setState(() {
+              balance = newBalance;
+              unlocked = newUnlockedBalance;
+            });
+          }
         },
         onError: (e, s) {
           Logging.log?.e(
@@ -96,10 +107,12 @@ class _WalletViewState extends State<WalletView> {
         ),
         actions: [
           TextButton(onPressed: update, child: const Text("Update")),
+          // TextButton(onPressed: doThing, child: const Text("doThing")),
           TextButton(onPressed: widget.wallet.save, child: const Text("Save")),
         ],
       ),
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
         children: [
           Item(kkey: "Connected", value: connected),
           Item(kkey: "outputCount", value: outputCount),
@@ -128,11 +141,21 @@ class Item extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Text("$kkey: "),
-          SelectableText(value.toString()),
-        ],
+      child: Container(
+        color: Theme.of(context).primaryColor.withOpacity(0.4),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text("$kkey: "),
+              const SizedBox(
+                height: 10,
+              ),
+              SelectableText(value.toString()),
+            ],
+          ),
+        ),
       ),
     );
   }
