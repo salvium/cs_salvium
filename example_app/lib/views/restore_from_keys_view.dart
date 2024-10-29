@@ -7,23 +7,26 @@ import 'package:flutter/material.dart';
 import '../util.dart';
 import '../widgets/coin_selector_widget.dart';
 
-class RestoreFromSeedView extends StatefulWidget {
-  const RestoreFromSeedView({super.key});
+class RestoreFromKeysView extends StatefulWidget {
+  const RestoreFromKeysView({super.key});
 
   @override
-  State<RestoreFromSeedView> createState() => _RestoreFromSeedViewState();
+  State<RestoreFromKeysView> createState() => _RestoreFromKeysViewState();
 }
 
-class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
+class _RestoreFromKeysViewState extends State<RestoreFromKeysView> {
   final nameController = TextEditingController();
   final pwController = TextEditingController();
-  final seedController = TextEditingController();
+  final viewKeyController = TextEditingController();
+  final spendKeyController = TextEditingController();
+  final languageController = TextEditingController()..text = "English";
   final heightController = TextEditingController();
+  final addressController = TextEditingController();
 
   String _type = "monero";
   bool _locked = false;
 
-  Future<Wallet> restoreWallet(
+  Future<Wallet> viewOnlyWallet(
     String type,
     String name,
     String password,
@@ -43,20 +46,26 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
       final Wallet wallet;
       switch (type) {
         case "monero":
-          wallet = await MoneroWallet.restoreWalletFromSeed(
+          wallet = MoneroWallet.restoreWalletFromKeys(
             path: path,
             password: password,
-            seed: seedController.text,
+            viewKey: viewKeyController.text,
+            spendKey: spendKeyController.text,
             restoreHeight: int.tryParse(heightController.text) ?? 0,
+            address: addressController.text,
+            language: languageController.text,
           );
           break;
 
         case "wownero":
-          wallet = await WowneroWallet.restoreWalletFromSeed(
+          wallet = WowneroWallet.restoreWalletFromKeys(
             path: path,
             password: password,
-            seed: seedController.text,
+            viewKey: viewKeyController.text,
+            spendKey: spendKeyController.text,
             restoreHeight: int.tryParse(heightController.text) ?? 0,
+            address: addressController.text,
+            language: languageController.text,
           );
           break;
 
@@ -86,7 +95,7 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
     });
 
     try {
-      final wallet = await restoreWallet(
+      final wallet = await viewOnlyWallet(
         _type,
         nameController.text,
         pwController.text,
@@ -126,7 +135,10 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
     nameController.dispose();
     pwController.dispose();
     heightController.dispose();
-    seedController.dispose();
+    viewKeyController.dispose();
+    addressController.dispose();
+    languageController.dispose();
+    spendKeyController.dispose();
     super.dispose();
   }
 
@@ -134,7 +146,7 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Restore from seed'),
+        title: const Text('Create View Only wallet'),
         centerTitle: true,
       ),
       body: Padding(
@@ -166,10 +178,34 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
               ),
               const SizedBox(height: 16),
               TextField(
-                controller: seedController,
+                controller: addressController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Seed',
+                  labelText: 'Address',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: viewKeyController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'View key',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: spendKeyController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Spend key',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: languageController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Seed language',
                 ),
               ),
               const SizedBox(height: 16),
@@ -177,7 +213,7 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
                 controller: heightController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Restore height (For 25 word seeds - OPTIONAL)',
+                  labelText: 'Restore height',
                 ),
               ),
               const SizedBox(height: 16),

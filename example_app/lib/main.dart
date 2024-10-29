@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'views/create_view_only_wallet_view.dart';
 import 'views/create_wallet_view.dart';
 import 'views/open_wallet_view.dart';
+import 'views/restore_from_keys_view.dart';
 import 'views/restore_from_seed_view.dart';
 
 void main() async {
@@ -95,6 +96,16 @@ class _ExampleAppState extends State<ExampleApp> {
                     );
                   },
                   child: const Text("Restore from seed"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RestoreFromKeysView(),
+                      ),
+                    );
+                  },
+                  child: const Text("Restore from keys"),
                 ),
                 TextButton(
                   onPressed: () {
