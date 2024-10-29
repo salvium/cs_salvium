@@ -15,6 +15,8 @@ import '../exceptions/wallet_opening_exception.dart';
 import '../exceptions/wallet_restore_from_keys_exception.dart';
 import '../exceptions/wallet_restore_from_seed_exception.dart';
 
+const _kFourteenWordSeedCacheKey = "cs_monero.fourteen.seed";
+
 class WowneroWallet extends Wallet {
   // internal constructor
   WowneroWallet._(wownero.wallet pointer, String path)
@@ -113,6 +115,18 @@ class WowneroWallet extends Wallet {
           language: language,
           networkType: networkType,
         );
+
+        // get the generated seed
+        final seed = wownero.Wallet_getCacheAttribute(
+          walletPointer,
+          key: "cake.seed",
+        );
+        // store generated seed with the correct cache key
+        wownero.Wallet_setCacheAttribute(
+          walletPointer,
+          key: _kFourteenWordSeedCacheKey,
+          value: seed,
+        );
         break;
 
       case WowneroSeedType.sixteen:
@@ -196,6 +210,12 @@ class WowneroWallet extends Wallet {
         networkType: networkType,
       );
       restoreHeight = wownero.Wallet_getRefreshFromBlockHeight(walletPointer);
+      // store seed with the correct cache key
+      wownero.Wallet_setCacheAttribute(
+        walletPointer,
+        key: _kFourteenWordSeedCacheKey,
+        value: seed,
+      );
     } else {
       throw Exception("Bad seed length: $seedLength");
     }
@@ -502,6 +522,14 @@ class WowneroWallet extends Wallet {
 
   @override
   String getSeed() {
+    final fourteen = wownero.Wallet_getCacheAttribute(
+      _getWalletPointer(),
+      key: _kFourteenWordSeedCacheKey,
+    );
+    if (fourteen != "") {
+      return fourteen;
+    }
+
     final polySeed =
         wownero.Wallet_getPolyseed(_getWalletPointer(), passphrase: '');
     if (polySeed != "") {
