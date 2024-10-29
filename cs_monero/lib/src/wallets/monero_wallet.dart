@@ -189,6 +189,25 @@ class MoneroWallet extends Wallet {
     return wallet;
   }
 
+  static MoneroWallet createViewOnlyWallet({
+    required String path,
+    required String password,
+    required String address,
+    required String viewKey,
+    int networkType = 0,
+    int restoreHeight = 0,
+  }) =>
+      restoreWalletFromKeys(
+        path: path,
+        password: password,
+        language: "", // not used when the viewKey is not empty
+        address: address,
+        viewKey: viewKey,
+        spendKey: "",
+        networkType: networkType,
+        restoreHeight: restoreHeight,
+      );
+
   static MoneroWallet restoreWalletFromKeys({
     required String path,
     required String password,
@@ -203,11 +222,12 @@ class MoneroWallet extends Wallet {
       _walletManagerPointer,
       path: path,
       password: password,
-      restoreHeight: restoreHeight,
+      language: language,
       addressString: address,
       viewKeyString: viewKey,
       spendKeyString: spendKey,
-      nettype: 0,
+      nettype: networkType,
+      restoreHeight: restoreHeight,
     );
 
     final status = monero.Wallet_status(walletPointer);
@@ -222,7 +242,7 @@ class MoneroWallet extends Wallet {
     return wallet;
   }
 
-  static MoneroWallet restoreWalletFromSpendKey({
+  static MoneroWallet restoreDeterministicWalletFromSpendKey({
     required String path,
     required String password,
     required String language,
@@ -383,9 +403,8 @@ class MoneroWallet extends Wallet {
     return status == 0;
   }
 
-  // this probably does not do what you think it does
   @override
-  Future<bool> createWatchOnly({
+  Future<bool> createViewOnlyWalletFromCurrentWallet({
     required String path,
     required String password,
     String language = "English",

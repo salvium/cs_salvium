@@ -217,6 +217,25 @@ class WowneroWallet extends Wallet {
     return wallet;
   }
 
+  static WowneroWallet createViewOnlyWallet({
+    required String path,
+    required String password,
+    required String address,
+    required String viewKey,
+    int networkType = 0,
+    int restoreHeight = 0,
+  }) =>
+      restoreWalletFromKeys(
+        path: path,
+        password: password,
+        language: "", // not used when the viewKey is not empty
+        address: address,
+        viewKey: viewKey,
+        spendKey: "",
+        networkType: networkType,
+        restoreHeight: restoreHeight,
+      );
+
   static WowneroWallet restoreWalletFromKeys({
     required String path,
     required String password,
@@ -231,11 +250,12 @@ class WowneroWallet extends Wallet {
       _walletManagerPointer,
       path: path,
       password: password,
-      restoreHeight: restoreHeight,
+      language: language,
       addressString: address,
       viewKeyString: viewKey,
       spendKeyString: spendKey,
-      nettype: 0,
+      nettype: networkType,
+      restoreHeight: restoreHeight,
     );
 
     final status = wownero.Wallet_status(walletPointer);
@@ -250,7 +270,7 @@ class WowneroWallet extends Wallet {
     return wallet;
   }
 
-  static WowneroWallet restoreWalletFromSpendKey({
+  static WowneroWallet restoreDeterministicWalletFromSpendKey({
     required String path,
     required String password,
     required String language,
@@ -416,9 +436,8 @@ class WowneroWallet extends Wallet {
     return status == 0;
   }
 
-  // this probably does not do what you think it does
   @override
-  Future<bool> createWatchOnly({
+  Future<bool> createViewOnlyWalletFromCurrentWallet({
     required String path,
     required String password,
     String language = "English",

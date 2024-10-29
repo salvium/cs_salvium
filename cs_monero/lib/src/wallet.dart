@@ -249,8 +249,7 @@ abstract class Wallet {
     String? socksProxyAddress,
   });
 
-  // this probably does not do what you think it does
-  Future<bool> createWatchOnly({
+  Future<bool> createViewOnlyWalletFromCurrentWallet({
     required String path,
     required String password,
     String language = "English",
