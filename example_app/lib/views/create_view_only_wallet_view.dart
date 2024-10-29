@@ -6,24 +6,29 @@ import 'package:flutter/material.dart';
 import '../util.dart';
 import '../widgets/coin_selector_widget.dart';
 
-class CreateWalletView extends StatefulWidget {
-  const CreateWalletView({super.key});
+class CreateViewOnlyWalletView extends StatefulWidget {
+  const CreateViewOnlyWalletView({super.key});
 
   @override
-  State<CreateWalletView> createState() => _CreateWalletViewState();
+  State<CreateViewOnlyWalletView> createState() =>
+      _CreateViewOnlyWalletViewState();
 }
 
-class _CreateWalletViewState extends State<CreateWalletView> {
+class _CreateViewOnlyWalletViewState extends State<CreateViewOnlyWalletView> {
   final nameController = TextEditingController();
   final pwController = TextEditingController();
+  final viewKeyController = TextEditingController();
+  final heightController = TextEditingController();
+  final addressController = TextEditingController();
 
   String _type = "monero";
   bool _locked = false;
 
-  WowneroSeedType? _selectedWowType;
-  MoneroSeedType? _selectedXmrType;
-
-  Future<Wallet> createWallet(String type, String name, String password) async {
+  Future<Wallet> viewOnlyWallet(
+    String type,
+    String name,
+    String password,
+  ) async {
     final existing = await loadWalletNames(type);
     if (existing.contains(name)) {
       throw Exception("Wallet with name: \"$name\" already exists");
@@ -39,24 +44,22 @@ class _CreateWalletViewState extends State<CreateWalletView> {
       final Wallet wallet;
       switch (type) {
         case "monero":
-          if (_selectedXmrType == null) {
-            throw Exception("Select seed length!");
-          }
-          wallet = await MoneroWallet.create(
+          wallet = MoneroWallet.createViewOnlyWallet(
             path: path,
             password: password,
-            seedType: _selectedXmrType!,
+            viewKey: viewKeyController.text,
+            restoreHeight: int.tryParse(heightController.text) ?? 0,
+            address: addressController.text,
           );
           break;
 
         case "wownero":
-          if (_selectedWowType == null) {
-            throw Exception("Select seed length!");
-          }
-          wallet = await WowneroWallet.create(
+          wallet = WowneroWallet.createViewOnlyWallet(
             path: path,
             password: password,
-            seedType: _selectedWowType!,
+            viewKey: viewKeyController.text,
+            restoreHeight: int.tryParse(heightController.text) ?? 0,
+            address: addressController.text,
           );
           break;
 
@@ -84,7 +87,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
     });
 
     try {
-      final wallet = await createWallet(
+      final wallet = await viewOnlyWallet(
         _type,
         nameController.text,
         pwController.text,
@@ -123,6 +126,9 @@ class _CreateWalletViewState extends State<CreateWalletView> {
   void dispose() {
     nameController.dispose();
     pwController.dispose();
+    heightController.dispose();
+    viewKeyController.dispose();
+    addressController.dispose();
     super.dispose();
   }
 
@@ -130,61 +136,20 @@ class _CreateWalletViewState extends State<CreateWalletView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create a wallet'),
+        title: const Text('Create View Only wallet'),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: CoinSelectorWidget(
-          onChanged: (value) => setState(() => _type = value),
+          onChanged: (value) {
+            setState(() {
+              _type = value;
+            });
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButton(
-                      hint: const Text("Select seed length"),
-                      isExpanded: true,
-                      value: _type == "wownero"
-                          ? _selectedWowType
-                          : _selectedXmrType,
-                      items: [
-                        if (_type == "wownero")
-                          ...WowneroSeedType.values.map(
-                            (e) => DropdownMenuItem(
-                              value: e,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(e.name),
-                              ),
-                            ),
-                          ),
-                        if (_type == "monero")
-                          ...MoneroSeedType.values.map(
-                            (e) => DropdownMenuItem(
-                              value: e,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(e.name),
-                              ),
-                            ),
-                          ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          if (value is MoneroSeedType) {
-                            _selectedXmrType = value;
-                          } else if (value is WowneroSeedType) {
-                            _selectedWowType = value;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 16),
               TextField(
                 controller: nameController,
@@ -199,6 +164,30 @@ class _CreateWalletViewState extends State<CreateWalletView> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Password',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: addressController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Address',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: viewKeyController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'View key',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: heightController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Restore height',
                 ),
               ),
               const SizedBox(height: 16),

@@ -133,6 +133,96 @@ abstract class Wallet {
   }
 
   // ===========================================================================
+  // ======= Shared Internal ===================================================
+
+  /// Do not use this outside this library.
+  @protected
+  Future<List<String>> checkAndProcessInputs({
+    required List<Output> inputs,
+    required BigInt sendAmount,
+    required bool sweep,
+  }) async {
+    final inSum = inputs.map((e) => e.value).fold(BigInt.zero, (p, e) => p + e);
+    if (inSum < sendAmount) {
+      throw Exception("Not enough inputs to cover specified amount");
+    }
+
+    if (sweep) {
+      if (sendAmount != inSum) {
+        throw Exception(
+          "Sweep all found mismatch of amount to send and selected inputs total value",
+        );
+      }
+    } else {
+      if (sendAmount == inSum) {
+        throw Exception(
+          "Amount is equal to sum of input values. Did you mean to do a sweep?",
+        );
+      }
+      // if its not a sweep, normal logic should be fine so no need to do the
+      // expensive process below
+      return [];
+    }
+
+    await refreshOutputs();
+    final allUnusedOutputs = await getOutputs();
+    allUnusedOutputs.removeWhere((e) {
+      if (e.isFrozen) {
+        return true;
+      }
+
+      for (final input in inputs) {
+        if (input.keyImage == e.keyImage) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    final List<Output> frozen = [];
+    try {
+      for (final utxo in allUnusedOutputs) {
+        await freezeOutput(utxo.keyImage);
+        frozen.add(utxo.copyWithFrozen(true));
+      }
+
+      return frozen.map((e) => e.keyImage).toList(growable: false);
+    } catch (e, s) {
+      Logging.log?.e(
+        "checkAndProcessInputs temp. freezing failed.",
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    } finally {
+      // attempt to thaw any temp frozen outputs
+      for (final utxo in frozen) {
+        await thawOutput(utxo.keyImage);
+      }
+    }
+  }
+
+  /// Do not use this outside this library.
+  @protected
+  Future<void> postProcessInputs({
+    required List<String> keyImages,
+  }) async {
+    try {
+      for (final keyImage in keyImages) {
+        await thawOutput(keyImage);
+      }
+    } catch (e, s) {
+      Logging.log?.e(
+        "postProcessInputs failed.",
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
+
+  // ===========================================================================
   // ======= Interface =========================================================
 
   @protected
@@ -159,8 +249,7 @@ abstract class Wallet {
     String? socksProxyAddress,
   });
 
-  // this probably does not do what you think it does
-  Future<bool> createWatchOnly({
+  Future<bool> createViewOnlyWalletFromCurrentWallet({
     required String path,
     required String password,
     String language = "English",
@@ -210,10 +299,13 @@ abstract class Wallet {
   // void setSubaddressLabel(int accountIdx, int addressIdx, String label);
 
   String getTxKey(String txid);
-  Transaction getTx(String txid);
-  List<Transaction> getTxs();
+  Future<Transaction> getTx(String txid, {bool refresh = false});
+  Future<List<Transaction>> getTxs({bool refresh = false});
   // List<Transfer> getTransfers({int? accountIdx, int? subaddressIdx});
-  Future<List<Output>> getOutputs({bool includeSpent = false});
+  Future<List<Output>> getOutputs({
+    bool includeSpent = false,
+    bool refresh = false,
+  });
 
   Future<bool> exportKeyImages({required String filename, bool all = false});
   Future<bool> importKeyImages({required String filename});
@@ -222,20 +314,21 @@ abstract class Wallet {
   Future<void> thawOutput(String keyImage);
 
   Future<PendingTransaction> createTx({
-    required String address,
-    required String paymentId,
+    required Recipient output,
     required TransactionPriority priority,
-    String? amount,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    List<Output>? preferredInputs,
+    String paymentId = "",
+    bool sweep = false,
   });
 
   Future<PendingTransaction> createTxMultiDest({
     required List<Recipient> outputs,
-    required String paymentId,
     required TransactionPriority priority,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    String paymentId = "",
+    List<Output>? preferredInputs,
+    bool sweep = false,
   });
 
   // List<PendingTransaction> createTxs(TxConfig config);

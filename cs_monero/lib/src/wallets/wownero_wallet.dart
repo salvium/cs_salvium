@@ -7,21 +7,13 @@ import 'package:meta/meta.dart';
 import 'package:monero/src/generated_bindings_wownero.g.dart' as wownero_gen;
 import 'package:monero/wownero.dart' as wownero;
 
-import '../enums/transaction_priority.dart';
-import '../enums/wownero_seed_type.dart';
-import '../exceptions/creation_transaction_exception.dart';
+import '../../cs_monero.dart';
+import '../enums/min_confirms.dart';
 import '../exceptions/setup_wallet_exception.dart';
 import '../exceptions/wallet_creation_exception.dart';
 import '../exceptions/wallet_opening_exception.dart';
 import '../exceptions/wallet_restore_from_keys_exception.dart';
 import '../exceptions/wallet_restore_from_seed_exception.dart';
-import '../logging.dart';
-import '../models/address.dart';
-import '../models/output.dart';
-import '../models/pending_transaction.dart';
-import '../models/recipient.dart';
-import '../models/transaction.dart';
-import '../wallet.dart';
 
 class WowneroWallet extends Wallet {
   // internal constructor
@@ -31,16 +23,18 @@ class WowneroWallet extends Wallet {
   final String _path;
 
   // shared pointer
-  static wownero.WalletManager? __wmPtr;
-  static final wownero.WalletManager _wmPtr = Pointer.fromAddress((() {
+  static wownero.WalletManager? _walletManagerPointerCached;
+  static final wownero.WalletManager _walletManagerPointer =
+      Pointer.fromAddress((() {
     try {
       // wownero.printStarts = true;
-      __wmPtr ??= wownero.WalletManagerFactory_getWalletManager();
-      Logging.log?.i("ptr: $__wmPtr");
+      _walletManagerPointerCached ??=
+          wownero.WalletManagerFactory_getWalletManager();
+      Logging.log?.i("ptr: $_walletManagerPointerCached");
     } catch (e, s) {
       Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
     }
-    return __wmPtr!.address;
+    return _walletManagerPointerCached!.address;
   })());
 
   // internal map of wallets
@@ -59,7 +53,39 @@ class WowneroWallet extends Wallet {
     return _walletPointer!;
   }
 
-  // static factory constructor functions
+  // ===========================================================================
+  //  ==== private helpers =====================================================
+
+  Set<int> _subaddressIndexesFrom(wownero.TransactionInfo infoPointer) {
+    final indexesString = wownero.TransactionInfo_subaddrIndex(infoPointer);
+    final indexes = indexesString.split(", ").map(int.parse);
+    return indexes.toSet();
+  }
+
+  Transaction _transactionFrom(wownero.TransactionInfo infoPointer) {
+    return Transaction(
+      displayLabel: wownero.TransactionInfo_label(infoPointer),
+      description: wownero.TransactionInfo_description(infoPointer),
+      fee: BigInt.from(wownero.TransactionInfo_fee(infoPointer)),
+      confirmations: wownero.TransactionInfo_confirmations(infoPointer),
+      blockHeight: wownero.TransactionInfo_blockHeight(infoPointer),
+      accountIndex: wownero.TransactionInfo_subaddrAccount(infoPointer),
+      addressIndexes: _subaddressIndexesFrom(infoPointer),
+      paymentId: wownero.TransactionInfo_paymentId(infoPointer),
+      amount: BigInt.from(wownero.TransactionInfo_amount(infoPointer)),
+      isSpend: wownero.TransactionInfo_direction(infoPointer) ==
+          wownero.TransactionInfo_Direction.Out,
+      hash: wownero.TransactionInfo_hash(infoPointer),
+      key: getTxKey(wownero.TransactionInfo_hash(infoPointer)),
+      timeStamp: DateTime.fromMillisecondsSinceEpoch(
+        wownero.TransactionInfo_timestamp(infoPointer) * 1000,
+      ),
+      minConfirms: MinConfirms.wownero,
+    );
+  }
+
+  // ===========================================================================
+  //  ==== static factory constructor functions ================================
 
   static Future<WowneroWallet> create({
     required String path,
@@ -92,13 +118,13 @@ class WowneroWallet extends Wallet {
       case WowneroSeedType.sixteen:
         final seed = wownero.Wallet_createPolyseed(language: language);
         walletPointer = wownero.WalletManager_createWalletFromPolyseed(
-          _wmPtr,
+          _walletManagerPointer,
           path: path,
           password: password,
           mnemonic: seed,
           seedOffset: '',
           newWallet: true,
-          restoreHeight: 0,
+          restoreHeight: 0, // ignored by core underlying code
           kdfRounds: 1,
           networkType: networkType,
         );
@@ -106,7 +132,7 @@ class WowneroWallet extends Wallet {
 
       case WowneroSeedType.twentyFive:
         walletPointer = wownero.WalletManager_createWallet(
-          _wmPtr,
+          _walletManagerPointer,
           path: path,
           password: password,
           language: language,
@@ -142,24 +168,25 @@ class WowneroWallet extends Wallet {
     final seedLength = seed.split(' ').length;
     if (seedLength == 25) {
       walletPointer = wownero.WalletManager_recoveryWallet(
-        _wmPtr,
+        _walletManagerPointer,
         path: path,
         password: password,
         mnemonic: seed,
         restoreHeight: restoreHeight,
         seedOffset: '',
-        networkType: 0,
+        networkType: networkType,
       );
     } else if (seedLength == 16) {
       walletPointer = wownero.WalletManager_createWalletFromPolyseed(
-        _wmPtr,
+        _walletManagerPointer,
         path: path,
         password: password,
         mnemonic: seed,
         seedOffset: '',
         newWallet: false,
-        restoreHeight: restoreHeight,
+        restoreHeight: 0, // ignored by core underlying code
         kdfRounds: 1,
+        networkType: networkType,
       );
     } else if (seedLength == 14) {
       walletPointer = wownero.WOWNERO_deprecated_restore14WordSeed(
@@ -190,6 +217,25 @@ class WowneroWallet extends Wallet {
     return wallet;
   }
 
+  static WowneroWallet createViewOnlyWallet({
+    required String path,
+    required String password,
+    required String address,
+    required String viewKey,
+    int networkType = 0,
+    int restoreHeight = 0,
+  }) =>
+      restoreWalletFromKeys(
+        path: path,
+        password: password,
+        language: "", // not used when the viewKey is not empty
+        address: address,
+        viewKey: viewKey,
+        spendKey: "",
+        networkType: networkType,
+        restoreHeight: restoreHeight,
+      );
+
   static WowneroWallet restoreWalletFromKeys({
     required String path,
     required String password,
@@ -201,14 +247,15 @@ class WowneroWallet extends Wallet {
     int restoreHeight = 0,
   }) {
     final walletPointer = wownero.WalletManager_createWalletFromKeys(
-      _wmPtr,
+      _walletManagerPointer,
       path: path,
       password: password,
-      restoreHeight: restoreHeight,
+      language: language,
       addressString: address,
       viewKeyString: viewKey,
       spendKeyString: spendKey,
-      nettype: 0,
+      nettype: networkType,
+      restoreHeight: restoreHeight,
     );
 
     final status = wownero.Wallet_status(walletPointer);
@@ -223,10 +270,9 @@ class WowneroWallet extends Wallet {
     return wallet;
   }
 
-  static WowneroWallet restoreWalletFromSpendKey({
+  static WowneroWallet restoreDeterministicWalletFromSpendKey({
     required String path,
     required String password,
-    // required String seed,
     required String language,
     required String spendKey,
     int networkType = 0,
@@ -234,13 +280,14 @@ class WowneroWallet extends Wallet {
   }) {
     final walletPointer =
         wownero.WalletManager_createDeterministicWalletFromSpendKey(
-      _wmPtr,
+      _walletManagerPointer,
       path: path,
       password: password,
       language: language,
       spendKeyString: spendKey,
       newWallet: true, // TODO(mrcyjanek): safe to remove
       restoreHeight: restoreHeight,
+      networkType: networkType,
     );
 
     final status = wownero.Wallet_status(walletPointer);
@@ -273,8 +320,10 @@ class WowneroWallet extends Wallet {
     }
 
     try {
-      final walletPointer = wownero.WalletManager_openWallet(_wmPtr,
-          path: path, password: password);
+      final walletPointer = wownero.WalletManager_openWallet(
+          _walletManagerPointer,
+          path: path,
+          password: password);
       wallet = WowneroWallet._(walletPointer, path);
       _openedWalletsByPath[path] = wallet;
     } catch (e, s) {
@@ -293,14 +342,13 @@ class WowneroWallet extends Wallet {
   }
 
   // ===========================================================================
-
   // special check to see if wallet exists
   static bool isWalletExist(String path) =>
-      wownero.WalletManager_walletExists(_wmPtr, path);
+      wownero.WalletManager_walletExists(_walletManagerPointer, path);
 
-// ===========================================================================
-
+  // ===========================================================================
   // === Internal overrides ====================================================
+
   @override
   @protected
   Future<void> refreshOutputs() async {
@@ -388,9 +436,8 @@ class WowneroWallet extends Wallet {
     return status == 0;
   }
 
-  // this probably does not do what you think it does
   @override
-  Future<bool> createWatchOnly({
+  Future<bool> createViewOnlyWalletFromCurrentWallet({
     required String path,
     required String password,
     String language = "English",
@@ -523,8 +570,12 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  void startSyncing({Duration interval = const Duration(seconds: 20)}) {
-    // TODO: duration
+  void startSyncing({Duration interval = const Duration(seconds: 10)}) {
+    // 10 seconds seems to be the default in monero core
+    wownero.Wallet_setAutoRefreshInterval(
+      _getWalletPointer(),
+      millis: interval.inMilliseconds,
+    );
     wownero.Wallet_refreshAsync(_getWalletPointer());
     wownero.Wallet_startRefresh(_getWalletPointer());
   }
@@ -644,42 +695,50 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  Transaction getTx(String txid) {
-    return Transaction(
-      txInfo: wownero.TransactionHistory_transactionById(
+  Future<Transaction> getTx(String txid, {bool refresh = false}) async {
+    if (refresh) {
+      await refreshTransactions();
+    }
+
+    return _transactionFrom(
+      wownero.TransactionHistory_transactionById(
         _transactionHistoryPointer!,
         txid: txid,
       ),
-      getTxKey: getTxKey,
     );
   }
 
   @override
-  List<Transaction> getTxs() {
+  Future<List<Transaction>> getTxs({bool refresh = false}) async {
+    if (refresh) {
+      await refreshTransactions();
+    }
+
     final size = transactionCount();
 
     return List.generate(
       size,
-      (index) => Transaction(
-        txInfo: wownero.TransactionHistory_transaction(
+      (index) => _transactionFrom(
+        wownero.TransactionHistory_transaction(
           _transactionHistoryPointer!,
           index: index,
         ),
-        getTxKey: getTxKey,
       ),
     );
   }
 
   @override
-  Future<List<Output>> getOutputs({bool includeSpent = false}) async {
+  Future<List<Output>> getOutputs({
+    bool includeSpent = false,
+    bool refresh = false,
+  }) async {
     try {
-      await refreshOutputs();
-
-      // final count = wownero.Coins_getAll_size(_coinsPointer!);
-      // why tho?
+      if (refresh) {
+        await refreshOutputs();
+      }
       final count = wownero.Coins_count(_coinsPointer!);
 
-      Logging.log?.i("monero::found_utxo_count=$count");
+      Logging.log?.i("wownero outputs found=$count");
 
       final List<Output> result = [];
 
@@ -696,11 +755,13 @@ class WowneroWallet extends Wallet {
               address: wownero.CoinsInfo_address(coinPointer),
               hash: hash,
               keyImage: wownero.CoinsInfo_keyImage(coinPointer),
-              value: wownero.CoinsInfo_amount(coinPointer),
+              value: BigInt.from(wownero.CoinsInfo_amount(coinPointer)),
               isFrozen: wownero.CoinsInfo_frozen(coinPointer),
               isUnlocked: wownero.CoinsInfo_unlocked(coinPointer),
               vout: wownero.CoinsInfo_internalOutputIndex(coinPointer),
               spent: spent,
+              spentHeight:
+                  spent ? wownero.CoinsInfo_spentHeight(coinPointer) : null,
               height: wownero.CoinsInfo_blockHeight(coinPointer),
               coinbase: wownero.CoinsInfo_coinbase(coinPointer),
             );
@@ -787,96 +848,141 @@ class WowneroWallet extends Wallet {
 
   @override
   Future<PendingTransaction> createTx({
-    required String address,
-    required String paymentId,
+    required Recipient output,
     required TransactionPriority priority,
-    String? amount,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    List<Output>? preferredInputs,
+    String paymentId = "",
+    bool sweep = false,
   }) async {
-    final amt = amount == null ? 0 : wownero.Wallet_amountFromString(amount);
-
-    final addressPointer = address.toNativeUtf8();
-    final paymentIdAddress = paymentId.toNativeUtf8();
-    final preferredInputsPointer =
-        preferredInputs.join(wownero.defaultSeparatorStr).toNativeUtf8();
-
-    final walletPointerAddress = _getWalletPointer().address;
-    final addressPointerAddress = addressPointer.address;
-    final paymentIdPointerAddress = paymentIdAddress.address;
-    final preferredInputsPointerAddress = preferredInputsPointer.address;
-    final separatorPointerAddress = wownero.defaultSeparator.address;
-    final pendingTxPointer = Pointer<Void>.fromAddress(await Isolate.run(() {
-      final tx = wownero_gen.WowneroC(DynamicLibrary.open(wownero.libPath))
-          .WOWNERO_Wallet_createTransaction(
-        Pointer.fromAddress(walletPointerAddress),
-        Pointer.fromAddress(addressPointerAddress).cast(),
-        Pointer.fromAddress(paymentIdPointerAddress).cast(),
-        amt,
-        1,
-        priority.value,
-        accountIndex,
-        Pointer.fromAddress(preferredInputsPointerAddress).cast(),
-        Pointer.fromAddress(separatorPointerAddress),
+    final List<String>? processedInputs;
+    if (preferredInputs != null) {
+      processedInputs = await checkAndProcessInputs(
+        inputs: preferredInputs,
+        sendAmount: output.amount,
+        sweep: sweep,
       );
-      return tx.address;
-    }));
-    calloc.free(addressPointer);
-    calloc.free(paymentIdAddress);
-    calloc.free(preferredInputsPointer);
-    final String? error = (() {
-      final status = wownero.PendingTransaction_status(pendingTxPointer);
-      if (status == 0) {
-        return null;
-      }
-      return wownero.PendingTransaction_errorString(pendingTxPointer);
-    })();
-
-    if (error != null) {
-      final message = error;
-      throw CreationTransactionException(message: message);
+    } else {
+      processedInputs = null;
     }
+    final inputsToUse = preferredInputs ?? <Output>[];
 
-    return PendingTransaction(
-      amount: wownero.PendingTransaction_amount(pendingTxPointer),
-      fee: wownero.PendingTransaction_fee(pendingTxPointer),
-      txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
-      hex: wownero.PendingTransaction_hex(pendingTxPointer, ""),
-      pointerAddress: pendingTxPointer.address,
-    );
+    try {
+      final amt = sweep ? 0 : output.amount.toInt();
+
+      final addressPointer = output.address.toNativeUtf8();
+      final paymentIdAddress = paymentId.toNativeUtf8();
+      final preferredInputsPointer = inputsToUse
+          .map((e) => e.keyImage)
+          .join(wownero.defaultSeparatorStr)
+          .toNativeUtf8();
+
+      final walletPointerAddress = _getWalletPointer().address;
+      final addressPointerAddress = addressPointer.address;
+      final paymentIdPointerAddress = paymentIdAddress.address;
+      final preferredInputsPointerAddress = preferredInputsPointer.address;
+      final separatorPointerAddress = wownero.defaultSeparator.address;
+      final pendingTxPointer = Pointer<Void>.fromAddress(await Isolate.run(() {
+        final tx = wownero_gen.WowneroC(DynamicLibrary.open(wownero.libPath))
+            .WOWNERO_Wallet_createTransaction(
+          Pointer.fromAddress(walletPointerAddress),
+          Pointer.fromAddress(addressPointerAddress).cast(),
+          Pointer.fromAddress(paymentIdPointerAddress).cast(),
+          amt,
+          0, // mixin count/ring size. Ignored here, core code will use appropriate value
+          priority.value,
+          accountIndex,
+          Pointer.fromAddress(preferredInputsPointerAddress).cast(),
+          Pointer.fromAddress(separatorPointerAddress),
+        );
+        return tx.address;
+      }));
+      calloc.free(addressPointer);
+      calloc.free(paymentIdAddress);
+      calloc.free(preferredInputsPointer);
+      final String? error = (() {
+        final status = wownero.PendingTransaction_status(pendingTxPointer);
+        if (status == 0) {
+          return null;
+        }
+        return wownero.PendingTransaction_errorString(pendingTxPointer);
+      })();
+
+      if (error != null) {
+        final message = error;
+        throw CreationTransactionException(message: message);
+      }
+
+      return PendingTransaction(
+        amount:
+            BigInt.from(wownero.PendingTransaction_amount(pendingTxPointer)),
+        fee: BigInt.from(wownero.PendingTransaction_fee(pendingTxPointer)),
+        txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
+        hex: wownero.PendingTransaction_hex(pendingTxPointer, ""),
+        pointerAddress: pendingTxPointer.address,
+      );
+    } finally {
+      if (processedInputs != null) {
+        await postProcessInputs(keyImages: processedInputs);
+      }
+    }
   }
 
   @override
   Future<PendingTransaction> createTxMultiDest({
     required List<Recipient> outputs,
-    required String paymentId,
     required TransactionPriority priority,
-    int accountIndex = 0,
-    required List<String> preferredInputs,
+    required int accountIndex,
+    String paymentId = "",
+    List<Output>? preferredInputs,
+    bool sweep = false,
   }) async {
-    final pendingTxPointer = wownero.Wallet_createTransactionMultDest(
-      _getWalletPointer(),
-      dstAddr: outputs.map((e) => e.address).toList(),
-      isSweepAll: false,
-      amounts: outputs
-          .map((e) => wownero.Wallet_amountFromString(e.amount))
-          .toList(),
-      mixinCount: 0,
-      pendingTransactionPriority: priority.value,
-      subaddr_account: accountIndex,
-    );
-    if (wownero.PendingTransaction_status(pendingTxPointer) != 0) {
-      throw CreationTransactionException(
-        message: wownero.PendingTransaction_errorString(pendingTxPointer),
+    final List<String>? processedInputs;
+    if (preferredInputs != null) {
+      processedInputs = await checkAndProcessInputs(
+        inputs: preferredInputs,
+        sendAmount: outputs.map((e) => e.amount).fold(
+              BigInt.zero,
+              (p, e) => p + e,
+            ),
+        sweep: sweep,
       );
+    } else {
+      processedInputs = null;
     }
-    return PendingTransaction(
-      amount: wownero.PendingTransaction_amount(pendingTxPointer),
-      fee: wownero.PendingTransaction_fee(pendingTxPointer),
-      txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
-      hex: wownero.PendingTransaction_hex(pendingTxPointer, ''),
-      pointerAddress: pendingTxPointer.address,
-    );
+    final inputsToUse = preferredInputs ?? <Output>[];
+
+    try {
+      final pendingTxPointer = wownero.Wallet_createTransactionMultDest(
+        _getWalletPointer(),
+        paymentId: paymentId,
+        dstAddr: outputs.map((e) => e.address).toList(),
+        isSweepAll: sweep,
+        amounts: outputs.map((e) => e.amount.toInt()).toList(),
+        mixinCount:
+            0, // mixin count/ring size. Ignored here, core code will use appropriate value
+        pendingTransactionPriority: priority.value,
+        subaddr_account: accountIndex,
+        preferredInputs: inputsToUse.map((e) => e.keyImage).toList(),
+      );
+      if (wownero.PendingTransaction_status(pendingTxPointer) != 0) {
+        throw CreationTransactionException(
+          message: wownero.PendingTransaction_errorString(pendingTxPointer),
+        );
+      }
+      return PendingTransaction(
+        amount:
+            BigInt.from(wownero.PendingTransaction_amount(pendingTxPointer)),
+        fee: BigInt.from(wownero.PendingTransaction_fee(pendingTxPointer)),
+        txid: wownero.PendingTransaction_txid(pendingTxPointer, ''),
+        hex: wownero.PendingTransaction_hex(pendingTxPointer, ''),
+        pointerAddress: pendingTxPointer.address,
+      );
+    } finally {
+      if (processedInputs != null) {
+        await postProcessInputs(keyImages: processedInputs);
+      }
+    }
   }
 
   @override
@@ -973,7 +1079,8 @@ class WowneroWallet extends Wallet {
       await this.save();
     }
 
-    wownero.WalletManager_closeWallet(_wmPtr, _getWalletPointer(), save);
+    wownero.WalletManager_closeWallet(
+        _walletManagerPointer, _getWalletPointer(), save);
     _walletPointer = null;
     _openedWalletsByPath.remove(_path);
     isClosing = false;
