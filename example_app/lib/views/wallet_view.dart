@@ -11,6 +11,7 @@ class WalletView extends StatefulWidget {
 }
 
 class _WalletViewState extends State<WalletView> {
+  bool isViewOnly = false;
   bool connected = true;
   int outputCount = 0;
   int txCount = 0;
@@ -24,7 +25,13 @@ class _WalletViewState extends State<WalletView> {
   String password = "";
   String path = "";
 
+  String publicViewKey = "";
+  String privateViewKey = "";
+  String publicSpendKey = "";
+  String privateSpendKey = "";
+
   Future<void> update() async {
+    isViewOnly = widget.wallet.isViewOnly();
     connected = await widget.wallet.isConnectedToDaemon();
     txCount = (await widget.wallet.getTxs(refresh: true)).length;
     outputCount =
@@ -39,6 +46,11 @@ class _WalletViewState extends State<WalletView> {
     mnemonic = widget.wallet.getSeed();
     balance = widget.wallet.getBalance();
     unlocked = widget.wallet.getUnlockedBalance();
+    publicViewKey = widget.wallet.getPublicViewKey();
+    privateViewKey = widget.wallet.getPrivateViewKey();
+    publicSpendKey = widget.wallet.getPublicSpendKey();
+    privateSpendKey = widget.wallet.getPrivateSpendKey();
+
     if (mounted) {
       setState(() {});
     }
@@ -114,6 +126,7 @@ class _WalletViewState extends State<WalletView> {
       body: ListView(
         shrinkWrap: true,
         children: [
+          Item(kkey: "Is view only", value: isViewOnly),
           Item(kkey: "Connected", value: connected),
           Item(kkey: "outputCount", value: outputCount),
           Item(kkey: "tx count", value: txCount),
@@ -126,6 +139,10 @@ class _WalletViewState extends State<WalletView> {
           Item(kkey: "syncFromHeight", value: syncFromHeight),
           Item(kkey: "syncHeight", value: syncHeight),
           Item(kkey: "daemonHeight", value: daemonHeight),
+          Item(kkey: "publicViewKey", value: publicViewKey),
+          Item(kkey: "privateViewKey", value: privateViewKey),
+          Item(kkey: "publicSpendKey", value: publicSpendKey),
+          Item(kkey: "privateSpendKey", value: privateSpendKey),
         ],
       ),
     );
