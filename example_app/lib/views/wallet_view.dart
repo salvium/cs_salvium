@@ -1,6 +1,9 @@
 import 'package:cs_monero/cs_monero.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/info_item.dart';
+import 'create_transaction_view.dart';
+
 class WalletView extends StatefulWidget {
   const WalletView({super.key, required this.wallet});
 
@@ -15,8 +18,8 @@ class _WalletViewState extends State<WalletView> {
   bool connected = true;
   int outputCount = 0;
   int txCount = 0;
-  int balance = 0;
-  int unlocked = 0;
+  BigInt balance = BigInt.zero;
+  BigInt unlocked = BigInt.zero;
   String mnemonic = "";
   Address? address;
   int syncFromHeight = 0;
@@ -80,8 +83,8 @@ class _WalletViewState extends State<WalletView> {
           }
         },
         onBalancesChanged: ({
-          required int newBalance,
-          required int newUnlockedBalance,
+          required BigInt newBalance,
+          required BigInt newUnlockedBalance,
         }) {
           if (mounted) {
             setState(() {
@@ -101,6 +104,14 @@ class _WalletViewState extends State<WalletView> {
     );
 
     update().then((_) => widget.wallet.startListeners());
+  }
+
+  final syncHeightController = TextEditingController();
+
+  @override
+  void dispose() {
+    syncHeightController.dispose();
+    super.dispose();
   }
 
   @override
@@ -127,56 +138,71 @@ class _WalletViewState extends State<WalletView> {
           TextButton(onPressed: widget.wallet.save, child: const Text("Save")),
         ],
       ),
-      body: ListView(
-        shrinkWrap: true,
+      body: Column(
         children: [
-          Item(kkey: "Is view only", value: isViewOnly),
-          Item(kkey: "Connected", value: connected),
-          Item(kkey: "outputCount", value: outputCount),
-          Item(kkey: "tx count", value: txCount),
-          Item(kkey: "mnemonic", value: mnemonic),
-          Item(kkey: "path", value: path),
-          Item(kkey: "password", value: password),
-          Item(kkey: "address", value: address),
-          Item(kkey: "balance", value: balance),
-          Item(kkey: "unlocked", value: unlocked),
-          Item(kkey: "syncFromHeight", value: syncFromHeight),
-          Item(kkey: "syncHeight", value: syncHeight),
-          Item(kkey: "daemonHeight", value: daemonHeight),
-          Item(kkey: "publicViewKey", value: publicViewKey),
-          Item(kkey: "privateViewKey", value: privateViewKey),
-          Item(kkey: "publicSpendKey", value: publicSpendKey),
-          Item(kkey: "privateSpendKey", value: privateSpendKey),
-        ],
-      ),
-    );
-  }
-}
-
-class Item extends StatelessWidget {
-  const Item({super.key, this.kkey, this.value});
-
-  final dynamic kkey, value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Container(
-        color: Theme.of(context).primaryColor.withOpacity(0.4),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text("$kkey: "),
-              const SizedBox(
-                height: 10,
-              ),
-              SelectableText(value.toString()),
-            ],
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CreateTransactionView(
+                    wallet: widget.wallet,
+                  ),
+                ),
+              );
+            },
+            child: const Text("Send"),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Flexible(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Sync from height',
+                    ),
+                    controller: syncHeightController,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    final height = int.tryParse(syncHeightController.text);
+
+                    if (height is int) {
+                      widget.wallet.setStartSyncFromBlockHeight(height);
+                    }
+                  },
+                  child: const Text("Attempt apply"),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                InfoItem(label: "Is view only", value: isViewOnly),
+                InfoItem(label: "Connected", value: connected),
+                InfoItem(label: "outputCount", value: outputCount),
+                InfoItem(label: "tx count", value: txCount),
+                InfoItem(label: "mnemonic", value: mnemonic),
+                InfoItem(label: "path", value: path),
+                InfoItem(label: "password", value: password),
+                InfoItem(label: "address", value: address),
+                InfoItem(label: "balance", value: balance),
+                InfoItem(label: "unlocked", value: unlocked),
+                InfoItem(label: "syncFromHeight", value: syncFromHeight),
+                InfoItem(label: "syncHeight", value: syncHeight),
+                InfoItem(label: "daemonHeight", value: daemonHeight),
+                InfoItem(label: "publicViewKey", value: publicViewKey),
+                InfoItem(label: "privateViewKey", value: privateViewKey),
+                InfoItem(label: "publicSpendKey", value: publicSpendKey),
+                InfoItem(label: "privateSpendKey", value: privateSpendKey),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

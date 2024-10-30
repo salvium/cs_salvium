@@ -94,6 +94,47 @@ class OpenWalletDialog extends StatefulWidget {
 class _OpenWalletDialogState extends State<OpenWalletDialog> {
   late final TextEditingController controller;
 
+  Future<(Wallet, bool)> _helperFuture(
+    String name,
+    String type,
+    String pw,
+  ) async {
+    final path = await pathForWallet(
+      name: name,
+      type: type,
+      createIfNotExists: false,
+    );
+    final Wallet wallet;
+    final String daemonAddress;
+    switch (type) {
+      case "monero":
+        daemonAddress = "monero.stackwallet.com:18081";
+        wallet = MoneroWallet.loadWallet(
+          path: path,
+          password: pw,
+        );
+        break;
+
+      case "wownero":
+        daemonAddress = "wownero.stackwallet.com:34568";
+        wallet = WowneroWallet.loadWallet(
+          path: path,
+          password: pw,
+        );
+        break;
+
+      default:
+        throw Exception("Unknown wallet type: $type");
+    }
+    final success = await wallet.connect(
+      daemonAddress: daemonAddress,
+      trusted: true,
+      useSSL: true,
+    );
+
+    return (wallet, success);
+  }
+
   bool _locked = false;
 
   Future<void> _onPressed(String type, String name, String pw) async {
@@ -103,49 +144,38 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
     });
 
     try {
-      final path = await pathForWallet(
-        name: name,
-        type: type,
-        createIfNotExists: false,
-      );
-      final Wallet wallet;
-      final String daemonAddress;
-      switch (type) {
-        case "monero":
-          daemonAddress = "monero.stackwallet.com:18081";
-          wallet = MoneroWallet.loadWallet(
-            path: path,
-            password: pw,
-          );
-          break;
-
-        case "wownero":
-          daemonAddress = "wownero.stackwallet.com:34568";
-          wallet = WowneroWallet.loadWallet(
-            path: path,
-            password: pw,
-          );
-          break;
-
-        default:
-          throw Exception("Unknown wallet type: $type");
-      }
-      final success = await wallet.connect(
-        daemonAddress: daemonAddress,
-        trusted: true,
-        useSSL: true,
+      bool didError = false;
+      final result = await showLoading(
+        whileFuture: _helperFuture(name, type, pw),
+        context: context,
+        onError: (e, s) async {
+          didError = true;
+          Logging.log?.e("Open wallet failed", error: e, stackTrace: s);
+          if (context.mounted) {
+            await showAdaptiveDialog<void>(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => AlertDialog.adaptive(
+                title: Text(e.toString()),
+                content: Text(s.toString()),
+              ),
+            );
+          }
+        },
       );
 
-      wallet.startSyncing();
+      if (didError) return;
+
+      result!.$1.startSyncing();
 
       if (mounted) {
-        if (success) {
+        if (result.$2) {
           // pop dialog
           Navigator.of(context).pop();
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => WalletView(
-                wallet: wallet,
+                wallet: result.$1,
               ),
             ),
           );
