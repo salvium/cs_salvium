@@ -574,16 +574,19 @@ class MoneroWallet extends Wallet {
   }
 
   @override
-  int getBalance({int accountIndex = 0}) => monero.Wallet_balance(
-        _getWalletPointer(),
-        accountIndex: accountIndex,
+  BigInt getBalance({int accountIndex = 0}) => BigInt.from(
+        monero.Wallet_balance(
+          _getWalletPointer(),
+          accountIndex: accountIndex,
+        ),
       );
 
   @override
-  int getUnlockedBalance({int accountIndex = 0}) =>
-      monero.Wallet_unlockedBalance(
-        _getWalletPointer(),
-        accountIndex: accountIndex,
+  BigInt getUnlockedBalance({int accountIndex = 0}) => BigInt.from(
+        monero.Wallet_unlockedBalance(
+          _getWalletPointer(),
+          accountIndex: accountIndex,
+        ),
       );
 
   // @override
@@ -950,7 +953,7 @@ class MoneroWallet extends Wallet {
   }
 
   @override
-  Future<bool> commitTx(PendingTransaction tx) async {
+  Future<void> commitTx(PendingTransaction tx) async {
     final transactionPointer = monero.PendingTransaction.fromAddress(
       tx.pointerAddress!,
     );
@@ -969,9 +972,7 @@ class MoneroWallet extends Wallet {
 
     if (error != null) {
       Logging.log?.e(error, stackTrace: StackTrace.current);
-      return false;
-    } else {
-      return true;
+      throw Exception(error);
     }
   }
 
@@ -1011,6 +1012,26 @@ class MoneroWallet extends Wallet {
   // String getPaymentUri(TxConfig request) {
   //   throw UnimplementedError("TODO");
   // }
+
+  @override
+  BigInt? amountFromString(String value) {
+    try {
+      // not sure what protections or validation is done internally
+      // so lets do some extra for now
+      double.parse(value);
+
+      // if that parse succeeded the following should produce a valid result
+
+      return BigInt.from(monero.Wallet_amountFromString(value));
+    } catch (e, s) {
+      Logging.log?.w(
+        "amountFromString failed to parse \"$value\"",
+        error: e,
+        stackTrace: s,
+      );
+      return null;
+    }
+  }
 
   @override
   String getPassword() {

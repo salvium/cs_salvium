@@ -44,8 +44,8 @@ abstract class Wallet {
 
   int? _lastDaemonHeight;
   int? _lastSyncHeight;
-  int? _lastBalanceUnlocked;
-  int? _lastBalanceFull;
+  BigInt? _lastBalanceUnlocked;
+  BigInt? _lastBalanceFull;
 
   void _poll() async {
     Logging.log?.d("Polling");
@@ -288,8 +288,8 @@ abstract class Wallet {
   Future<bool> rescanSpent();
   Future<bool> rescanBlockchain();
 
-  int getBalance({int accountIndex = 0});
-  int getUnlockedBalance({int accountIndex = 0});
+  BigInt getBalance({int accountIndex = 0});
+  BigInt getUnlockedBalance({int accountIndex = 0});
 
   // Disable for now
   // List<Account> getAccounts({bool includeSubaddresses = false});
@@ -340,7 +340,7 @@ abstract class Wallet {
   // String relayTx(Tx tx);
   // List<String> submitTxs(String signedTxHex);
 
-  Future<bool> commitTx(PendingTransaction tx);
+  Future<void> commitTx(PendingTransaction tx);
 
   // Future<String> signMessage(
   //   String message,
@@ -357,6 +357,8 @@ abstract class Wallet {
     String address,
     String signature,
   );
+
+  BigInt? amountFromString(String value);
 
   // String getTxKey(String txId);
   // CheckTx checkTxKey(String txId, String txKey, String address);
