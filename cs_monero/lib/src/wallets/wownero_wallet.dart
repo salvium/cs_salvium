@@ -586,11 +586,12 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  int getSyncFromBlockHeight() =>
-      wownero.Wallet_getRefreshFromBlockHeight(_getWalletPointer());
+  int getRefreshFromBlockHeight() => wownero.Wallet_getRefreshFromBlockHeight(
+        _getWalletPointer(),
+      );
 
   @override
-  void setStartSyncFromBlockHeight(int startHeight) {
+  void setRefreshFromBlockHeight(int startHeight) {
     wownero.Wallet_setRefreshFromBlockHeight(
       _getWalletPointer(),
       refresh_from_block_height: startHeight,

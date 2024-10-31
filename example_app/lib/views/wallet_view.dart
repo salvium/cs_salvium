@@ -44,7 +44,7 @@ class _WalletViewState extends State<WalletView> {
     password = widget.wallet.getPassword();
     daemonHeight = widget.wallet.getDaemonHeight();
     syncHeight = widget.wallet.syncHeight();
-    syncFromHeight = widget.wallet.getSyncFromBlockHeight();
+    syncFromHeight = widget.wallet.getRefreshFromBlockHeight();
     address = widget.wallet.getAddress();
     mnemonic = widget.wallet.getSeed();
     balance = widget.wallet.getBalance();
@@ -170,7 +170,7 @@ class _WalletViewState extends State<WalletView> {
                     final height = int.tryParse(syncHeightController.text);
 
                     if (height is int) {
-                      widget.wallet.setStartSyncFromBlockHeight(height);
+                      widget.wallet.setRefreshFromBlockHeight(height);
                     }
                   },
                   child: const Text("Attempt apply"),

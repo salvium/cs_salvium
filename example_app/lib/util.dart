@@ -102,7 +102,7 @@ Future<void> printWalletInfo(Wallet wallet) async {
   print("daemonHeight: ${wallet.getDaemonHeight()}");
   print("mnemonic: ${wallet.getSeed()}");
   print("address: ${wallet.getAddress()}");
-  print("sync from height: ${wallet.getSyncFromBlockHeight()}");
+  print("sync from height: ${wallet.getRefreshFromBlockHeight()}");
   print("daemonHeight: ${wallet.getDaemonHeight()}");
   print("password: ${wallet.getPassword()}");
   print("path: ${wallet.getPath()}");

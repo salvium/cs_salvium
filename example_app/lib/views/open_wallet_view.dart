@@ -94,7 +94,7 @@ class OpenWalletDialog extends StatefulWidget {
 class _OpenWalletDialogState extends State<OpenWalletDialog> {
   late final TextEditingController controller;
 
-  Future<(Wallet, bool)> _helperFuture(
+  Future<Wallet> _helperFuture(
     String name,
     String type,
     String pw,
@@ -126,13 +126,13 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
       default:
         throw Exception("Unknown wallet type: $type");
     }
-    final success = await wallet.connect(
+    await wallet.connect(
       daemonAddress: daemonAddress,
       trusted: true,
       useSSL: true,
     );
 
-    return (wallet, success);
+    return wallet;
   }
 
   bool _locked = false;
@@ -145,7 +145,7 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
 
     try {
       bool didError = false;
-      final result = await showLoading(
+      final wallet = await showLoading(
         whileFuture: _helperFuture(name, type, pw),
         context: context,
         onError: (e, s) async {
@@ -166,16 +166,15 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
 
       if (didError) return;
 
-      result!.$1.startSyncing();
-
       if (mounted) {
-        if (result.$2) {
+        if (wallet != null) {
+          wallet.startSyncing();
           // pop dialog
           Navigator.of(context).pop();
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => WalletView(
-                wallet: result.$1,
+                wallet: wallet,
               ),
             ),
           );
@@ -184,7 +183,7 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
             context: context,
             barrierDismissible: true,
             builder: (_) => const AlertDialog.adaptive(
-              title: Text("Failed to connect"),
+              title: Text("Failed to connect/wallet is null"),
             ),
           );
         }
