@@ -8,8 +8,8 @@ Pointer<Void> getWalletManager() {
   return bindings.MONERO_WalletManagerFactory_getWalletManager();
 }
 
-Ptr createWallet(
-  Ptr walletManagerPointer, {
+Pointer<Void> createWallet(
+  Pointer<Void> walletManagerPointer, {
   required String path,
   required String password,
   String language = "English",
@@ -19,15 +19,20 @@ Ptr createWallet(
   final password_ = password.toNativeUtf8().cast<Char>();
   final language_ = language.toNativeUtf8().cast<Char>();
   final w = bindings.MONERO_WalletManager_createWallet(
-      walletManagerPointer, path_, password_, language_, networkType);
+    walletManagerPointer,
+    path_,
+    password_,
+    language_,
+    networkType,
+  );
   calloc.free(path_);
   calloc.free(password_);
   calloc.free(language_);
   return w;
 }
 
-Ptr openWallet(
-  Ptr walletManagerPointer, {
+Pointer<Void> openWallet(
+  Pointer<Void> walletManagerPointer, {
   required String path,
   required String password,
   int networkType = 0,
@@ -35,14 +40,18 @@ Ptr openWallet(
   final path_ = path.toNativeUtf8().cast<Char>();
   final password_ = password.toNativeUtf8().cast<Char>();
   final w = bindings.MONERO_WalletManager_openWallet(
-      walletManagerPointer, path_, password_, networkType);
+    walletManagerPointer,
+    path_,
+    password_,
+    networkType,
+  );
   calloc.free(path_);
   calloc.free(password_);
   return w;
 }
 
-Ptr recoveryWallet(
-  Ptr walletManagerPointer, {
+Pointer<Void> recoveryWallet(
+  Pointer<Void> walletManagerPointer, {
   required String path,
   required String password,
   required String mnemonic,
@@ -71,8 +80,8 @@ Ptr recoveryWallet(
   return w;
 }
 
-Ptr createWalletFromKeys(
-  Ptr walletManagerPointer, {
+Pointer<Void> createWalletFromKeys(
+  Pointer<Void> walletManagerPointer, {
   required String path,
   required String password,
   String language = "English",
@@ -111,8 +120,8 @@ Ptr createWalletFromKeys(
   return w;
 }
 
-Ptr createDeterministicWalletFromSpendKey(
-  Ptr walletManagerPointer, {
+Pointer<Void> createDeterministicWalletFromSpendKey(
+  Pointer<Void> walletManagerPointer, {
   required String path,
   required String password,
   int networkType = 0,
@@ -142,8 +151,8 @@ Ptr createDeterministicWalletFromSpendKey(
   return w;
 }
 
-Ptr createWalletFromPolyseed(
-  Ptr walletManagerPointer, {
+Pointer<Void> createWalletFromPolyseed(
+  Pointer<Void> walletManagerPointer, {
   required String path,
   required String password,
   int networkType = 0,
@@ -174,7 +183,11 @@ Ptr createWalletFromPolyseed(
   return w;
 }
 
-bool closeWallet(Ptr walletManagerPointer, Ptr walletPointer, bool store) {
+bool closeWallet(
+  Pointer<Void> walletManagerPointer,
+  Pointer<Void> walletPointer,
+  bool store,
+) {
   final closeWallet = bindings.MONERO_WalletManager_closeWallet(
     walletManagerPointer,
     walletPointer,
@@ -183,7 +196,7 @@ bool closeWallet(Ptr walletManagerPointer, Ptr walletPointer, bool store) {
   return closeWallet;
 }
 
-bool walletExists(Ptr walletManagerPointer, String path) {
+bool walletExists(Pointer<Void> walletManagerPointer, String path) {
   final path_ = path.toNativeUtf8().cast<Char>();
   final s = bindings.MONERO_WalletManager_walletExists(
     walletManagerPointer,

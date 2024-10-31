@@ -5,20 +5,20 @@ import 'package:ffi/ffi.dart';
 import 'wownero_bindings_base.dart';
 
 /// Will throw on failure
-void checkWalletStatus(Ptr walletPointer) {
+void checkWalletStatus(Pointer<Void> walletPointer) {
   final status = bindings.WOWNERO_Wallet_status(walletPointer);
 
   if (status == 0) {
     return;
   }
-  final strPtr =
-      bindings.WOWNERO_Wallet_errorString(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  throw Exception(str);
+  final stringPointer = bindings.WOWNERO_Wallet_errorString(
+    walletPointer,
+  ).cast<Utf8>();
+
+  throw Exception(convertAndFree(stringPointer));
 }
 
-bool storeWallet(Ptr walletPointer, {required String path}) {
+bool storeWallet(Pointer<Void> walletPointer, {required String path}) {
   final pathPointer = path.toNativeUtf8().cast<Char>();
   try {
     return bindings.WOWNERO_Wallet_store(walletPointer, pathPointer);
@@ -28,7 +28,7 @@ bool storeWallet(Ptr walletPointer, {required String path}) {
 }
 
 bool initWallet(
-  Ptr walletPointer, {
+  Pointer<Void> walletPointer, {
   required String daemonAddress,
   int upperTransactionSizeLimit = 0,
   String daemonUsername = "",
@@ -60,27 +60,26 @@ bool initWallet(
   }
 }
 
-void setTrustedDaemon(Ptr walletPointer, {required bool arg}) {
+void setTrustedDaemon(Pointer<Void> walletPointer, {required bool arg}) {
   bindings.WOWNERO_Wallet_setTrustedDaemon(walletPointer, arg);
 }
 
-bool isWatchOnly(Ptr walletPointer) {
+bool isWatchOnly(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_watchOnly(walletPointer);
 }
 
-int isConnected(Ptr walletPointer) {
+int isConnected(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_connected(walletPointer);
 }
 
-bool isSynchronized(Ptr walletPointer) {
+bool isSynchronized(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_synchronized(walletPointer);
 }
 
-String getWalletPath(Ptr walletPointer) {
-  final strPtr = bindings.WOWNERO_Wallet_path(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getWalletPath(Pointer<Void> walletPointer) {
+  final stringPointer =
+      bindings.WOWNERO_Wallet_path(walletPointer).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
 // =============================================================================
@@ -96,33 +95,31 @@ bool validateAddress(String address, int networkType) {
 }
 
 String getWalletAddress(
-  Ptr walletPointer, {
+  Pointer<Void> walletPointer, {
   int accountIndex = 0,
   int addressIndex = 0,
 }) {
-  final strPtr = bindings.WOWNERO_Wallet_address(
+  final stringPointer = bindings.WOWNERO_Wallet_address(
     walletPointer,
     accountIndex,
     addressIndex,
   ).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+  return convertAndFree(stringPointer);
 }
 
 // =============================================================================
 // ============== Chain ========================================================
 
-int getWalletBlockChainHeight(Ptr walletPointer) {
+int getWalletBlockChainHeight(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_blockChainHeight(walletPointer);
 }
 
-int getDaemonBlockChainHeight(Ptr walletPointer) {
+int getDaemonBlockChainHeight(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_daemonBlockChainHeight(walletPointer);
 }
 
 void setWalletRefreshFromBlockHeight(
-  Ptr walletPointer, {
+  Pointer<Void> walletPointer, {
   required int refreshFromBlockHeight,
 }) {
   bindings.WOWNERO_Wallet_setRefreshFromBlockHeight(
@@ -131,77 +128,77 @@ void setWalletRefreshFromBlockHeight(
   );
 }
 
-int getWalletRefreshFromBlockHeight(Ptr walletPointer) {
+int getWalletRefreshFromBlockHeight(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_getRefreshFromBlockHeight(walletPointer);
 }
 
-void setWalletAutoRefreshInterval(Ptr walletPointer, {required int millis}) {
+void setWalletAutoRefreshInterval(Pointer<Void> walletPointer,
+    {required int millis}) {
   bindings.WOWNERO_Wallet_setAutoRefreshInterval(walletPointer, millis);
 }
 
-void refreshWalletAsync(Ptr walletPointer) {
+void refreshWalletAsync(Pointer<Void> walletPointer) {
   bindings.WOWNERO_Wallet_refreshAsync(walletPointer);
 }
 
-void startWalletRefresh(Ptr walletPointer) {
+void startWalletRefresh(Pointer<Void> walletPointer) {
   bindings.WOWNERO_Wallet_startRefresh(walletPointer);
 }
 
-void pauseWalletRefresh(Ptr walletPointer) {
+void pauseWalletRefresh(Pointer<Void> walletPointer) {
   bindings.WOWNERO_Wallet_pauseRefresh(walletPointer);
 }
 
-void stopWallet(Ptr walletPointer) {
+void stopWallet(Pointer<Void> walletPointer) {
   bindings.WOWNERO_Wallet_stop(walletPointer);
 }
 
-bool rescanWalletBlockchain(Ptr walletPointer) {
+bool rescanWalletBlockchain(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_rescanBlockchain(walletPointer);
 }
 
 // =============================================================================
 // ============== Balance ======================================================
 
-int getWalletBalance(Ptr walletPointer, {required int accountIndex}) {
+int getWalletBalance(Pointer<Void> walletPointer, {required int accountIndex}) {
   return bindings.WOWNERO_Wallet_balance(walletPointer, accountIndex);
 }
 
-int getWalletUnlockedBalance(Ptr walletPointer, {required int accountIndex}) {
+int getWalletUnlockedBalance(Pointer<Void> walletPointer,
+    {required int accountIndex}) {
   return bindings.WOWNERO_Wallet_unlockedBalance(walletPointer, accountIndex);
 }
 
 // =============================================================================
 // ============== History/Transactions =========================================
 
-String getTxKey(Ptr walletPointer, {required String txid}) {
+String getTxKey(Pointer<Void> walletPointer, {required String txid}) {
   final txidPointer = txid.toNativeUtf8().cast<Char>();
   try {
-    final strPtr = bindings.WOWNERO_Wallet_getTxKey(
+    final stringPointer = bindings.WOWNERO_Wallet_getTxKey(
       walletPointer,
       txidPointer,
     ).cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(txidPointer);
   }
 }
 
-Ptr getTransactionHistoryPointer(Ptr walletPointer) {
+Pointer<Void> getTransactionHistoryPointer(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_history(walletPointer);
 }
 
-void refreshTransactionHistory(Ptr txHistoryPointer) {
+void refreshTransactionHistory(Pointer<Void> txHistoryPointer) {
   bindings.WOWNERO_TransactionHistory_refresh(txHistoryPointer);
 }
 
-int getTransactionHistoryCount(Ptr txHistoryPointer) {
+int getTransactionHistoryCount(Pointer<Void> txHistoryPointer) {
   return bindings.WOWNERO_TransactionHistory_count(txHistoryPointer);
 }
 
-Ptr getTransactionInfoPointer(
-  Ptr txHistoryPointer, {
+Pointer<Void> getTransactionInfoPointer(
+  Pointer<Void> txHistoryPointer, {
   required int index,
 }) {
   return bindings.WOWNERO_TransactionHistory_transaction(
@@ -210,8 +207,8 @@ Ptr getTransactionInfoPointer(
   );
 }
 
-Ptr getTransactionInfoPointerByTxid(
-  Ptr txHistoryPointer, {
+Pointer<Void> getTransactionInfoPointerByTxid(
+  Pointer<Void> txHistoryPointer, {
   required String txid,
 }) {
   final txidPointer = txid.toNativeUtf8().cast<Char>();
@@ -228,8 +225,8 @@ Ptr getTransactionInfoPointerByTxid(
 // =============================================================================
 // ============== Transactions =================================================
 
-Ptr createTransaction(
-  Ptr walletPointer, {
+Pointer<Void> createTransaction(
+  Pointer<Void> walletPointer, {
   required String address,
   required String paymentId,
   required int amount,
@@ -265,8 +262,8 @@ Ptr createTransaction(
   }
 }
 
-Ptr createTransactionMultiDest(
-  Ptr walletPointer, {
+Pointer<Void> createTransactionMultiDest(
+  Pointer<Void> walletPointer, {
   required List<String> addresses,
   required String paymentId,
   required bool isSweepAll,
@@ -316,67 +313,62 @@ Ptr createTransactionMultiDest(
 // ============== Pending Transaction ==========================================
 
 /// Will throw on failure
-void checkPendingTransactionStatus(Ptr pendingTransactionPointer) {
+void checkPendingTransactionStatus(Pointer<Void> pendingTransactionPointer) {
   final status = bindings.WOWNERO_PendingTransaction_status(
     pendingTransactionPointer,
   );
   if (status == 0) {
     return;
   }
-  final strPtr = bindings.WOWNERO_PendingTransaction_errorString(
+  final stringPointer = bindings.WOWNERO_PendingTransaction_errorString(
     pendingTransactionPointer,
   ).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  throw Exception(str);
+
+  throw Exception(convertAndFree(stringPointer));
 }
 
-int getPendingTransactionAmount(Ptr pendingTransactionPointer) {
+int getPendingTransactionAmount(Pointer<Void> pendingTransactionPointer) {
   return bindings.WOWNERO_PendingTransaction_amount(pendingTransactionPointer);
 }
 
-int getPendingTransactionFee(Ptr pendingTransactionPointer) {
+int getPendingTransactionFee(Pointer<Void> pendingTransactionPointer) {
   return bindings.WOWNERO_PendingTransaction_fee(pendingTransactionPointer);
 }
 
 String getPendingTransactionTxid(
-  Ptr pendingTransactionPointer, {
+  Pointer<Void> pendingTransactionPointer, {
   String separator = "",
 }) {
   final separatorPointer = separator.toNativeUtf8().cast<Char>();
   try {
-    final strPtr = bindings.WOWNERO_PendingTransaction_txid(
+    final stringPointer = bindings.WOWNERO_PendingTransaction_txid(
       pendingTransactionPointer,
       separatorPointer,
     ).cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(separatorPointer);
   }
 }
 
 String getPendingTransactionHex(
-  Ptr pendingTransactionPointer, {
+  Pointer<Void> pendingTransactionPointer, {
   String separator = "",
 }) {
   final separatorPointer = separator.toNativeUtf8().cast<Char>();
   try {
-    final strPtr = bindings.WOWNERO_PendingTransaction_hex(
+    final stringPointer = bindings.WOWNERO_PendingTransaction_hex(
       pendingTransactionPointer,
       separatorPointer,
     ).cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(separatorPointer);
   }
 }
 
 bool commitPendingTransaction(
-  Ptr pendingTransactionPointer, {
+  Pointer<Void> pendingTransactionPointer, {
   String filename = "",
   bool overwrite = false,
 }) {
@@ -395,99 +387,95 @@ bool commitPendingTransaction(
 // =============================================================================
 // ============== Coins ========================================================
 
-Ptr getCoinsPointer(Ptr walletPointer) {
+Pointer<Void> getCoinsPointer(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_coins(walletPointer);
 }
 
-void refreshCoins(Ptr coinsPointer) {
+void refreshCoins(Pointer<Void> coinsPointer) {
   bindings.WOWNERO_Coins_refresh(coinsPointer);
 }
 
-int getCoinsCount(Ptr coinsPointer) {
+int getCoinsCount(Pointer<Void> coinsPointer) {
   return bindings.WOWNERO_Coins_count(coinsPointer);
 }
 
-int getAllCoinsSize(Ptr coinsPointer) {
+int getAllCoinsSize(Pointer<Void> coinsPointer) {
   return bindings.WOWNERO_Coins_getAll_size(coinsPointer);
 }
 
-Ptr getCoinInfoPointer(Ptr coinsPointer, int index) {
+Pointer<Void> getCoinInfoPointer(Pointer<Void> coinsPointer, int index) {
   return bindings.WOWNERO_Coins_coin(coinsPointer, index);
 }
 
-void freezeCoin(Ptr coinsPointer, {required int index}) {
+void freezeCoin(Pointer<Void> coinsPointer, {required int index}) {
   bindings.WOWNERO_Coins_setFrozen(coinsPointer, index);
 }
 
-void thawCoin(Ptr coinsPointer, {required int index}) {
+void thawCoin(Pointer<Void> coinsPointer, {required int index}) {
   bindings.WOWNERO_Coins_thaw(coinsPointer, index);
 }
 
 // =============================================================================
 // ============== Coins Info ===================================================
 
-int getInternalOutputIndexForCoinsInfo(Ptr coinsInfoPointer) {
+int getInternalOutputIndexForCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_internalOutputIndex(coinsInfoPointer);
 }
 
-bool isFrozenCoinsInfo(Ptr coinsInfoPointer) {
+bool isFrozenCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_frozen(coinsInfoPointer);
 }
 
-bool isSpentCoinsInfo(Ptr coinsInfoPointer) {
+bool isSpentCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_spent(coinsInfoPointer);
 }
 
-int getSpentHeightForCoinsInfo(Ptr coinsInfoPointer) {
+int getSpentHeightForCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_spentHeight(coinsInfoPointer);
 }
 
-int getAmountForCoinsInfo(Ptr coinsInfoPointer) {
+int getAmountForCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_amount(coinsInfoPointer);
 }
 
-int getBlockHeightForCoinsInfo(Ptr coinsInfoPointer) {
+int getBlockHeightForCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_blockHeight(coinsInfoPointer);
 }
 
-bool isUnlockedCoinsInfo(Ptr coinsInfoPointer) {
+bool isUnlockedCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_unlocked(coinsInfoPointer);
 }
 
-bool isCoinbaseCoinsInfo(Ptr coinsInfoPointer) {
+bool isCoinbaseCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.WOWNERO_CoinsInfo_coinbase(coinsInfoPointer);
 }
 
-String getAddressForCoinsInfo(Ptr coinsInfoPointer) {
-  final strPtr = bindings.WOWNERO_CoinsInfo_address(
+String getAddressForCoinsInfo(Pointer<Void> coinsInfoPointer) {
+  final stringPointer = bindings.WOWNERO_CoinsInfo_address(
     coinsInfoPointer,
   ).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+  return convertAndFree(stringPointer);
 }
 
-String getKeyImageForCoinsInfo(Ptr coinsInfoPointer) {
-  final strPtr = bindings.WOWNERO_CoinsInfo_keyImage(
+String getKeyImageForCoinsInfo(Pointer<Void> coinsInfoPointer) {
+  final stringPointer = bindings.WOWNERO_CoinsInfo_keyImage(
     coinsInfoPointer,
   ).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+  return convertAndFree(stringPointer);
 }
 
-String getHashForCoinsInfo(Ptr coinsInfoPointer) {
-  final strPtr = bindings.WOWNERO_CoinsInfo_hash(coinsInfoPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getHashForCoinsInfo(Pointer<Void> coinsInfoPointer) {
+  final stringPointer = bindings.WOWNERO_CoinsInfo_hash(
+    coinsInfoPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
 // =============================================================================
 // ============== Key Images ===================================================
 
 bool exportWalletKeyImages(
-  Ptr walletPointer,
+  Pointer<Void> walletPointer,
   String filename, {
   required bool all,
 }) {
@@ -503,7 +491,7 @@ bool exportWalletKeyImages(
   }
 }
 
-bool importWalletKeyImages(Ptr walletPointer, String filename) {
+bool importWalletKeyImages(Pointer<Void> walletPointer, String filename) {
   final filenamePointer = filename.toNativeUtf8().cast<Char>();
 
   try {
@@ -520,21 +508,19 @@ bool importWalletKeyImages(Ptr walletPointer, String filename) {
 // ============== Sign/Verify ==================================================
 
 String signMessageWith(
-  Ptr walletPointer, {
+  Pointer<Void> walletPointer, {
   required String message,
   required String address,
 }) {
   final messagePointer = message.toNativeUtf8().cast<Char>();
   final addressPointer = address.toNativeUtf8().cast<Char>();
   try {
-    final strPtr = bindings.WOWNERO_Wallet_signMessage(
+    final stringPointer = bindings.WOWNERO_Wallet_signMessage(
       walletPointer,
       messagePointer,
       addressPointer,
     ).cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(messagePointer);
     calloc.free(addressPointer);
@@ -542,7 +528,7 @@ String signMessageWith(
 }
 
 bool verifySignedMessageWithWallet(
-  Ptr walletPointer, {
+  Pointer<Void> walletPointer, {
   required String message,
   required String address,
   required String signature,
@@ -567,38 +553,39 @@ bool verifySignedMessageWithWallet(
 // =============================================================================
 // ============== Seed/Password ================================================
 
-String getWalletSeed(Ptr walletPointer, {required String seedOffset}) {
+String getWalletSeed(
+  Pointer<Void> walletPointer, {
+  required String seedOffset,
+}) {
   final seedOffsetPointer = seedOffset.toNativeUtf8().cast<Char>();
   try {
-    final strPtr =
+    final stringPointer =
         bindings.WOWNERO_Wallet_seed(walletPointer, seedOffsetPointer)
             .cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(seedOffsetPointer);
   }
 }
 
-String getWalletSeedLanguage(Ptr walletPointer) {
-  final strPtr =
+String getWalletSeedLanguage(Pointer<Void> walletPointer) {
+  final stringPointer =
       bindings.WOWNERO_Wallet_getSeedLanguage(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+  return convertAndFree(stringPointer);
 }
 
-String getWalletPolyseed(Ptr walletPointer, {required String passphrase}) {
+String getWalletPolyseed(
+  Pointer<Void> walletPointer, {
+  required String passphrase,
+}) {
   final passphrasePointer = passphrase.toNativeUtf8().cast<Char>();
   try {
-    final strPtr =
-        bindings.WOWNERO_Wallet_getPolyseed(walletPointer, passphrasePointer)
-            .cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
+    final stringPointer = bindings.WOWNERO_Wallet_getPolyseed(
+      walletPointer,
+      passphrasePointer,
+    ).cast<Utf8>();
 
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(passphrasePointer);
   }
@@ -607,157 +594,148 @@ String getWalletPolyseed(Ptr walletPointer, {required String passphrase}) {
 String createPolyseed({String language = "English"}) {
   final languagePointer = language.toNativeUtf8();
   try {
-    final strPtr = bindings.WOWNERO_Wallet_createPolyseed(
+    final stringPointer = bindings.WOWNERO_Wallet_createPolyseed(
       languagePointer.cast(),
     ).cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(languagePointer);
   }
 }
 
-bool setWalletPassword(Ptr walletPointer, {required String password}) {
-  final password_ = password.toNativeUtf8().cast<Char>();
+bool setWalletPassword(
+  Pointer<Void> walletPointer, {
+  required String password,
+}) {
+  final passwordPointer = password.toNativeUtf8().cast<Char>();
   try {
-    return bindings.WOWNERO_Wallet_setPassword(walletPointer, password_);
+    return bindings.WOWNERO_Wallet_setPassword(walletPointer, passwordPointer);
   } finally {
-    calloc.free(password_);
+    calloc.free(passwordPointer);
   }
 }
 
-String getWalletPassword(Ptr walletPointer) {
-  final strPtr =
-      bindings.WOWNERO_Wallet_getPassword(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getWalletPassword(Pointer<Void> walletPointer) {
+  final stringPointer = bindings.WOWNERO_Wallet_getPassword(
+    walletPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
 // =============================================================================
 // ============== Keys =========================================================
 
-String getWalletSecretViewKey(Ptr walletPointer) {
-  final strPtr =
-      bindings.WOWNERO_Wallet_secretViewKey(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getWalletSecretViewKey(Pointer<Void> walletPointer) {
+  final stringPointer = bindings.WOWNERO_Wallet_secretViewKey(
+    walletPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
-String getWalletPublicViewKey(Ptr walletPointer) {
-  final strPtr =
-      bindings.WOWNERO_Wallet_publicViewKey(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getWalletPublicViewKey(Pointer<Void> walletPointer) {
+  final stringPointer = bindings.WOWNERO_Wallet_publicViewKey(
+    walletPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
-String getWalletSecretSpendKey(Ptr walletPointer) {
-  final strPtr =
-      bindings.WOWNERO_Wallet_secretSpendKey(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getWalletSecretSpendKey(Pointer<Void> walletPointer) {
+  final stringPointer = bindings.WOWNERO_Wallet_secretSpendKey(
+    walletPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
-String getWalletPublicSpendKey(Ptr walletPointer) {
-  final strPtr =
-      bindings.WOWNERO_Wallet_publicSpendKey(walletPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getWalletPublicSpendKey(Pointer<Void> walletPointer) {
+  final stringPointer = bindings.WOWNERO_Wallet_publicSpendKey(
+    walletPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
 // =============================================================================
 // ============== TransactionInfo ==============================================
 
-int getTransactionInfoAmount(Ptr txInfoPointer) {
+int getTransactionInfoAmount(Pointer<Void> txInfoPointer) {
   return bindings.WOWNERO_TransactionInfo_amount(txInfoPointer);
 }
 
-int getTransactionInfoFee(Ptr txInfoPointer) {
+int getTransactionInfoFee(Pointer<Void> txInfoPointer) {
   return bindings.WOWNERO_TransactionInfo_fee(txInfoPointer);
 }
 
-int getTransactionInfoConfirmations(Ptr txInfoPointer) {
+int getTransactionInfoConfirmations(Pointer<Void> txInfoPointer) {
   return bindings.WOWNERO_TransactionInfo_confirmations(txInfoPointer);
 }
 
-int getTransactionInfoBlockHeight(Ptr txInfoPointer) {
+int getTransactionInfoBlockHeight(Pointer<Void> txInfoPointer) {
   return bindings.WOWNERO_TransactionInfo_blockHeight(txInfoPointer);
 }
 
-int getTransactionInfoTimestamp(Ptr txInfoPointer) {
+int getTransactionInfoTimestamp(Pointer<Void> txInfoPointer) {
   return bindings.WOWNERO_TransactionInfo_timestamp(txInfoPointer);
 }
 
-int getTransactionInfoAccount(Ptr txInfoPointer) {
+int getTransactionInfoAccount(Pointer<Void> txInfoPointer) {
   return bindings.WOWNERO_TransactionInfo_subaddrAccount(txInfoPointer);
 }
 
-Set<int> getTransactionSubaddressIndexes(Ptr txInfoPointer) {
-  final strPtr = bindings.WOWNERO_TransactionInfo_subaddrIndex(
+Set<int> getTransactionSubaddressIndexes(Pointer<Void> txInfoPointer) {
+  final stringPointer = bindings.WOWNERO_TransactionInfo_subaddrIndex(
           txInfoPointer, defaultSeparator)
       .cast<Utf8>();
-  final indexesString = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
+  final indexesString = convertAndFree(stringPointer);
   final indexes = indexesString.split(", ").map(int.parse);
   return indexes.toSet();
 }
 
-bool getTransactionInfoIsSpend(Ptr txInfoPointer) {
+bool getTransactionInfoIsSpend(Pointer<Void> txInfoPointer) {
   // 0 is incoming, 1 is outgoing
   return bindings.WOWNERO_TransactionInfo_direction(txInfoPointer) == 1;
 }
 
-String getTransactionInfoLabel(Ptr txInfoPointer) {
-  final strPtr =
-      bindings.WOWNERO_TransactionInfo_label(txInfoPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getTransactionInfoLabel(Pointer<Void> txInfoPointer) {
+  final stringPointer = bindings.WOWNERO_TransactionInfo_label(
+    txInfoPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
-String getTransactionInfoDescription(Ptr txInfoPointer) {
-  final strPtr =
-      bindings.WOWNERO_TransactionInfo_description(txInfoPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getTransactionInfoDescription(Pointer<Void> txInfoPointer) {
+  final stringPointer = bindings.WOWNERO_TransactionInfo_description(
+    txInfoPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
-String getTransactionInfoPaymentId(Ptr txInfoPointer) {
-  final strPtr =
-      bindings.WOWNERO_TransactionInfo_paymentId(txInfoPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getTransactionInfoPaymentId(Pointer<Void> txInfoPointer) {
+  final stringPointer = bindings.WOWNERO_TransactionInfo_paymentId(
+    txInfoPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
-String getTransactionInfoHash(Ptr txInfoPointer) {
-  final strPtr =
-      bindings.WOWNERO_TransactionInfo_hash(txInfoPointer).cast<Utf8>();
-  final str = strPtr.toDartString();
-  bindings.WOWNERO_free(strPtr.cast());
-  return str;
+String getTransactionInfoHash(Pointer<Void> txInfoPointer) {
+  final stringPointer = bindings.WOWNERO_TransactionInfo_hash(
+    txInfoPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
 // =============================================================================
 // ============== Other ========================================================
 
 int amountFromString(String amount) {
-  final amount_ = amount.toNativeUtf8().cast<Char>();
+  final amountPointer = amount.toNativeUtf8().cast<Char>();
   try {
-    return bindings.WOWNERO_Wallet_amountFromString(amount_);
+    return bindings.WOWNERO_Wallet_amountFromString(amountPointer);
   } finally {
-    calloc.free(amount_);
+    calloc.free(amountPointer);
   }
 }
 
 bool setWalletCacheAttribute(
-  Ptr walletPointer, {
+  Pointer<Void> walletPointer, {
   required String key,
   required String value,
 }) {
@@ -776,19 +754,16 @@ bool setWalletCacheAttribute(
 }
 
 String getWalletCacheAttribute(
-  Ptr walletPointer, {
+  Pointer<Void> walletPointer, {
   required String key,
 }) {
   final keyPointer = key.toNativeUtf8().cast<Char>();
   try {
-    final strPtr = bindings.WOWNERO_Wallet_getCacheAttribute(
+    final stringPointer = bindings.WOWNERO_Wallet_getCacheAttribute(
       walletPointer,
       keyPointer,
     ).cast<Utf8>();
-    final str = strPtr.toDartString();
-    bindings.WOWNERO_free(strPtr.cast());
-
-    return str;
+    return convertAndFree(stringPointer);
   } finally {
     calloc.free(keyPointer);
   }
@@ -796,7 +771,7 @@ String getWalletCacheAttribute(
 
 // wow specific
 
-Ptr restore14WordSeed({
+Pointer<Void> restore14WordSeed({
   required String path,
   required String password,
   required String language,
@@ -819,7 +794,7 @@ Ptr restore14WordSeed({
   }
 }
 
-Ptr create14WordSeed({
+Pointer<Void> create14WordSeed({
   required String path,
   required String password,
   required String language,

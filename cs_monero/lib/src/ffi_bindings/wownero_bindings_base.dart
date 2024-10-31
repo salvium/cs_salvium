@@ -27,7 +27,11 @@ FfiWowneroC get bindings => _cachedBindings ??= FfiWowneroC(
       ),
     );
 
-typedef Ptr = Pointer<Void>;
-
 final defaultSeparatorStr = ";";
 final defaultSeparator = defaultSeparatorStr.toNativeUtf8().cast<Char>();
+
+String convertAndFree(Pointer<Utf8> stringPointer) {
+  final value = stringPointer.toDartString();
+  bindings.WOWNERO_free(stringPointer.cast());
+  return value;
+}

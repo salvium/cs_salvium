@@ -27,7 +27,11 @@ FfiMoneroC get bindings => _cachedBindings ??= FfiMoneroC(
       ),
     );
 
-typedef Ptr = Pointer<Void>;
-
 final defaultSeparatorStr = ";";
 final defaultSeparator = defaultSeparatorStr.toNativeUtf8().cast<Char>();
+
+String convertAndFree(Pointer<Utf8> stringPointer) {
+  final value = stringPointer.toDartString();
+  bindings.MONERO_free(stringPointer.cast());
+  return value;
+}
