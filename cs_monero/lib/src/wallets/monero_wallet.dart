@@ -105,11 +105,11 @@ class MoneroWallet extends Wallet {
         break;
     }
 
-    xmr_ffi.checkStatus(walletPointer);
+    xmr_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
     await Isolate.run(() {
-      xmr_ffi.store(Pointer.fromAddress(address), path: path);
+      xmr_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
     final wallet = MoneroWallet._(walletPointer, path);
@@ -153,11 +153,11 @@ class MoneroWallet extends Wallet {
       throw Exception("Bad seed length: $seedLength");
     }
 
-    xmr_ffi.checkStatus(walletPointer);
+    xmr_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
     await Isolate.run(() {
-      xmr_ffi.store(Pointer.fromAddress(address), path: path);
+      xmr_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
     final wallet = MoneroWallet._(walletPointer, path);
@@ -206,7 +206,7 @@ class MoneroWallet extends Wallet {
       restoreHeight: restoreHeight,
     );
 
-    xmr_ffi.checkStatus(walletPointer);
+    xmr_ffi.checkWalletStatus(walletPointer);
 
     final wallet = MoneroWallet._(walletPointer, path);
     _openedWalletsByPath[path] = wallet;
@@ -231,7 +231,7 @@ class MoneroWallet extends Wallet {
       restoreHeight: restoreHeight,
     );
 
-    xmr_ffi.checkStatus(walletPointer);
+    xmr_ffi.checkWalletStatus(walletPointer);
 
     // TODO check if we should grab seed and cache it here?
     // monero.Wallet_setCacheAttribute(walletPointer, key: "cakewallet.seed", value: seed);
@@ -265,7 +265,7 @@ class MoneroWallet extends Wallet {
       rethrow;
     }
 
-    xmr_ffi.checkStatus(wallet._getWalletPointer());
+    xmr_ffi.checkWalletStatus(wallet._getWalletPointer());
     return wallet;
   }
 
@@ -345,7 +345,7 @@ class MoneroWallet extends Wallet {
     // TODO: do something with return value?
     // return value matters? If so, whats the point of checking status below?
     final _ = await Isolate.run(() {
-      return xmr_ffi.init(
+      return xmr_ffi.initWallet(
         Pointer.fromAddress(pointerAddress),
         daemonAddress: daemonAddress,
         daemonUsername: daemonUsername ?? "",
@@ -356,7 +356,7 @@ class MoneroWallet extends Wallet {
       );
     });
 
-    xmr_ffi.checkStatus(_getWalletPointer());
+    xmr_ffi.checkWalletStatus(_getWalletPointer());
 
     xmr_ffi.setTrustedDaemon(
       _getWalletPointer(),
@@ -989,7 +989,7 @@ class MoneroWallet extends Wallet {
   Future<void> save() async {
     final pointerAddress = _getWalletPointer().address;
     await Isolate.run(() {
-      xmr_ffi.store(Pointer.fromAddress(pointerAddress), path: "");
+      xmr_ffi.storeWallet(Pointer.fromAddress(pointerAddress), path: "");
     });
   }
 

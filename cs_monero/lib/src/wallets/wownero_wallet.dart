@@ -139,11 +139,11 @@ class WowneroWallet extends Wallet {
         break;
     }
 
-    wow_ffi.checkStatus(walletPointer);
+    wow_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
     await Isolate.run(() {
-      wow_ffi.store(Pointer.fromAddress(address), path: path);
+      wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
     final wallet = WowneroWallet._(walletPointer, path);
@@ -200,11 +200,11 @@ class WowneroWallet extends Wallet {
       throw Exception("Bad seed length: $seedLength");
     }
 
-    wow_ffi.checkStatus(walletPointer);
+    wow_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
     await Isolate.run(() {
-      wow_ffi.store(Pointer.fromAddress(address), path: path);
+      wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
     final wallet = WowneroWallet._(walletPointer, path);
@@ -253,7 +253,7 @@ class WowneroWallet extends Wallet {
       restoreHeight: restoreHeight,
     );
 
-    wow_ffi.checkStatus(walletPointer);
+    wow_ffi.checkWalletStatus(walletPointer);
 
     final wallet = WowneroWallet._(walletPointer, path);
     _openedWalletsByPath[path] = wallet;
@@ -278,7 +278,7 @@ class WowneroWallet extends Wallet {
       restoreHeight: restoreHeight,
     );
 
-    wow_ffi.checkStatus(walletPointer);
+    wow_ffi.checkWalletStatus(walletPointer);
 
     // TODO check if we should grab seed and cache it here?
     // wownero.Wallet_setCacheAttribute(
@@ -312,7 +312,7 @@ class WowneroWallet extends Wallet {
       rethrow;
     }
 
-    wow_ffi.checkStatus(wallet._getWalletPointer());
+    wow_ffi.checkWalletStatus(wallet._getWalletPointer());
     return wallet;
   }
 
@@ -392,7 +392,7 @@ class WowneroWallet extends Wallet {
     // TODO: do something with return value?
     // return value matters? If so, whats the point of checking status below?
     final _ = await Isolate.run(() {
-      return wow_ffi.init(
+      return wow_ffi.initWallet(
         Pointer.fromAddress(pointerAddress),
         daemonAddress: daemonAddress,
         daemonUsername: daemonUsername ?? "",
@@ -403,7 +403,7 @@ class WowneroWallet extends Wallet {
       );
     });
 
-    wow_ffi.checkStatus(_getWalletPointer());
+    wow_ffi.checkWalletStatus(_getWalletPointer());
 
     wow_ffi.setTrustedDaemon(
       _getWalletPointer(),
@@ -1045,7 +1045,7 @@ class WowneroWallet extends Wallet {
   Future<void> save() async {
     final pointerAddress = _getWalletPointer().address;
     await Isolate.run(() {
-      wow_ffi.store(Pointer.fromAddress(pointerAddress), path: "");
+      wow_ffi.storeWallet(Pointer.fromAddress(pointerAddress), path: "");
     });
   }
 

@@ -5,28 +5,28 @@ import 'package:ffi/ffi.dart';
 import 'monero_bindings_base.dart';
 
 /// Will throw on failure
-void checkStatus(Ptr ptr) {
-  final status = bindings.MONERO_Wallet_status(ptr);
+void checkWalletStatus(Ptr walletPointer) {
+  final status = bindings.MONERO_Wallet_status(walletPointer);
 
   if (status == 0) {
     return;
   }
-  final strPtr = bindings.MONERO_Wallet_errorString(ptr).cast<Utf8>();
+  final strPtr = bindings.MONERO_Wallet_errorString(walletPointer).cast<Utf8>();
   final str = strPtr.toDartString();
   bindings.MONERO_free(strPtr.cast());
   throw Exception(str);
 }
 
-bool store(Ptr ptr, {required String path}) {
+bool storeWallet(Ptr walletPointer, {required String path}) {
   final pathPointer = path.toNativeUtf8().cast<Char>();
   try {
-    return bindings.MONERO_Wallet_store(ptr, pathPointer);
+    return bindings.MONERO_Wallet_store(walletPointer, pathPointer);
   } finally {
     calloc.free(pathPointer);
   }
 }
 
-bool init(
+bool initWallet(
   Ptr walletPointer, {
   required String daemonAddress,
   int upperTransactionSizeLimit = 0,
