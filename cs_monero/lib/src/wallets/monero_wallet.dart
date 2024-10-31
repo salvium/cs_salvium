@@ -1,10 +1,10 @@
 import 'dart:ffi';
 import 'dart:isolate';
 
-import 'package:compat/old_cw_core/get_height_by_date.dart';
 import 'package:meta/meta.dart';
 
 import '../../cs_monero.dart';
+import '../deprecated/get_height_by_date.dart';
 import '../enums/min_confirms.dart';
 import '../ffi_bindings/monero_wallet_bindings.dart' as xmr_ffi;
 import '../ffi_bindings/monero_wallet_manager_bindings.dart' as xmr_wm_ffi;
