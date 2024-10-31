@@ -13,7 +13,27 @@ pushd cs_monero
   dart pub get
 popd
 
-pushd cs_monero_flutter_libs
+pushd cs_monero_flutter_libs_platform_interface
+  flutter pub get
+popd
+
+pushd cs_monero_flutter_libs_android
+  flutter pub get
+popd
+
+pushd cs_monero_flutter_libs_ios
+  flutter pub get
+popd
+
+pushd cs_monero_flutter_libs_macos
+  flutter pub get
+popd
+
+pushd cs_monero_flutter_libs_linux
+  flutter pub get
+popd
+
+pushd cs_monero_flutter_libs_windows
   flutter pub get
 popd
 

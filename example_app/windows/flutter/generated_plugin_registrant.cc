@@ -6,9 +6,9 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <cs_monero_flutter_libs/cs_monero_flutter_libs_plugin_c_api.h>
+#include <cs_monero_flutter_libs_windows/cs_monero_flutter_libs_windows_plugin_c_api.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-  CsMoneroFlutterLibsPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("CsMoneroFlutterLibsPluginCApi"));
+  CsMoneroFlutterLibsWindowsPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("CsMoneroFlutterLibsWindowsPluginCApi"));
 }
