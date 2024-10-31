@@ -6,3 +6,10 @@
 
 build
 built_outputs
+
+.dart_tool
+
+coverage/
+
+pubspec.lock
+pubspec_overrides.yaml

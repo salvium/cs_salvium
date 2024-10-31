@@ -54,37 +54,37 @@ packages:
       path: "../cs_monero_flutter_libs"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "0.0.1"
   cs_monero_flutter_libs_android:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       path: "../cs_monero_flutter_libs_android"
       relative: true
     source: path
     version: "0.0.1"
   cs_monero_flutter_libs_ios:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       path: "../cs_monero_flutter_libs_ios"
       relative: true
     source: path
     version: "0.0.1"
   cs_monero_flutter_libs_linux:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       path: "../cs_monero_flutter_libs_linux"
       relative: true
     source: path
     version: "0.0.1"
   cs_monero_flutter_libs_macos:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       path: "../cs_monero_flutter_libs_macos"
       relative: true
     source: path
     version: "0.0.1"
   cs_monero_flutter_libs_platform_interface:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       path: "../cs_monero_flutter_libs_platform_interface"
       relative: true
