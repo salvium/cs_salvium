@@ -7,9 +7,8 @@ BUILD_DIR="${TOOLS_DIR}/../build"
 MONERO_C_DIR="${BUILD_DIR}/monero_c"
 OUTPUTS_DIR="${PROJECT_DIR}/built_outputs"
 
-# If this gets changed, update it in cs_monero/pubspec.yaml as well!
-MONERO_C_HASH="614b5c731fb671d112f860fd57b5fd0c8c11e92c"
-
+# set monero_c MONERO_C_HASH/version
+source "${TOOLS_DIR}/monero_c_version.sh"
 
 if [[ ! -d "${BUILD_DIR}" ]];
 then
