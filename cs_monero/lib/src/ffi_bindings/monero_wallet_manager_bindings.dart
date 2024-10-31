@@ -18,17 +18,20 @@ Pointer<Void> createWallet(
   final path_ = path.toNativeUtf8().cast<Char>();
   final password_ = password.toNativeUtf8().cast<Char>();
   final language_ = language.toNativeUtf8().cast<Char>();
-  final w = bindings.MONERO_WalletManager_createWallet(
-    walletManagerPointer,
-    path_,
-    password_,
-    language_,
-    networkType,
-  );
-  calloc.free(path_);
-  calloc.free(password_);
-  calloc.free(language_);
-  return w;
+
+  try {
+    return bindings.MONERO_WalletManager_createWallet(
+      walletManagerPointer,
+      path_,
+      password_,
+      language_,
+      networkType,
+    );
+  } finally {
+    calloc.free(path_);
+    calloc.free(password_);
+    calloc.free(language_);
+  }
 }
 
 Pointer<Void> openWallet(
@@ -39,15 +42,18 @@ Pointer<Void> openWallet(
 }) {
   final path_ = path.toNativeUtf8().cast<Char>();
   final password_ = password.toNativeUtf8().cast<Char>();
-  final w = bindings.MONERO_WalletManager_openWallet(
-    walletManagerPointer,
-    path_,
-    password_,
-    networkType,
-  );
-  calloc.free(path_);
-  calloc.free(password_);
-  return w;
+
+  try {
+    return bindings.MONERO_WalletManager_openWallet(
+      walletManagerPointer,
+      path_,
+      password_,
+      networkType,
+    );
+  } finally {
+    calloc.free(path_);
+    calloc.free(password_);
+  }
 }
 
 Pointer<Void> recoveryWallet(
@@ -64,7 +70,9 @@ Pointer<Void> recoveryWallet(
   final password_ = password.toNativeUtf8().cast<Char>();
   final mnemonic_ = mnemonic.toNativeUtf8().cast<Char>();
   final seedOffset_ = seedOffset.toNativeUtf8().cast<Char>();
-  final w = bindings.MONERO_WalletManager_recoveryWallet(
+
+  try {
+    return bindings.MONERO_WalletManager_recoveryWallet(
       walletManagerPointer,
       path_,
       password_,
@@ -72,12 +80,14 @@ Pointer<Void> recoveryWallet(
       networkType,
       restoreHeight,
       kdfRounds,
-      seedOffset_);
-  calloc.free(path_);
-  calloc.free(password_);
-  calloc.free(mnemonic_);
-  calloc.free(seedOffset_);
-  return w;
+      seedOffset_,
+    );
+  } finally {
+    calloc.free(path_);
+    calloc.free(password_);
+    calloc.free(mnemonic_);
+    calloc.free(seedOffset_);
+  }
 }
 
 Pointer<Void> createWalletFromKeys(
@@ -99,25 +109,27 @@ Pointer<Void> createWalletFromKeys(
   final viewKeyString_ = viewKeyString.toNativeUtf8().cast<Char>();
   final spendKeyString_ = spendKeyString.toNativeUtf8().cast<Char>();
 
-  final w = bindings.MONERO_WalletManager_createWalletFromKeys(
-    walletManagerPointer,
-    path_,
-    password_,
-    language_,
-    networkType,
-    restoreHeight,
-    addressString_,
-    viewKeyString_,
-    spendKeyString_,
-    kdfRounds,
-  );
-  calloc.free(path_);
-  calloc.free(password_);
-  calloc.free(language_);
-  calloc.free(addressString_);
-  calloc.free(viewKeyString_);
-  calloc.free(spendKeyString_);
-  return w;
+  try {
+    return bindings.MONERO_WalletManager_createWalletFromKeys(
+      walletManagerPointer,
+      path_,
+      password_,
+      language_,
+      networkType,
+      restoreHeight,
+      addressString_,
+      viewKeyString_,
+      spendKeyString_,
+      kdfRounds,
+    );
+  } finally {
+    calloc.free(path_);
+    calloc.free(password_);
+    calloc.free(language_);
+    calloc.free(addressString_);
+    calloc.free(viewKeyString_);
+    calloc.free(spendKeyString_);
+  }
 }
 
 Pointer<Void> createDeterministicWalletFromSpendKey(
@@ -135,7 +147,9 @@ Pointer<Void> createDeterministicWalletFromSpendKey(
   final password_ = password.toNativeUtf8().cast<Char>();
   final language_ = language.toNativeUtf8().cast<Char>();
   final spendKeyString_ = spendKeyString.toNativeUtf8().cast<Char>();
-  final w = bindings.MONERO_WalletManager_createDeterministicWalletFromSpendKey(
+
+  try {
+    return bindings.MONERO_WalletManager_createDeterministicWalletFromSpendKey(
       walletManagerPointer,
       path_,
       password_,
@@ -143,12 +157,14 @@ Pointer<Void> createDeterministicWalletFromSpendKey(
       networkType,
       restoreHeight,
       spendKeyString_,
-      kdfRounds);
-  calloc.free(path_);
-  calloc.free(password_);
-  calloc.free(language_);
-  calloc.free(spendKeyString_);
-  return w;
+      kdfRounds,
+    );
+  } finally {
+    calloc.free(path_);
+    calloc.free(password_);
+    calloc.free(language_);
+    calloc.free(spendKeyString_);
+  }
 }
 
 Pointer<Void> createWalletFromPolyseed(
@@ -166,7 +182,9 @@ Pointer<Void> createWalletFromPolyseed(
   final password_ = password.toNativeUtf8().cast<Char>();
   final mnemonic_ = mnemonic.toNativeUtf8().cast<Char>();
   final seedOffset_ = seedOffset.toNativeUtf8().cast<Char>();
-  final w = bindings.MONERO_WalletManager_createWalletFromPolyseed(
+
+  try {
+    return bindings.MONERO_WalletManager_createWalletFromPolyseed(
       walletManagerPointer,
       path_,
       password_,
@@ -175,12 +193,14 @@ Pointer<Void> createWalletFromPolyseed(
       seedOffset_,
       newWallet,
       restoreHeight,
-      kdfRounds);
-  calloc.free(path_);
-  calloc.free(password_);
-  calloc.free(mnemonic_);
-  calloc.free(seedOffset_);
-  return w;
+      kdfRounds,
+    );
+  } finally {
+    calloc.free(path_);
+    calloc.free(password_);
+    calloc.free(mnemonic_);
+    calloc.free(seedOffset_);
+  }
 }
 
 bool closeWallet(
@@ -198,10 +218,13 @@ bool closeWallet(
 
 bool walletExists(Pointer<Void> walletManagerPointer, String path) {
   final path_ = path.toNativeUtf8().cast<Char>();
-  final s = bindings.MONERO_WalletManager_walletExists(
-    walletManagerPointer,
-    path_,
-  );
-  calloc.free(path_);
-  return s;
+
+  try {
+    return bindings.MONERO_WalletManager_walletExists(
+      walletManagerPointer,
+      path_,
+    );
+  } finally {
+    calloc.free(path_);
+  }
 }
