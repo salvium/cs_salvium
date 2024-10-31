@@ -8,4 +8,4 @@ headers:
 exclude-all-by-default: true
 functions:
   include:
-    - WOWNERO_.+"
+    - "WOWNERO_.+"
