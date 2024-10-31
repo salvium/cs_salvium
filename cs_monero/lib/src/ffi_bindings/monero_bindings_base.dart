@@ -21,10 +21,11 @@ String get _libName {
 }
 
 FfiMoneroC? _cachedBindings;
-FfiMoneroC get bindings =>
-    _cachedBindings ??= FfiMoneroC(DynamicLibrary.open(_libName));
-
-void free(Pointer pointer) => bindings.MONERO_free(pointer.cast());
+FfiMoneroC get bindings => _cachedBindings ??= FfiMoneroC(
+      DynamicLibrary.open(
+        _libName,
+      ),
+    );
 
 typedef Ptr = Pointer<Void>;
 
