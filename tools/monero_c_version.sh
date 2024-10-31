@@ -2,5 +2,5 @@
 set -e -x
 
 # This should be the only place this exists.
-MONERO_C_HASH="614b5c731fb671d112f860fd57b5fd0c8c11e92c"
+MONERO_C_HASH="136288642fad8c76c67bd0957e654474520b5e65"
 export MONERO_C_HASH

@@ -4912,14 +4912,14 @@ class FfiMoneroC {
           bool Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>, bool, int)>();
 
-  bool MONERO_WalletManager_queryWalletDevice(
-    int device_type,
+  int MONERO_WalletManager_queryWalletDevice(
+    ffi.Pointer<ffi.Void> wm_ptr,
     ffi.Pointer<ffi.Char> keys_file_name,
     ffi.Pointer<ffi.Char> password,
     int kdf_rounds,
   ) {
     return _MONERO_WalletManager_queryWalletDevice(
-      device_type,
+      wm_ptr,
       keys_file_name,
       password,
       kdf_rounds,
@@ -4928,15 +4928,15 @@ class FfiMoneroC {
 
   late final _MONERO_WalletManager_queryWalletDevicePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Bool Function(
-              ffi.Int,
+          ffi.Int Function(
+              ffi.Pointer<ffi.Void>,
               ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>,
               ffi.Uint64)>>('MONERO_WalletManager_queryWalletDevice');
   late final _MONERO_WalletManager_queryWalletDevice =
       _MONERO_WalletManager_queryWalletDevicePtr.asFunction<
-          bool Function(
-              int, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, int)>();
+          int Function(ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>, int)>();
 
   ffi.Pointer<ffi.Char> MONERO_WalletManager_findWallets(
     ffi.Pointer<ffi.Void> wm_ptr,
