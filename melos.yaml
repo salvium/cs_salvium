@@ -55,6 +55,38 @@ command:
       flutter_lints: ^4.0.0
 
 scripts:
+  prepareMoneroC:
+    run: dart tools/dart/bin/prepare_monero_c.dart
+    description: Clone and prepare the monero_c source. The melos build:* will do this if required.
+
+  build:android:
+    run: dart tools/dart/bin/build_libs.dart android
+    description: Build the android monero_c libraries
+
+  build:ios:
+    run: dart tools/dart/bin/build_libs.dart ios
+    description: Build the android monero_c libraries
+
+  build:macos:
+    run: dart tools/dart/bin/build_libs.dart macos
+    description: Build the android monero_c libraries
+
+  build:linux:
+    run: dart tools/dart/bin/build_libs.dart linux
+    description: Build the android monero_c libraries
+
+  build:windows:
+    run: dart tools/dart/bin/build_libs.dart windows
+    description: Build the android monero_c libraries
+
+  copyLibs:
+    run: dart tools/dart/bin/copy_libs.dart
+    description: Copy monero_c libraries to their respective package locations
+
+  genFFI:
+    run: dart tools/dart/bin/gen_ffi.dart
+    description: Generate the monero_c dart FFI bindings
+
   example:
     run: melos exec --scope=example_app -- flutter run
     description: Run the example app
