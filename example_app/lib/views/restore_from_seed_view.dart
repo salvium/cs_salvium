@@ -86,7 +86,7 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
     });
 
     try {
-      final wallet = await restoreWallet(
+      final _ = await restoreWallet(
         _type,
         nameController.text,
         pwController.text,

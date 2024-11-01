@@ -165,8 +165,10 @@ int getWalletBalance(Pointer<Void> walletPointer, {required int accountIndex}) {
   return bindings.MONERO_Wallet_balance(walletPointer, accountIndex);
 }
 
-int getWalletUnlockedBalance(Pointer<Void> walletPointer,
-    {required int accountIndex}) {
+int getWalletUnlockedBalance(
+  Pointer<Void> walletPointer, {
+  required int accountIndex,
+}) {
   return bindings.MONERO_Wallet_unlockedBalance(walletPointer, accountIndex);
 }
 

@@ -95,7 +95,7 @@ class _RestoreFromKeysViewState extends State<RestoreFromKeysView> {
     });
 
     try {
-      final wallet = await viewOnlyWallet(
+      final _ = await viewOnlyWallet(
         _type,
         nameController.text,
         pwController.text,

@@ -90,7 +90,7 @@ class _CreateViewOnlyWalletViewState extends State<CreateViewOnlyWalletView> {
     });
 
     try {
-      final wallet = await viewOnlyWallet(
+      final _ = await viewOnlyWallet(
         _type,
         nameController.text,
         pwController.text,

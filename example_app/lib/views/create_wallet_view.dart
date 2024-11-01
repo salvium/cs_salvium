@@ -85,7 +85,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
     });
 
     try {
-      final wallet = await createWallet(
+      final _ = await createWallet(
         _type,
         nameController.text,
         pwController.text,

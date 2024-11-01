@@ -6,7 +6,6 @@ library;
 export 'src/enums/monero_seed_type.dart';
 export 'src/enums/transaction_priority.dart';
 export 'src/enums/wownero_seed_type.dart';
-export 'src/exceptions/creation_transaction_exception.dart';
 export 'src/logging.dart';
 export 'src/mnemonics/mnemonics.dart';
 export 'src/models/account.dart';

@@ -1,8 +1,9 @@
 import 'dart:ffi';
 import 'dart:io';
 
-import 'package:cs_monero/src/ffi_bindings/generated_bindings_wownero.g.dart';
 import 'package:ffi/ffi.dart';
+
+import 'generated_bindings_wownero.g.dart';
 
 String get _libName {
   if (Platform.isIOS || Platform.isMacOS) {

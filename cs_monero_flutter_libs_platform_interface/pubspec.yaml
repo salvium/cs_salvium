@@ -1,0 +1,19 @@
+name: cs_monero_flutter_libs_platform_interface
+description: "A new Flutter plugin project."
+version: 0.0.1
+homepage: https://github.com/cypherstack/cs_monero
+
+environment:
+  sdk: ^3.5.3
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  mockito: ^5.4.4

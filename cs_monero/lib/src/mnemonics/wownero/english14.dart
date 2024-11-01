@@ -2047,6 +2047,6 @@ class EnglishMnemonics14 {
     "zebra",
     "zero",
     "zone",
-    "zoo"
+    "zoo",
   ];
 }

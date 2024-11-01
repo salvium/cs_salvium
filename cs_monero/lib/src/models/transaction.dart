@@ -1,4 +1,4 @@
-import 'package:cs_monero/src/enums/min_confirms.dart';
+import '../enums/min_confirms.dart';
 
 class Transaction {
   final String displayLabel;
