@@ -53,9 +53,9 @@ command:
       mockito: ^5.4.4
 
 scripts:
-#  analyze:
-#    run: melos exec -- flutter analyze
-#    description: Analyze all packages
+  example:
+    run: melos exec --scope=example_app -- flutter run
+    description: Run the example app
 
   test:
     run: melos exec --dir-exists=test -c 1 -- flutter test
