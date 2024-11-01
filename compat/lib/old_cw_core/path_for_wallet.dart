@@ -24,4 +24,4 @@ Future<String> pathForWallet({
       name: name,
       type: type,
       appRoot: appRoot,
-    ).then((path) => path + '/$name');
+    ).then((path) => '$path/$name');

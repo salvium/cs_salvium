@@ -132,8 +132,10 @@ int getWalletRefreshFromBlockHeight(Pointer<Void> walletPointer) {
   return bindings.WOWNERO_Wallet_getRefreshFromBlockHeight(walletPointer);
 }
 
-void setWalletAutoRefreshInterval(Pointer<Void> walletPointer,
-    {required int millis}) {
+void setWalletAutoRefreshInterval(
+  Pointer<Void> walletPointer, {
+  required int millis,
+}) {
   bindings.WOWNERO_Wallet_setAutoRefreshInterval(walletPointer, millis);
 }
 
@@ -164,8 +166,10 @@ int getWalletBalance(Pointer<Void> walletPointer, {required int accountIndex}) {
   return bindings.WOWNERO_Wallet_balance(walletPointer, accountIndex);
 }
 
-int getWalletUnlockedBalance(Pointer<Void> walletPointer,
-    {required int accountIndex}) {
+int getWalletUnlockedBalance(
+  Pointer<Void> walletPointer, {
+  required int accountIndex,
+}) {
   return bindings.WOWNERO_Wallet_unlockedBalance(walletPointer, accountIndex);
 }
 
@@ -682,8 +686,9 @@ int getTransactionInfoAccount(Pointer<Void> txInfoPointer) {
 
 Set<int> getTransactionSubaddressIndexes(Pointer<Void> txInfoPointer) {
   final stringPointer = bindings.WOWNERO_TransactionInfo_subaddrIndex(
-          txInfoPointer, defaultSeparator)
-      .cast<Utf8>();
+    txInfoPointer,
+    defaultSeparator,
+  ).cast<Utf8>();
   final indexesString = convertAndFree(stringPointer);
   final indexes = indexesString.split(", ").map(int.parse);
   return indexes.toSet();

@@ -1625,6 +1625,6 @@ class GermanMnemonics {
     "Zugvogel",
     "Zündung",
     "Zweck",
-    "Zyklop"
+    "Zyklop",
   ];
 }

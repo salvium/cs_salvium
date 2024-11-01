@@ -1,0 +1,3 @@
+# cs_monero_flutter_libs_windows
+
+Windows implementation of cs_monero_flutter_libs

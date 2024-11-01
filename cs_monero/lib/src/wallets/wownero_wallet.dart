@@ -20,16 +20,18 @@ class WowneroWallet extends Wallet {
 
   // shared pointer
   static Pointer<Void>? _walletManagerPointerCached;
-  static final Pointer<Void> _walletManagerPointer = Pointer.fromAddress((() {
-    try {
-      // wownero.printStarts = true;
-      _walletManagerPointerCached ??= wow_wm_ffi.getWalletManager();
-      Logging.log?.i("ptr: $_walletManagerPointerCached");
-    } catch (e, s) {
-      Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
-    }
-    return _walletManagerPointerCached!.address;
-  })());
+  static final Pointer<Void> _walletManagerPointer = Pointer.fromAddress(
+    (() {
+      try {
+        // wownero.printStarts = true;
+        _walletManagerPointerCached ??= wow_wm_ffi.getWalletManager();
+        Logging.log?.i("ptr: $_walletManagerPointerCached");
+      } catch (e, s) {
+        Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
+      }
+      return _walletManagerPointerCached!.address;
+    })(),
+  );
 
   // internal map of wallets
   static final Map<String, WowneroWallet> _openedWalletsByPath = {};
@@ -303,8 +305,11 @@ class WowneroWallet extends Wallet {
     }
 
     try {
-      final walletPointer = wow_wm_ffi.openWallet(_walletManagerPointer,
-          path: path, password: password);
+      final walletPointer = wow_wm_ffi.openWallet(
+        _walletManagerPointer,
+        path: path,
+        password: password,
+      );
       wallet = WowneroWallet._(walletPointer, path);
       _openedWalletsByPath[path] = wallet;
     } catch (e, s) {
@@ -363,12 +368,12 @@ class WowneroWallet extends Wallet {
         _transactionHistoryPointer!,
       );
 
-  @override
-  @protected
-  int syncHeight() => wow_ffi.getWalletBlockChainHeight(_getWalletPointer());
-
   // ===========================================================================
   // === Overrides =============================================================
+
+  @override
+  int getCurrentWalletSyncingHeight() =>
+      wow_ffi.getWalletBlockChainHeight(_getWalletPointer());
 
   @override
   int getBlockChainHeightByDate(DateTime date) {
@@ -453,7 +458,7 @@ class WowneroWallet extends Wallet {
     // As such, we'll just do an approximation and assume (probably wrongly so)
     // that current sync/scan height and daemon height calls will return sane
     // values.
-    final current = syncHeight();
+    final current = getCurrentWalletSyncingHeight();
     final daemonHeight = getDaemonHeight();
 
     // if difference is less than an arbitrary low but non zero value, then make
@@ -806,7 +811,8 @@ class WowneroWallet extends Wallet {
     for (int i = 0; i < count; i++) {
       if (keyImage ==
           wow_ffi.getKeyImageForCoinsInfo(
-              wow_ffi.getCoinInfoPointer(_coinsPointer!, i))) {
+            wow_ffi.getCoinInfoPointer(_coinsPointer!, i),
+          )) {
         wow_ffi.freezeCoin(_coinsPointer!, index: i);
         return;
       }
@@ -827,7 +833,8 @@ class WowneroWallet extends Wallet {
     for (int i = 0; i < count; i++) {
       if (keyImage ==
           wow_ffi.getKeyImageForCoinsInfo(
-              wow_ffi.getCoinInfoPointer(_coinsPointer!, i))) {
+            wow_ffi.getCoinInfoPointer(_coinsPointer!, i),
+          )) {
         wow_ffi.thawCoin(_coinsPointer!, index: i);
         return;
       }

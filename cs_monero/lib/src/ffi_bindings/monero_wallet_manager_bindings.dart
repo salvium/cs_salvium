@@ -73,14 +73,15 @@ Pointer<Void> recoveryWallet(
 
   try {
     return bindings.MONERO_WalletManager_recoveryWallet(
-        walletManagerPointer,
-        pathPointer,
-        passwordPointer,
-        mnemonicPointer,
-        networkType,
-        restoreHeight,
-        kdfRounds,
-        seedOffsetPointer);
+      walletManagerPointer,
+      pathPointer,
+      passwordPointer,
+      mnemonicPointer,
+      networkType,
+      restoreHeight,
+      kdfRounds,
+      seedOffsetPointer,
+    );
   } finally {
     calloc.free(pathPointer);
     calloc.free(passwordPointer);

@@ -1625,6 +1625,6 @@ class ChineseSimplifiedMnemonics {
     "祝",
     "秒",
     "浙",
-    "貌"
+    "貌",
   ];
 }

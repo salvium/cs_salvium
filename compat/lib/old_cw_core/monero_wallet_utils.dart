@@ -4,10 +4,10 @@ import 'path_for_wallet.dart';
 import 'wallet_type.dart';
 
 String hiveIdFor(String name, WalletType type) =>
-    walletTypeToString(type).toLowerCase() + '_' + name;
+    '${walletTypeToString(type).toLowerCase()}_$name';
 
 String libMoneroWalletPasswordKey(String walletName) =>
-    "MONERO_WALLET_PASSWORD" + "_" + walletName.toUpperCase();
+    "MONERO_WALLET_PASSWORD_${walletName.toUpperCase()}";
 
 Future<void> deleteWalletFiles({
   required String name,

@@ -1,0 +1,70 @@
+name: cs_monero
+repository: https://github.com/cypherstack/cs_monero
+
+packages:
+  - "compat"
+  - "cs_monero"
+  - "cs_monero_flutter_libs"
+  - "cs_monero_flutter_libs_android"
+  - "cs_monero_flutter_libs_android_x86_64"
+  - "cs_monero_flutter_libs_android_arm64_v8a"
+  - "cs_monero_flutter_libs_android_armeabi_v7a"
+  - "cs_monero_flutter_libs_ios"
+  - "cs_monero_flutter_libs_linux"
+  - "cs_monero_flutter_libs_macos"
+  - "cs_monero_flutter_libs_platform_interface"
+  - "cs_monero_flutter_libs_windows"
+  - "example_app"
+
+command:
+  version:
+    # Generates a link to a prefilled GitHub release creation page.
+    releaseUrl: true
+
+  bootstrap:
+    environment:
+      sdk: ">=3.5.3 <4.0.0"
+      flutter: ">=3.24.0"
+    dependencies:
+      ffi: ^2.1.0
+      logger: ^2.4.0
+      meta: ^1.15.0
+      plugin_platform_interface: ^2.0.2
+
+      # shared interface for federated plugins below
+      cs_monero_flutter_libs_platform_interface: 0.0.1-dev.1
+
+      # separated bins bins by platform to get around pub.dev size limit
+      cs_monero_flutter_libs_android: 0.0.1-dev.0
+      cs_monero_flutter_libs_ios: 0.0.1-dev.0
+      cs_monero_flutter_libs_linux: 0.0.1-dev.0
+      cs_monero_flutter_libs_macos: 0.0.1-dev.0
+      cs_monero_flutter_libs_windows: 0.0.1-dev.0
+
+      # separated android bins by arch to get around pub.dev size limit
+      cs_monero_flutter_libs_android_x86_64: 0.0.1-dev.0
+      cs_monero_flutter_libs_android_arm64_v8a: 0.0.1-dev.0
+      cs_monero_flutter_libs_android_armeabi_v7a: 0.0.1-dev.0
+
+    dev_dependencies:
+      lints: ^4.0.0
+      test: ^1.24.0
+      ffigen: ^14.0.0
+      flutter_test:
+        sdk: flutter
+      flutter_lints: ^4.0.0
+
+scripts:
+  example:
+    run: melos exec --scope=example_app -- flutter run
+    description: Run the example app
+
+  test:
+    run: melos exec --dir-exists=test -c 1 -- flutter test
+    description: Run tests for all packages
+
+  coverage:
+    steps:
+      - melos exec --dir-exists=test -c 1 -- flutter test --coverage
+      - melos exec --dir-exists=test -c 1 -- genhtml coverage/lcov.info --output-directory=coverage/
+    description: Generate coverage for the selected package.

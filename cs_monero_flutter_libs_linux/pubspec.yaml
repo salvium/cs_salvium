@@ -1,0 +1,27 @@
+name: cs_monero_flutter_libs_linux
+description: Linux implementation of cs_monero_flutter_libs
+version: 0.0.1-dev.0
+homepage: https://github.com/cypherstack/cs_monero
+
+environment:
+  sdk: ^3.5.3
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cs_monero_flutter_libs_platform_interface: 0.0.1-dev.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  plugin_platform_interface: ^2.0.2
+
+flutter:
+  plugin:
+    implements: cs_monero_flutter_libs
+    platforms:
+      linux:
+        pluginClass: CsMoneroFlutterLibsLinuxPlugin
+        dartPluginClass: CsMoneroFlutterLibsLinux

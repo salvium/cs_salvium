@@ -6,11 +6,11 @@ set "PROJECT_DIR=%TOOLS_DIR%\.."
 
 set "OUTPUTS_DIR=%PROJECT_DIR%\precompiled"
 set "LIBS_PACKAGE_DIR=%PROJECT_DIR%\cs_monero_flutter_libs"
-set "ANDROID_LIBS_DIR=%LIBS_PACKAGE_DIR%\android\src\main\jniLibs"
-set "IOS_LIBS_DIR=%LIBS_PACKAGE_DIR%\ios\Frameworks"
-set "MACOS_LIBS_DIR=%LIBS_PACKAGE_DIR%\macos\Frameworks"
-set "LINUX_LIBS_DIR=%LIBS_PACKAGE_DIR%\linux\lib"
-set "WINDOWS_LIBS_DIR=%LIBS_PACKAGE_DIR%\windows\lib"
+set "ANDROID_LIBS_DIR=%LIBS_PACKAGE_DIR%_android\android\src\main\jniLibs"
+set "IOS_LIBS_DIR=%LIBS_PACKAGE_DIR%_ios\ios\Frameworks"
+set "MACOS_LIBS_DIR=%LIBS_PACKAGE_DIR%_macos\macos\Frameworks"
+set "LINUX_LIBS_DIR=%LIBS_PACKAGE_DIR%_linux\linux\lib"
+set "WINDOWS_LIBS_DIR=%LIBS_PACKAGE_DIR%_windows\windows\lib"
 
 rem Check and copy Android libraries
 if exist "%OUTPUTS_DIR%\android\jniLibs" (

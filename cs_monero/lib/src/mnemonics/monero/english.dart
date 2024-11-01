@@ -1625,6 +1625,6 @@ class EnglishMnemonics {
     "zodiac",
     "zombie",
     "zones",
-    "zoom"
+    "zoom",
   ];
 }
