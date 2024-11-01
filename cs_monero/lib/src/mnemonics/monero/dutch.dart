@@ -1625,6 +1625,6 @@ class DutchMnemonics {
     "zwepen",
     "zwiep",
     "zwijmel",
-    "zworen"
+    "zworen",
   ];
 }

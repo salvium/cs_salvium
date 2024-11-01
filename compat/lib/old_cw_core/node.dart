@@ -9,18 +9,19 @@ Uri? createUriFromElectrumAddress(String? address) =>
 
 @HiveType(typeId: Node.typeId)
 class Node extends HiveObject {
-  Node(
-      {required String uri,
-      required WalletType type,
-      this.login,
-      this.password,
-      this.useSSL,
-      this.trusted = false}) {
+  Node({
+    required String uri,
+    required WalletType type,
+    this.login,
+    this.password,
+    this.useSSL,
+    this.trusted = false,
+  }) {
     uriRaw = uri;
     this.type = type;
   }
 
-  Node.fromMap(Map map)
+  Node.fromMap(Map<dynamic, dynamic> map)
       : uriRaw = map['uri'] as String? ?? '',
         login = map['login'] as String?,
         password = map['password'] as String?,

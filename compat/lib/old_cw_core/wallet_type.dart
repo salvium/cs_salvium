@@ -7,7 +7,7 @@ const walletTypes = [
   WalletType.bitcoin,
   WalletType.litecoin,
   WalletType.haven,
-  WalletType.wownero
+  WalletType.wownero,
 ];
 const walletTypeTypeId = 5;
 

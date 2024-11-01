@@ -1625,6 +1625,6 @@ class PortugueseMnemonics {
     "zefiro",
     "zeloso",
     "zenite",
-    "zumbi"
+    "zumbi",
   ];
 }

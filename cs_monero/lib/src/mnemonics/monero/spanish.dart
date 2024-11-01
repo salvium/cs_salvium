@@ -1625,6 +1625,6 @@ class SpanishMnemonics {
     "riqueza",
     "risa",
     "ritmo",
-    "rito"
+    "rito",
   ];
 }

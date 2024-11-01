@@ -43,7 +43,7 @@ class _WalletViewState extends State<WalletView> {
     path = widget.wallet.getPath();
     password = widget.wallet.getPassword();
     daemonHeight = widget.wallet.getDaemonHeight();
-    syncHeight = widget.wallet.syncHeight();
+    syncHeight = widget.wallet.getCurrentWalletSyncingHeight();
     syncFromHeight = widget.wallet.getRefreshFromBlockHeight();
     address = widget.wallet.getAddress();
     mnemonic = widget.wallet.getSeed();
@@ -143,7 +143,7 @@ class _WalletViewState extends State<WalletView> {
           TextButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<dynamic>(
                   builder: (context) => CreateTransactionView(
                     wallet: widget.wallet,
                   ),

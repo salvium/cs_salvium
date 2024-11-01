@@ -10,8 +10,7 @@ packages:
   - "cs_monero_flutter_libs_linux"
   - "cs_monero_flutter_libs_macos"
   - "cs_monero_flutter_libs_platform_interface"
-  - "cs_monero_flutter_libs_platform_windows"
-  - "cs_monero_flutter_libs_platform_windows"
+  - "cs_monero_flutter_libs_windows"
   - "example_app"
 
 command:

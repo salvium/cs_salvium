@@ -7,7 +7,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group("$CsMoneroFlutterLibsMacos", () {
-    CsMoneroFlutterLibsMacos platform = CsMoneroFlutterLibsMacos();
+    final platform = CsMoneroFlutterLibsMacos();
     const MethodChannel channel = MethodChannel("cs_monero_flutter_libs_macos");
 
     setUp(() {

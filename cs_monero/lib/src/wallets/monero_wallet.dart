@@ -18,16 +18,18 @@ class MoneroWallet extends Wallet {
 
   // shared pointer
   static Pointer<Void>? _walletManagerPointerCached;
-  static final Pointer<Void> _walletManagerPointer = Pointer.fromAddress((() {
-    try {
-      // monero.printStarts = true;
-      _walletManagerPointerCached ??= xmr_wm_ffi.getWalletManager();
-      Logging.log?.i("ptr: $_walletManagerPointerCached");
-    } catch (e, s) {
-      Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
-    }
-    return _walletManagerPointerCached!.address;
-  })());
+  static final Pointer<Void> _walletManagerPointer = Pointer.fromAddress(
+    (() {
+      try {
+        // monero.printStarts = true;
+        _walletManagerPointerCached ??= xmr_wm_ffi.getWalletManager();
+        Logging.log?.i("ptr: $_walletManagerPointerCached");
+      } catch (e, s) {
+        Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
+      }
+      return _walletManagerPointerCached!.address;
+    })(),
+  );
 
   // internal map of wallets
   static final Map<String, MoneroWallet> _openedWalletsByPath = {};
@@ -316,17 +318,17 @@ class MoneroWallet extends Wallet {
         _transactionHistoryPointer!,
       );
 
-  @override
-  @protected
-  int syncHeight() => xmr_ffi.getWalletBlockChainHeight(_getWalletPointer());
-
   // ===========================================================================
   // === Overrides =============================================================
 
   @override
+  int getCurrentWalletSyncingHeight() =>
+      xmr_ffi.getWalletBlockChainHeight(_getWalletPointer());
+
+  @override
   int getBlockChainHeightByDate(DateTime date) {
     // TODO: find something not hardcoded
-    return getMoneroHeigthByDate(date: date);
+    return getMoneroHeightByDate(date: date);
   }
 
   @override
@@ -406,7 +408,7 @@ class MoneroWallet extends Wallet {
     // As such, we'll just do an approximation and assume (probably wrongly so)
     // that current sync/scan height and daemon height calls will return sane
     // values.
-    final current = syncHeight();
+    final current = getCurrentWalletSyncingHeight();
     final daemonHeight = getDaemonHeight();
 
     // if difference is less than an arbitrary low but non zero value, then make
@@ -750,7 +752,8 @@ class MoneroWallet extends Wallet {
     for (int i = 0; i < count; i++) {
       if (keyImage ==
           xmr_ffi.getKeyImageForCoinsInfo(
-              xmr_ffi.getCoinInfoPointer(_coinsPointer!, i))) {
+            xmr_ffi.getCoinInfoPointer(_coinsPointer!, i),
+          )) {
         xmr_ffi.freezeCoin(_coinsPointer!, index: i);
         return;
       }
@@ -771,7 +774,8 @@ class MoneroWallet extends Wallet {
     for (int i = 0; i < count; i++) {
       if (keyImage ==
           xmr_ffi.getKeyImageForCoinsInfo(
-              xmr_ffi.getCoinInfoPointer(_coinsPointer!, i))) {
+            xmr_ffi.getCoinInfoPointer(_coinsPointer!, i),
+          )) {
         xmr_ffi.thawCoin(_coinsPointer!, index: i);
         return;
       }

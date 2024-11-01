@@ -66,7 +66,7 @@ class _OpenWalletViewState extends State<OpenWalletView> {
                         } else {
                           type = "wownero";
                         }
-                        showAdaptiveDialog(
+                        showAdaptiveDialog<void>(
                           context: context,
                           builder: (context) => OpenWalletDialog(
                             type: type,
@@ -172,7 +172,7 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
           // pop dialog
           Navigator.of(context).pop();
           await Navigator.of(context).push(
-            MaterialPageRoute(
+            MaterialPageRoute<dynamic>(
               builder: (context) => WalletView(
                 wallet: wallet,
               ),

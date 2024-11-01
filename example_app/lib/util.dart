@@ -85,36 +85,13 @@ String formattedAmount(BigInt value, Type walletType) {
   return amount.toStringAsFixed(decimalPlaces);
 }
 
-Future<void> printWalletInfo(Wallet wallet) async {
-  await wallet.refreshTransactions();
-  await wallet.refreshOutputs();
-  final connected = await wallet.isConnectedToDaemon();
-  final txCount = wallet.transactionCount();
-  final outputCount = (await wallet.getOutputs(includeSpent: true)).length;
-
-  print("====================================================================");
-  print("connected: $connected");
-  print("outputCount: $outputCount");
-  print("txCount: $txCount");
-  print("balance: ${wallet.getBalance()}");
-  print("unlocked: ${wallet.getUnlockedBalance()}");
-  print("syncHeight: ${wallet.syncHeight()}");
-  print("daemonHeight: ${wallet.getDaemonHeight()}");
-  print("mnemonic: ${wallet.getSeed()}");
-  print("address: ${wallet.getAddress()}");
-  print("sync from height: ${wallet.getRefreshFromBlockHeight()}");
-  print("daemonHeight: ${wallet.getDaemonHeight()}");
-  print("password: ${wallet.getPassword()}");
-  print("path: ${wallet.getPath()}");
-  print("====================================================================");
-}
-
 void onSyncingUpdate({
   required int syncHeight,
   required int nodeHeight,
   String? message,
 }) {
-  print("~~~~~~~~~~ onSyncingUpdate ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  Logging.log
+      ?.i("~~~~~~~~~~ onSyncingUpdate ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   Logging.log?.i("message: $message");
   Logging.log?.i("syncingHeight: $syncHeight");
   Logging.log?.i("nodeHeight: $nodeHeight");
@@ -122,7 +99,8 @@ void onSyncingUpdate({
   Logging.log?.i(
     "sync percent: ${(syncHeight / nodeHeight * 100).toStringAsFixed(2)}",
   );
-  print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  Logging.log
+      ?.i("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
 
 Future<T> minWaitFuture<T>(
@@ -150,8 +128,8 @@ Future<T?> showLoading<T>({
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (_) => PopScope(
+        canPop: false,
         child: Container(
           color: Theme.of(context).primaryColor.withOpacity(0.6),
           child: const Center(

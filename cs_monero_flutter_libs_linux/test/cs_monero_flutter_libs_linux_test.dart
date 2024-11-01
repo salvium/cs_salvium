@@ -7,7 +7,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group("$CsMoneroFlutterLibsLinux", () {
-    CsMoneroFlutterLibsLinux platform = CsMoneroFlutterLibsLinux();
+    final platform = CsMoneroFlutterLibsLinux();
     const MethodChannel channel = MethodChannel('cs_monero_flutter_libs_linux');
 
     setUp(() {

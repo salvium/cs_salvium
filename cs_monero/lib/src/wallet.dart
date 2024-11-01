@@ -72,7 +72,7 @@ abstract class Wallet {
     }
     _lastDaemonHeight = nodeHeight;
 
-    final currentSyncingHeight = syncHeight();
+    final currentSyncingHeight = getCurrentWalletSyncingHeight();
     if (currentSyncingHeight >= 0 &&
         currentSyncingHeight <= nodeHeight &&
         (heightChanged || currentSyncingHeight != _lastSyncHeight)) {
@@ -234,8 +234,7 @@ abstract class Wallet {
   @protected
   int transactionCount();
 
-  @protected
-  int syncHeight();
+  int getCurrentWalletSyncingHeight();
 
   int getBlockChainHeightByDate(DateTime date);
 

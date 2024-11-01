@@ -70,7 +70,7 @@ class _ExampleAppState extends State<ExampleApp> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (context) => const CreateWalletView(),
                       ),
                     );
@@ -80,7 +80,7 @@ class _ExampleAppState extends State<ExampleApp> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (context) => const OpenWalletView(),
                       ),
                     );
@@ -90,7 +90,7 @@ class _ExampleAppState extends State<ExampleApp> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (context) => const RestoreFromSeedView(),
                       ),
                     );
@@ -100,7 +100,7 @@ class _ExampleAppState extends State<ExampleApp> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (context) => const RestoreFromKeysView(),
                       ),
                     );
@@ -110,7 +110,7 @@ class _ExampleAppState extends State<ExampleApp> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      MaterialPageRoute<dynamic>(
                         builder: (context) => const CreateViewOnlyWalletView(),
                       ),
                     );
