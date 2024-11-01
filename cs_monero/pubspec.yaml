@@ -1,13 +1,11 @@
 name: cs_monero
-description: A starting point for Dart libraries or applications.
-version: 1.0.0
+description: A monero (and wownero) library
+version: 0.0.1-dev.0
 repository: https://github.com/cypherstack/cs_monero
-publish_to: none
 
 environment:
   sdk: ^3.5.3
 
-# Add regular dependencies here.
 dependencies:
   ffi: ^2.1.0
   logger: ^2.4.0

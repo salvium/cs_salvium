@@ -1,6 +1,6 @@
 name: cs_monero_flutter_libs_platform_interface
 description: A common platform interface for cs_monero_flutter_libs
-version: 0.0.1-dev.0
+version: 0.0.1-dev.1
 homepage: https://github.com/cypherstack/cs_monero
 
 environment:

@@ -1,8 +1,7 @@
 name: cs_monero_flutter_libs_android
-description: "A new Flutter plugin project."
-version: 0.0.1
+description: Android implementation of cs_monero_flutter_libs
+version: 0.0.1-dev.0
 homepage: https://github.com/cypherstack/cs_monero
-publish_to: none
 
 environment:
   sdk: ^3.5.3
@@ -11,8 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cs_monero_flutter_libs_platform_interface:
-    path: ../cs_monero_flutter_libs_platform_interface
+  cs_monero_flutter_libs_platform_interface: 0.0.1-dev.1
+  cs_monero_flutter_libs_android_x86_64: 0.0.1-dev.0
+  cs_monero_flutter_libs_android_armeabi_v7a: 0.0.1-dev.0
+  cs_monero_flutter_libs_android_arm64_v8a: 0.0.1-dev.0
 
 dev_dependencies:
   flutter_test:

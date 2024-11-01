@@ -29,5 +29,3 @@ migrate_working_dir/
 build/
 
 coverage/
-
-android/src/main/jniLibs/

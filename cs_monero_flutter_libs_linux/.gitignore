@@ -29,7 +29,3 @@ migrate_working_dir/
 build/
 
 coverage/
-
-linux/libs
-/linux/lib/monero_libwallet2_api_c.so
-/linux/lib/wownero_libwallet2_api_c.so
