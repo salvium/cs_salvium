@@ -1,29 +1,41 @@
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:cs_monero_flutter_libs_android/cs_monero_flutter_libs_android.dart';
-// import 'package:cs_monero_flutter_libs_android/cs_monero_flutter_libs_android_platform_interface.dart';
-// import 'package:cs_monero_flutter_libs_android/cs_monero_flutter_libs_android_method_channel.dart';
-// import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-//
-// class MockCsMoneroFlutterLibsAndroidPlatform
-//     with MockPlatformInterfaceMixin
-//     implements CsMoneroFlutterLibsAndroidPlatform {
-//
-//   @override
-//   Future<String?> getPlatformVersion() => Future.value('42');
-// }
-//
-// void main() {
-//   final CsMoneroFlutterLibsAndroidPlatform initialPlatform = CsMoneroFlutterLibsAndroidPlatform.instance;
-//
-//   test('$MethodChannelCsMoneroFlutterLibsAndroid is the default instance', () {
-//     expect(initialPlatform, isInstanceOf<MethodChannelCsMoneroFlutterLibsAndroid>());
-//   });
-//
-//   test('getPlatformVersion', () async {
-//     CsMoneroFlutterLibsAndroid csMoneroFlutterLibsAndroidPlugin = CsMoneroFlutterLibsAndroid();
-//     MockCsMoneroFlutterLibsAndroidPlatform fakePlatform = MockCsMoneroFlutterLibsAndroidPlatform();
-//     CsMoneroFlutterLibsAndroidPlatform.instance = fakePlatform;
-//
-//     expect(await csMoneroFlutterLibsAndroidPlugin.getPlatformVersion(), '42');
-//   });
-// }
+import 'package:cs_monero_flutter_libs_android/cs_monero_flutter_libs_android.dart';
+import 'package:cs_monero_flutter_libs_platform_interface/cs_monero_flutter_libs_platform_interface.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  group("$CsMoneroFlutterLibsAndroid", () {
+    CsMoneroFlutterLibsAndroid platform = CsMoneroFlutterLibsAndroid();
+    const MethodChannel channel =
+        MethodChannel("cs_monero_flutter_libs_android");
+
+    setUp(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+        channel,
+        (MethodCall methodCall) async {
+          return "42";
+        },
+      );
+    });
+
+    tearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null);
+    });
+
+    test("getPlatformVersion", () async {
+      expect(await platform.getPlatformVersion(), "42");
+    });
+  });
+
+  test("registerWith", () {
+    CsMoneroFlutterLibsAndroid.registerWith();
+    expect(
+      CsMoneroFlutterLibsPlatform.instance,
+      isA<CsMoneroFlutterLibsAndroid>(),
+    );
+  });
+}

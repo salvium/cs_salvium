@@ -51,12 +51,19 @@ command:
       flutter_test:
         sdk: flutter
       flutter_lints: ^4.0.0
+      mockito: ^5.4.4
 
 scripts:
   analyze:
-    run: melos exec -- "flutter analyze"
+    run: melos exec -- flutter analyze
     description: Analyze all packages
 
   test:
-    run: melos exec --dir-exists=test -- "flutter test --coverage"
+    run: melos exec --dir-exists=test -c 1 -- flutter test
     description: Run tests for all packages
+
+  coverage:
+    steps:
+      - melos exec --dir-exists=test -c 1 -- flutter test --coverage
+      - melos exec --dir-exists=test -c 1 -- genhtml coverage/lcov.info --output-directory=coverage/
+    description: Generate coverage for the selected package.
