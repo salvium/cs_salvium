@@ -17,8 +17,8 @@ class WalletListener {
   )? onNewBlock;
 
   final void Function({
-    required int newBalance,
-    required int newUnlockedBalance,
+    required BigInt newBalance,
+    required BigInt newUnlockedBalance,
   })? onBalancesChanged;
 
   final void Function(

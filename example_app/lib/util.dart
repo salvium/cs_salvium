@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cs_monero/cs_monero.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> pathForWalletDir({
@@ -63,6 +66,25 @@ Future<List<String>> loadWalletNames(String walletType) async {
   return names;
 }
 
+String formattedAmount(BigInt value, Type walletType) {
+  final int decimalPlaces;
+  switch (walletType) {
+    case const (MoneroWallet):
+      decimalPlaces = 12;
+      break;
+    case const (WowneroWallet):
+      decimalPlaces = 11;
+      break;
+
+    default:
+      return "error";
+  }
+
+  final amount = value.toDouble() / pow(10, decimalPlaces);
+
+  return amount.toStringAsFixed(decimalPlaces);
+}
+
 Future<void> printWalletInfo(Wallet wallet) async {
   await wallet.refreshTransactions();
   await wallet.refreshOutputs();
@@ -80,7 +102,7 @@ Future<void> printWalletInfo(Wallet wallet) async {
   print("daemonHeight: ${wallet.getDaemonHeight()}");
   print("mnemonic: ${wallet.getSeed()}");
   print("address: ${wallet.getAddress()}");
-  print("sync from height: ${wallet.getSyncFromBlockHeight()}");
+  print("sync from height: ${wallet.getRefreshFromBlockHeight()}");
   print("daemonHeight: ${wallet.getDaemonHeight()}");
   print("password: ${wallet.getPassword()}");
   print("path: ${wallet.getPath()}");
@@ -101,4 +123,69 @@ void onSyncingUpdate({
     "sync percent: ${(syncHeight / nodeHeight * 100).toStringAsFixed(2)}",
   );
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+}
+
+Future<T> minWaitFuture<T>(
+  Future<T> future, {
+  required Duration delay,
+}) async {
+  final results = await Future.wait(
+    [
+      future,
+      Future<dynamic>.delayed(delay),
+    ],
+  );
+
+  return results.first as T;
+}
+
+Future<T?> showLoading<T>({
+  required Future<T> whileFuture,
+  required BuildContext context,
+  bool rootNavigator = false,
+  void Function(Object error, StackTrace? st)? onError,
+  Duration? delay,
+}) async {
+  unawaited(
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => WillPopScope(
+        onWillPop: () async => false,
+        child: Container(
+          color: Theme.of(context).primaryColor.withOpacity(0.6),
+          child: const Center(
+            child: SizedBox(
+              width: 150,
+              height: 150,
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+  StackTrace? st;
+  Object? error;
+  T? result;
+
+  try {
+    if (delay != null) {
+      result = await minWaitFuture(whileFuture, delay: delay);
+    } else {
+      result = await whileFuture;
+    }
+  } catch (e, s) {
+    st = s;
+    error = e;
+  }
+
+  if (context.mounted) {
+    Navigator.of(context, rootNavigator: rootNavigator).pop();
+    if (error != null) {
+      onError?.call(error, st);
+    }
+  }
+
+  return result;
 }

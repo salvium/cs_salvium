@@ -44,8 +44,8 @@ abstract class Wallet {
 
   int? _lastDaemonHeight;
   int? _lastSyncHeight;
-  int? _lastBalanceUnlocked;
-  int? _lastBalanceFull;
+  BigInt? _lastBalanceUnlocked;
+  BigInt? _lastBalanceFull;
 
   void _poll() async {
     Logging.log?.d("Polling");
@@ -239,7 +239,7 @@ abstract class Wallet {
 
   int getBlockChainHeightByDate(DateTime date);
 
-  Future<bool> connect({
+  Future<void> connect({
     required String daemonAddress,
     required bool trusted,
     String? daemonUsername,
@@ -249,16 +249,16 @@ abstract class Wallet {
     String? socksProxyAddress,
   });
 
-  Future<bool> createViewOnlyWalletFromCurrentWallet({
-    required String path,
-    required String password,
-    String language = "English",
-  });
+  // Future<bool> createViewOnlyWalletFromCurrentWallet({
+  //   required String path,
+  //   required String password,
+  //   String language = "English",
+  // });
 
   bool isViewOnly();
   // void setDaemonConnection(DaemonConnection connection);
   // DaemonConnection getDaemonConnection();
-  void setProxyUri(String proxyUri);
+  // void setProxyUri(String proxyUri);
   Future<bool> isConnectedToDaemon();
   Future<bool> isSynced();
   // Version getVersion();
@@ -280,16 +280,16 @@ abstract class Wallet {
   // int getHeight();
   // int getHeightByDate(int year, int month, int day);
 
-  int getSyncFromBlockHeight();
-  void setStartSyncFromBlockHeight(int startHeight);
+  int getRefreshFromBlockHeight();
+  void setRefreshFromBlockHeight(int startHeight);
   void startSyncing({Duration interval = const Duration(seconds: 20)});
   void stopSyncing();
 
-  Future<bool> rescanSpent();
+  // Future<bool> rescanSpent();
   Future<bool> rescanBlockchain();
 
-  int getBalance({int accountIndex = 0});
-  int getUnlockedBalance({int accountIndex = 0});
+  BigInt getBalance({int accountIndex = 0});
+  BigInt getUnlockedBalance({int accountIndex = 0});
 
   // Disable for now
   // List<Account> getAccounts({bool includeSubaddresses = false});
@@ -340,7 +340,7 @@ abstract class Wallet {
   // String relayTx(Tx tx);
   // List<String> submitTxs(String signedTxHex);
 
-  Future<bool> commitTx(PendingTransaction tx);
+  Future<void> commitTx(PendingTransaction tx);
 
   // Future<String> signMessage(
   //   String message,
@@ -357,6 +357,8 @@ abstract class Wallet {
     String address,
     String signature,
   );
+
+  BigInt? amountFromString(String value);
 
   // String getTxKey(String txId);
   // CheckTx checkTxKey(String txId, String txKey, String address);
