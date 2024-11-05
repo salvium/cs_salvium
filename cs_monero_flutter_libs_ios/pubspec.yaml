@@ -1,6 +1,6 @@
 name: cs_monero_flutter_libs_ios
 description: Ios implementation of cs_monero_flutter_libs
-version: 0.0.1-dev.0
+version: 1.0.0-pre
 repository: https://github.com/cypherstack/cs_monero
 homepage: https://github.com/cypherstack/cs_monero
 issue_tracker: https://github.com/cypherstack/cs_monero/issues
@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cs_monero_flutter_libs_platform_interface: 0.0.1-dev.1
+  cs_monero_flutter_libs_platform_interface: 1.0.0-pre
 
 dev_dependencies:
   flutter_test:
