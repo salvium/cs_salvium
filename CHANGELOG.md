@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-11-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cs_monero_flutter_libs_ios` - `v1.0.0-pre.0`](#cs_monero_flutter_libs_ios---v100-pre0)
+ - [`cs_monero_flutter_libs` - `v1.0.0-pre.0`](#cs_monero_flutter_libs---v100-pre0)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `cs_monero_flutter_libs` - `v1.0.0-pre.0`
+
+---
+
+#### `cs_monero_flutter_libs_ios` - `v1.0.0-pre.0`
+
+ - **FIX**: ios missing min version in fmwk plist. ([d5481e37](https://github.com/cypherstack/cs_monero/commit/d5481e3751464187aab251b55e24372da8ff28d7))
+
+
 ## 2024-11-05
 
 ### Changes
