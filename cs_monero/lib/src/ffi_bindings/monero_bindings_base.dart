@@ -21,14 +21,15 @@ String get _libName {
   }
 }
 
-void manuallySetBindings(FfiMoneroC bindings) {
-  _cachedBindings = bindings;
+String? _overrideLibPath;
+void manuallyOverrideLibPath(String newPath) {
+  _overrideLibPath = newPath;
 }
 
 FfiMoneroC? _cachedBindings;
 FfiMoneroC get bindings => _cachedBindings ??= FfiMoneroC(
       DynamicLibrary.open(
-        _libName,
+        _overrideLibPath ?? _libName,
       ),
     );
 
