@@ -21,6 +21,10 @@ String get _libName {
   }
 }
 
+void manuallySetBindings(FfiMoneroC bindings) {
+  _cachedBindings = bindings;
+}
+
 FfiMoneroC? _cachedBindings;
 FfiMoneroC get bindings => _cachedBindings ??= FfiMoneroC(
       DynamicLibrary.open(
