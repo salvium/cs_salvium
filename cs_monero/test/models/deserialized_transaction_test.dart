@@ -1,7 +1,4 @@
-import 'package:cs_monero/src/models/deserialized_transaction.dart';
-import 'package:cs_monero/src/models/tx_extra.dart';
-import 'package:cs_monero/src/models/tx_input.dart';
-import 'package:cs_monero/src/models/tx_output.dart';
+import 'package:cs_monero/cs_monero.dart';
 import 'package:test/test.dart';
 
 void main() {

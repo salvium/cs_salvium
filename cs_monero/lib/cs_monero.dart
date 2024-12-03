@@ -10,6 +10,7 @@ export 'src/enums/wownero_seed_type.dart';
 export 'src/logging.dart';
 export 'src/mnemonics/mnemonics.dart';
 export 'src/models/address.dart';
+export 'src/models/deserialize_transaction/deserialized_transaction.dart';
 export 'src/models/output.dart';
 export 'src/models/pending_transaction.dart';
 export 'src/models/recipient.dart';

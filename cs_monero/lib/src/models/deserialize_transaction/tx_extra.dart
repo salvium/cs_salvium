@@ -1,4 +1,4 @@
-import '../utils/byte_reader.dart';
+import '../../utils/byte_reader.dart';
 
 abstract class TxExtraField {}
 

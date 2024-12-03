@@ -1,4 +1,4 @@
-import '../utils/byte_reader.dart';
+import '../../utils/byte_reader.dart';
 
 /// Represents a Monero transaction input as deserialized from a hex string.
 abstract class TxInput {
