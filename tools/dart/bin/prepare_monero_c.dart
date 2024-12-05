@@ -16,12 +16,7 @@ void main() async {
     Directory.current = envBuildDir;
 
     // Clone the monero_c repository
-    await runAsync('git', [
-      'clone',
-      kMoneroCRepo,
-      '--branch',
-      'apple-frameworks',
-    ]);
+    await runAsync('git', ['clone', kMoneroCRepo]);
 
     // Change directory to MONERO_C_DIR
     Directory.current = moneroCDir;
