@@ -5448,4 +5448,62 @@ class FfiMoneroC {
   late final _MONERO_checksum_wallet2_api_c_exp =
       _MONERO_checksum_wallet2_api_c_expPtr.asFunction<
           ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<MONERO_output_details>
+      MONERO_Wallet_getOutputDetailsFromKeyOffsets(
+    ffi.Pointer<ffi.Void> wallet_ptr,
+    ffi.Pointer<ffi.Uint64> key_offsets,
+    int count,
+    ffi.Pointer<ffi.Size> out_count,
+  ) {
+    return _MONERO_Wallet_getOutputDetailsFromKeyOffsets(
+      wallet_ptr,
+      key_offsets,
+      count,
+      out_count,
+    );
+  }
+
+  late final _MONERO_Wallet_getOutputDetailsFromKeyOffsetsPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Pointer<MONERO_output_details> Function(ffi.Pointer<ffi.Void>,
+                  ffi.Pointer<ffi.Uint64>, ffi.Size, ffi.Pointer<ffi.Size>)>>(
+      'MONERO_Wallet_getOutputDetailsFromKeyOffsets');
+  late final _MONERO_Wallet_getOutputDetailsFromKeyOffsets =
+      _MONERO_Wallet_getOutputDetailsFromKeyOffsetsPtr.asFunction<
+          ffi.Pointer<MONERO_output_details> Function(ffi.Pointer<ffi.Void>,
+              ffi.Pointer<ffi.Uint64>, int, ffi.Pointer<ffi.Size>)>();
+
+  void MONERO_Wallet_freeOutputDetails(
+    ffi.Pointer<MONERO_output_details> arr,
+  ) {
+    return _MONERO_Wallet_freeOutputDetails(
+      arr,
+    );
+  }
+
+  late final _MONERO_Wallet_freeOutputDetailsPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Pointer<MONERO_output_details>)>>(
+      'MONERO_Wallet_freeOutputDetails');
+  late final _MONERO_Wallet_freeOutputDetails =
+      _MONERO_Wallet_freeOutputDetailsPtr.asFunction<
+          void Function(ffi.Pointer<MONERO_output_details>)>();
+}
+
+final class MONERO_output_details extends ffi.Struct {
+  @ffi.Uint64()
+  external int absolute_offset;
+
+  @ffi.Uint64()
+  external int amount;
+
+  @ffi.Array.multi([65])
+  external ffi.Array<ffi.Char> public_key;
+
+  @ffi.Array.multi([65])
+  external ffi.Array<ffi.Char> txid;
+
+  @ffi.Bool()
+  external bool found;
 }
