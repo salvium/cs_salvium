@@ -12,10 +12,7 @@ const _kFourteenWordSeedCacheKey = "cs_monero.fourteen.seed";
 
 class WowneroWallet extends Wallet {
   // internal constructor
-  WowneroWallet._(Pointer<Void> pointer, String path)
-      : _walletPointer = pointer,
-        _path = path;
-  final String _path;
+  WowneroWallet._(Pointer<Void> pointer) : _walletPointer = pointer;
 
   // shared pointer
   static Pointer<Void>? _walletManagerPointerCached;
@@ -180,7 +177,7 @@ class WowneroWallet extends Wallet {
       wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
-    final wallet = WowneroWallet._(walletPointer, path);
+    final wallet = WowneroWallet._(walletPointer);
     return wallet;
   }
 
@@ -267,7 +264,7 @@ class WowneroWallet extends Wallet {
       wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
-    final wallet = WowneroWallet._(walletPointer, path);
+    final wallet = WowneroWallet._(walletPointer);
     return wallet;
   }
 
@@ -399,7 +396,7 @@ class WowneroWallet extends Wallet {
 
     wow_ffi.checkWalletStatus(walletPointer);
 
-    final wallet = WowneroWallet._(walletPointer, path);
+    final wallet = WowneroWallet._(walletPointer);
     return wallet;
   }
 
@@ -463,7 +460,7 @@ class WowneroWallet extends Wallet {
 
     wow_ffi.checkWalletStatus(walletPointer);
 
-    final wallet = WowneroWallet._(walletPointer, path);
+    final wallet = WowneroWallet._(walletPointer);
     wallet.save();
     return wallet;
   }
@@ -507,7 +504,7 @@ class WowneroWallet extends Wallet {
 
     wow_ffi.checkWalletStatus(walletPointer);
 
-    final wallet = WowneroWallet._(walletPointer, path);
+    final wallet = WowneroWallet._(walletPointer);
 
     return wallet;
   }
