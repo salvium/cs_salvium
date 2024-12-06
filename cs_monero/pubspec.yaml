@@ -1,6 +1,6 @@
 name: cs_monero
 description: A monero (and wownero) library
-version: 1.0.0-pre
+version: 1.0.0-pre.1
 repository: https://github.com/cypherstack/cs_monero
 homepage: https://github.com/cypherstack/cs_monero
 issue_tracker: https://github.com/cypherstack/cs_monero/issues
