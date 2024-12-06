@@ -5,6 +5,10 @@ import 'tx_extra.dart';
 import 'tx_input.dart';
 import 'tx_output.dart';
 
+export 'tx_extra.dart';
+export 'tx_input.dart';
+export 'tx_output.dart';
+
 class DeserializedTransaction {
   final BigInt version;
   final BigInt unlockTime;
