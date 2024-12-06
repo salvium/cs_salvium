@@ -12,10 +12,7 @@ const _kFourteenWordSeedCacheKey = "cs_monero.fourteen.seed";
 
 class WowneroWallet extends Wallet {
   // internal constructor
-  WowneroWallet._(Pointer<Void> pointer, String path)
-      : _walletPointer = pointer,
-        _path = path;
-  final String _path;
+  WowneroWallet._(Pointer<Void> pointer) : _walletPointer = pointer;
 
   // shared pointer
   static Pointer<Void>? _walletManagerPointerCached;
@@ -31,9 +28,6 @@ class WowneroWallet extends Wallet {
       return _walletManagerPointerCached!.address;
     })(),
   );
-
-  // internal map of wallets
-  static final Map<String, WowneroWallet> _openedWalletsByPath = {};
 
   // instance pointers
   Pointer<Void>? _coinsPointer;
@@ -183,8 +177,7 @@ class WowneroWallet extends Wallet {
       wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
-    final wallet = WowneroWallet._(walletPointer, path);
-    _openedWalletsByPath[path] = wallet;
+    final wallet = WowneroWallet._(walletPointer);
     return wallet;
   }
 
@@ -271,8 +264,7 @@ class WowneroWallet extends Wallet {
       wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
-    final wallet = WowneroWallet._(walletPointer, path);
-    _openedWalletsByPath[path] = wallet;
+    final wallet = WowneroWallet._(walletPointer);
     return wallet;
   }
 
@@ -404,8 +396,7 @@ class WowneroWallet extends Wallet {
 
     wow_ffi.checkWalletStatus(walletPointer);
 
-    final wallet = WowneroWallet._(walletPointer, path);
-    _openedWalletsByPath[path] = wallet;
+    final wallet = WowneroWallet._(walletPointer);
     return wallet;
   }
 
@@ -464,13 +455,13 @@ class WowneroWallet extends Wallet {
       spendKeyString: spendKey,
       newWallet: true,
       restoreHeight: restoreHeight,
+      networkType: networkType,
     );
 
     wow_ffi.checkWalletStatus(walletPointer);
 
-    final wallet = WowneroWallet._(walletPointer, path);
+    final wallet = WowneroWallet._(walletPointer);
     wallet.save();
-    _openedWalletsByPath[path] = wallet;
     return wallet;
   }
 
@@ -504,25 +495,17 @@ class WowneroWallet extends Wallet {
     required String password,
     int networkType = 0,
   }) {
-    WowneroWallet? wallet = _openedWalletsByPath[path];
-    if (wallet != null) {
-      return wallet;
-    }
+    final walletPointer = wow_wm_ffi.openWallet(
+      _walletManagerPointer,
+      path: path,
+      password: password,
+      networkType: networkType,
+    );
 
-    try {
-      final walletPointer = wow_wm_ffi.openWallet(
-        _walletManagerPointer,
-        path: path,
-        password: password,
-      );
-      wallet = WowneroWallet._(walletPointer, path);
-      _openedWalletsByPath[path] = wallet;
-    } catch (e, s) {
-      Logging.log?.e("", error: e, stackTrace: s);
-      rethrow;
-    }
+    wow_ffi.checkWalletStatus(walletPointer);
 
-    wow_ffi.checkWalletStatus(wallet._getWalletPointer());
+    final wallet = WowneroWallet._(walletPointer);
+
     return wallet;
   }
 
@@ -1276,7 +1259,6 @@ class WowneroWallet extends Wallet {
 
     wow_wm_ffi.closeWallet(_walletManagerPointer, _getWalletPointer(), save);
     _walletPointer = null;
-    _openedWalletsByPath.remove(_path);
     isClosing = false;
   }
 
