@@ -1,10 +1,10 @@
 import 'dart:ffi';
-import 'dart:isolate';
 
 import 'package:meta/meta.dart';
 
 import '../../cs_monero.dart';
 import '../deprecated/get_height_by_date.dart';
+import '../ffi_bindings/monero_bindings_base.dart' as xmr_ffi_base;
 import '../ffi_bindings/monero_wallet_bindings.dart' as xmr_ffi;
 import '../ffi_bindings/monero_wallet_manager_bindings.dart' as xmr_wm_ffi;
 
@@ -136,7 +136,7 @@ class MoneroWallet extends Wallet {
     xmr_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
-    await Isolate.run(() {
+    await xmr_ffi_base.runInIsolate(() {
       xmr_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
@@ -213,7 +213,7 @@ class MoneroWallet extends Wallet {
     xmr_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
-    await Isolate.run(() {
+    await xmr_ffi_base.runInIsolate(() {
       xmr_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
@@ -477,7 +477,7 @@ class MoneroWallet extends Wallet {
   Future<void> refreshOutputs() async {
     _coinsPointer = xmr_ffi.getCoinsPointer(_getWalletPointer());
     final pointerAddress = _coinsPointer!.address;
-    await Isolate.run(() {
+    await xmr_ffi_base.runInIsolate(() {
       xmr_ffi.refreshCoins(
         Pointer.fromAddress(
           pointerAddress,
@@ -494,7 +494,7 @@ class MoneroWallet extends Wallet {
     );
     final pointerAddress = _transactionHistoryPointer!.address;
 
-    await Isolate.run(() {
+    await xmr_ffi_base.runInIsolate(() {
       xmr_ffi.refreshTransactionHistory(
         Pointer.fromAddress(
           pointerAddress,
@@ -537,7 +537,7 @@ class MoneroWallet extends Wallet {
 
     // TODO: do something with return value?
     // return value matters? If so, whats the point of checking status below?
-    final _ = await Isolate.run(() {
+    final _ = await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.initWallet(
         Pointer.fromAddress(pointerAddress),
         daemonAddress: daemonAddress,
@@ -563,7 +563,7 @@ class MoneroWallet extends Wallet {
   //   required String password,
   //   String language = "English",
   // }) async {
-  //   return await Isolate.run(
+  //   return await xmr_ffi_base.runInIsolate(
   //     () => monero.Wallet_createWatchOnly(
   //       _getWalletPointer(),
   //       path: path,
@@ -587,7 +587,7 @@ class MoneroWallet extends Wallet {
   @override
   Future<bool> isConnectedToDaemon() async {
     final address = _getWalletPointer().address;
-    final result = await Isolate.run(() {
+    final result = await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.isConnected(Pointer.fromAddress(address));
     });
     return result == 1;
@@ -606,7 +606,7 @@ class MoneroWallet extends Wallet {
     // the call to `Wallet_synchronized`
     if (daemonHeight > 0 && daemonHeight - current < 10) {
       final address = _getWalletPointer().address;
-      final result = await Isolate.run(() {
+      final result = await xmr_ffi_base.runInIsolate(() {
         return xmr_ffi.isSynchronized(Pointer.fromAddress(address));
       });
       return result;
@@ -713,7 +713,7 @@ class MoneroWallet extends Wallet {
   // @override
   // Future<bool> rescanSpent() async {
   //   final address = _getWalletPointer().address;
-  //   final result = await Isolate.run(() {
+  //   final result = await xmr_ffi_base.runInIsolate(() {
   //     return monero.Wallet_rescanSpent(Pointer.fromAddress(address));
   //   });
   //   return result;
@@ -723,7 +723,7 @@ class MoneroWallet extends Wallet {
   @override
   Future<bool> rescanBlockchain() async {
     final address = _getWalletPointer().address;
-    final result = await Isolate.run(() {
+    final result = await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.rescanWalletBlockchain(Pointer.fromAddress(address));
     });
     return result;
@@ -913,7 +913,7 @@ class MoneroWallet extends Wallet {
     bool all = false,
   }) async {
     final pointerAddress = _getWalletPointer().address;
-    return await Isolate.run(() {
+    return await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.exportWalletKeyImages(
         Pointer<Void>.fromAddress(pointerAddress),
         filename,
@@ -925,7 +925,7 @@ class MoneroWallet extends Wallet {
   @override
   Future<bool> importKeyImages({required String filename}) async {
     final pointerAddress = _getWalletPointer().address;
-    return await Isolate.run(() {
+    return await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.importWalletKeyImages(
         Pointer<Void>.fromAddress(pointerAddress),
         filename,
@@ -1001,7 +1001,7 @@ class MoneroWallet extends Wallet {
     try {
       final walletPointerAddress = _getWalletPointer().address;
       final pendingTxPointer = Pointer<Void>.fromAddress(
-        await Isolate.run(() {
+        await xmr_ffi_base.runInIsolate(() {
           final tx = xmr_ffi.createTransaction(
             Pointer.fromAddress(walletPointerAddress),
             address: output.address,
@@ -1059,7 +1059,7 @@ class MoneroWallet extends Wallet {
     try {
       final walletPointerAddress = _getWalletPointer().address;
       final pendingTxPointer = Pointer<Void>.fromAddress(
-        await Isolate.run(() {
+        await xmr_ffi_base.runInIsolate(() {
           final tx = xmr_ffi.createTransactionMultiDest(
             Pointer.fromAddress(walletPointerAddress),
             paymentId: paymentId,
@@ -1098,7 +1098,7 @@ class MoneroWallet extends Wallet {
   @override
   Future<void> commitTx(PendingTransaction tx) async {
     // TODO: check if the return value should be used in any way or if it is ok to rely on the status check below?
-    final _ = await Isolate.run(() {
+    final _ = await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.commitPendingTransaction(
         Pointer<Void>.fromAddress(
           tx.pointerAddress,
@@ -1119,7 +1119,7 @@ class MoneroWallet extends Wallet {
     String address,
   ) async {
     final pointerAddress = _getWalletPointer().address;
-    return await Isolate.run(() {
+    return await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.signMessageWith(
         Pointer.fromAddress(pointerAddress),
         message: message,
@@ -1135,7 +1135,7 @@ class MoneroWallet extends Wallet {
     String signature,
   ) async {
     final pointerAddress = _getWalletPointer().address;
-    return await Isolate.run(() {
+    return await xmr_ffi_base.runInIsolate(() {
       return xmr_ffi.verifySignedMessageWithWallet(
         Pointer.fromAddress(pointerAddress),
         message: message,
@@ -1183,7 +1183,7 @@ class MoneroWallet extends Wallet {
   @override
   Future<void> save() async {
     final pointerAddress = _getWalletPointer().address;
-    await Isolate.run(() {
+    await xmr_ffi_base.runInIsolate(() {
       xmr_ffi.storeWallet(Pointer.fromAddress(pointerAddress), path: "");
     });
   }

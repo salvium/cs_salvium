@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:ffi/ffi.dart';
 
@@ -19,6 +21,24 @@ String get _libName {
       "Platform \"${Platform.operatingSystem}\" is not supported",
     );
   }
+}
+
+/// Isolate.run wrapper to properly use _overrideLibPath if required
+Future<R> runInIsolate<R>(
+  FutureOr<R> Function() computation, {
+  String? debugName,
+}) async {
+  final path = _overrideLibPath;
+
+  return await Isolate.run(
+    () {
+      if (path != null) {
+        manuallyOverrideLibPath(path);
+      }
+      return computation();
+    },
+    debugName: debugName,
+  );
 }
 
 String? _overrideLibPath;
