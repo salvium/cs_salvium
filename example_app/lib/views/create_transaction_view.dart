@@ -48,20 +48,22 @@ class _CreateTransactionViewState extends State<CreateTransactionView> {
             ? widget.wallet.createTx(
                 output: Recipient(
                   address: recipients.first.$2.text,
-                  amount:
-                      widget.wallet.amountFromString(recipients.first.$3.text)!,
+                  amount: (await widget.wallet
+                      .amountFromString(recipients.first.$3.text))!,
                 ),
                 priority: TransactionPriority.normal,
                 accountIndex: 0,
               )
             : widget.wallet.createTxMultiDest(
-                outputs: recipients
-                    .map(
-                      (r) => Recipient(
-                        address: r.$2.text,
-                        amount: widget.wallet.amountFromString(r.$3.text)!,
-                      ),
-                    )
+                outputs: (await Future.wait(
+                  recipients.map(
+                    (r) async => Recipient(
+                      address: r.$2.text,
+                      amount:
+                          (await widget.wallet.amountFromString(r.$3.text))!,
+                    ),
+                  ),
+                ))
                     .toList(growable: false),
                 priority: TransactionPriority.normal,
                 accountIndex: 0,

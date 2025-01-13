@@ -56,8 +56,8 @@ abstract class Wallet {
   void _poll() async {
     Logging.log?.d("Polling");
 
-    final full = getBalance();
-    final unlocked = getUnlockedBalance();
+    final full = await getBalance();
+    final unlocked = await getUnlockedBalance();
     if (unlocked != _lastBalanceUnlocked || full != _lastBalanceFull) {
       Logging.log?.d("listener.onBalancesChanged");
       for (final listener in getListeners()) {
@@ -68,7 +68,7 @@ abstract class Wallet {
     _lastBalanceUnlocked = unlocked;
     _lastBalanceFull = full;
 
-    final nodeHeight = getDaemonHeight();
+    final nodeHeight = await getDaemonHeight();
     final heightChanged = nodeHeight != _lastDaemonHeight;
     if (heightChanged) {
       Logging.log?.d("listener.onNewBlock");
@@ -78,7 +78,7 @@ abstract class Wallet {
     }
     _lastDaemonHeight = nodeHeight;
 
-    final currentSyncingHeight = getCurrentWalletSyncingHeight();
+    final currentSyncingHeight = await getCurrentWalletSyncingHeight();
     if (currentSyncingHeight >= 0 &&
         currentSyncingHeight <= nodeHeight &&
         (heightChanged || currentSyncingHeight != _lastSyncHeight)) {
@@ -245,12 +245,12 @@ abstract class Wallet {
   Future<void> refreshTransactions();
 
   @protected
-  int transactionCount();
+  Future<int> transactionCount();
 
   /// Returns the current block height of the wallet. Anything less than the
   /// [getDaemonHeight] value (+/- 1) likely indicates the wallet is not fully
   /// synced.
-  int getCurrentWalletSyncingHeight();
+  Future<int> getCurrentWalletSyncingHeight();
 
   /// Returns a rough height estimate for a given [date].
   int getBlockChainHeightByDate(DateTime date);
@@ -273,7 +273,7 @@ abstract class Wallet {
   // });
 
   /// Returns true if the wallet is a view only wallet.
-  bool isViewOnly();
+  Future<bool> isViewOnly();
 
   // void setDaemonConnection(DaemonConnection connection);
   // DaemonConnection getDaemonConnection();
@@ -289,33 +289,33 @@ abstract class Wallet {
   // NetworkType getNetworkType();
 
   /// Returns the location where the wallet files are stored.
-  String getPath();
+  Future<String> getPath();
 
   /// Returns the seed phrase (mnemonic) of the wallet.
-  String getSeed();
+  Future<String> getSeed();
 
   /// Returns the language of the seed phrase (mnemonic).
-  String getSeedLanguage();
+  Future<String> getSeedLanguage();
 
   /// Returns the private spend key for the wallet.
-  String getPrivateSpendKey();
+  Future<String> getPrivateSpendKey();
 
   /// Returns the private view key for the wallet.
-  String getPrivateViewKey();
+  Future<String> getPrivateViewKey();
 
   /// Returns the public spend key for the wallet.
-  String getPublicSpendKey();
+  Future<String> getPublicSpendKey();
 
   /// Returns the public view key for the wallet.
-  String getPublicViewKey();
+  Future<String> getPublicViewKey();
 
   /// Returns a receiving address given an [accountIndex] and sub[addressIndex].
   /// If the [addressIndex] is zero, the main address for the given
   /// [accountIndex] will be returned.
-  Address getAddress({int accountIndex = 0, int addressIndex = 0});
+  Future<Address> getAddress({int accountIndex = 0, int addressIndex = 0});
 
   /// Returns the current chain height as seen by the connected daemon.
-  int getDaemonHeight();
+  Future<int> getDaemonHeight();
 
   // int getDaemonMaxPeerHeight();
   // int getApproximateChainHeight();
@@ -323,16 +323,16 @@ abstract class Wallet {
   // int getHeightByDate(int year, int month, int day);
 
   /// Returns the height of the wallet used for rescanning/refreshing.
-  int getRefreshFromBlockHeight();
+  Future<int> getRefreshFromBlockHeight();
 
   /// Set the height of the wallet used for rescanning/refreshing.
-  void setRefreshFromBlockHeight(int startHeight);
+  Future<void> setRefreshFromBlockHeight(int startHeight);
 
   /// Sets the auto refresh interval and starts refreshing/syncing.
-  void startSyncing({Duration interval = const Duration(seconds: 20)});
+  Future<void> startSyncing({Duration interval = const Duration(seconds: 20)});
 
   /// Stop syncing/refreshing
-  void stopSyncing();
+  Future<void> stopSyncing();
 
   // Future<bool> rescanSpent();
 
@@ -340,10 +340,10 @@ abstract class Wallet {
   Future<bool> rescanBlockchain();
 
   /// Returns the wallet's full balance in atomic units.
-  BigInt getBalance({int accountIndex = 0});
+  Future<BigInt> getBalance({int accountIndex = 0});
 
   /// Returns the wallet's unlocked balance in atomic units.
-  BigInt getUnlockedBalance({int accountIndex = 0});
+  Future<BigInt> getUnlockedBalance({int accountIndex = 0});
 
   // Disable for now
   // List<Account> getAccounts({bool includeSubaddresses = false});
@@ -352,7 +352,7 @@ abstract class Wallet {
   // void setAccountLabel(int accountIdx, String label);
   // void setSubaddressLabel(int accountIdx, int addressIdx, String label);
 
-  String getTxKey(String txid);
+  Future<String> getTxKey(String txid);
 
   /// Returns a transaction given it's [txid]/hash
   Future<Transaction> getTx(String txid, {bool refresh = false});
@@ -438,7 +438,7 @@ abstract class Wallet {
 
   /// Convert a decimal amount string to atomic units.
   /// Returns null on invalid string format.
-  BigInt? amountFromString(String value);
+  Future<BigInt?> amountFromString(String value);
 
   // String getTxKey(String txId);
   // CheckTx checkTxKey(String txId, String txKey, String address);
@@ -490,10 +490,10 @@ abstract class Wallet {
   // void moveTo(String path);
 
   /// Returns the wallet password.
-  String getPassword();
+  Future<String> getPassword();
 
   /// Change the password of the wallet
-  void changePassword(String newPassword);
+  Future<void> changePassword(String newPassword);
 
   /// Saves the current state of the wallet to disk.
   Future<void> save();
