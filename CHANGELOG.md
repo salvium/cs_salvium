@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-01-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cs_monero` - `v1.0.0-pre.2`](#cs_monero---v100-pre2)
+
+---
+
+#### `cs_monero` - `v1.0.0-pre.2`
+
+ - **FEAT**: allow fetching subset of transactions. ([3e9b0098](https://github.com/cypherstack/cs_monero/commit/3e9b00981057d7aa4a90b92e40e628d01a52979a))
+ - **FEAT**: async/isolate wallet loading/creation. ([ab790641](https://github.com/cypherstack/cs_monero/commit/ab790641496604e3ade3085c3f306cf14d634943))
+
+
 ## 2024-12-04
 
 ### Changes

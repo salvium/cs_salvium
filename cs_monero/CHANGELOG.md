@@ -1,3 +1,8 @@
+## 1.0.0-pre.2
+
+ - **FEAT**: allow fetching subset of transactions. ([3e9b0098](https://github.com/cypherstack/cs_monero/commit/3e9b00981057d7aa4a90b92e40e628d01a52979a))
+ - **FEAT**: async/isolate wallet loading/creation. ([ab790641](https://github.com/cypherstack/cs_monero/commit/ab790641496604e3ade3085c3f306cf14d634943))
+
 ## 1.0.0-pre.1
 
  - **REFACTOR**: clean up. ([1d593945](https://github.com/cypherstack/cs_monero/commit/1d5939459cace3ea1efbd9ff7cff08f718182257))
