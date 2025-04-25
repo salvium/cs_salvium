@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-25
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cs_monero` - `v1.0.0-pre.3`](#cs_monero---v100-pre3)
+
+---
+
+#### `cs_monero` - `v1.0.0-pre.3`
+
+ - **FEAT**: expose seed offset/passphrase. ([21c091fe](https://github.com/cypherstack/cs_monero/commit/21c091fe7a0db32041aa46b7b1098b5c53c529c5))
+
+
 ## 2025-01-14
 
 ### Changes

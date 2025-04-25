@@ -1,3 +1,7 @@
+## 1.0.0-pre.3
+
+ - **FEAT**: expose seed offset/passphrase. ([21c091fe](https://github.com/cypherstack/cs_monero/commit/21c091fe7a0db32041aa46b7b1098b5c53c529c5))
+
 ## 1.0.0-pre.2
 
  - **FEAT**: allow fetching subset of transactions. ([3e9b0098](https://github.com/cypherstack/cs_monero/commit/3e9b00981057d7aa4a90b92e40e628d01a52979a))
