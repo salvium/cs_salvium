@@ -112,6 +112,7 @@ class WowneroWallet extends Wallet {
     required WowneroSeedType seedType,
     int networkType = 0,
     bool overrideDeprecated14WordSeedException = false,
+    String seedOffset = "",
   }) async {
     final walletManagerPointerAddress = _walletManagerPointer.address;
     final Pointer<Void> walletPointer;
@@ -156,7 +157,7 @@ class WowneroWallet extends Wallet {
                   path: path,
                   password: password,
                   mnemonic: seed,
-                  seedOffset: "",
+                  seedOffset: seedOffset,
                   newWallet: true,
                   restoreHeight: 0, // ignored by core underlying code
                   kdfRounds: 1,
@@ -227,6 +228,7 @@ class WowneroWallet extends Wallet {
     required String seed,
     int networkType = 0,
     int restoreHeight = 0,
+    String seedOffset = "",
   }) async {
     final walletManagerPointerAddress = _walletManagerPointer.address;
     final Pointer<Void> walletPointer;
@@ -241,7 +243,7 @@ class WowneroWallet extends Wallet {
                 password: password,
                 mnemonic: seed,
                 restoreHeight: restoreHeight,
-                seedOffset: "",
+                seedOffset: seedOffset,
                 networkType: networkType,
               )
               .address,
@@ -256,7 +258,7 @@ class WowneroWallet extends Wallet {
                 path: path,
                 password: password,
                 mnemonic: seed,
-                seedOffset: "",
+                seedOffset: seedOffset,
                 newWallet: false,
                 restoreHeight: 0, // ignored by core underlying code
                 kdfRounds: 1,
@@ -716,7 +718,7 @@ class WowneroWallet extends Wallet {
   }
 
   @override
-  String getSeed() {
+  String getSeed({String seedOffset = ""}) {
     final fourteen = wow_ffi.getWalletCacheAttribute(
       _getWalletPointer(),
       key: _kFourteenWordSeedCacheKey,
@@ -727,12 +729,15 @@ class WowneroWallet extends Wallet {
 
     final polySeed = wow_ffi.getWalletPolyseed(
       _getWalletPointer(),
-      passphrase: "",
+      passphrase: seedOffset,
     );
     if (polySeed != "") {
       return polySeed;
     }
-    final legacy = wow_ffi.getWalletSeed(_getWalletPointer(), seedOffset: "");
+    final legacy = wow_ffi.getWalletSeed(
+      _getWalletPointer(),
+      seedOffset: seedOffset,
+    );
     return legacy;
   }
 

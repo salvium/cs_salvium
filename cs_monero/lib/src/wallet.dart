@@ -292,7 +292,7 @@ abstract class Wallet {
   String getPath();
 
   /// Returns the seed phrase (mnemonic) of the wallet.
-  String getSeed();
+  String getSeed({String seedOffset = ""});
 
   /// Returns the language of the seed phrase (mnemonic).
   String getSeedLanguage();

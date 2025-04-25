@@ -105,6 +105,7 @@ class MoneroWallet extends Wallet {
     String language = "English",
     required MoneroSeedType seedType,
     int networkType = 0,
+    String seedOffset = "",
   }) async {
     final walletManagerPointerAddress = _walletManagerPointer.address;
     final Pointer<Void> walletPointer;
@@ -119,7 +120,7 @@ class MoneroWallet extends Wallet {
                   path: path,
                   password: password,
                   mnemonic: seed,
-                  seedOffset: "",
+                  seedOffset: seedOffset,
                   newWallet: true,
                   restoreHeight: 0, // ignored by core underlying code
                   kdfRounds: 1,
@@ -194,6 +195,7 @@ class MoneroWallet extends Wallet {
     required String seed,
     int networkType = 0,
     int restoreHeight = 0,
+    String seedOffset = "",
   }) async {
     final walletManagerPointerAddress = _walletManagerPointer.address;
     final Pointer<Void> walletPointer;
@@ -208,7 +210,7 @@ class MoneroWallet extends Wallet {
                 password: password,
                 mnemonic: seed,
                 restoreHeight: restoreHeight,
-                seedOffset: "",
+                seedOffset: seedOffset,
                 networkType: networkType,
               )
               .address,
@@ -223,7 +225,7 @@ class MoneroWallet extends Wallet {
                 path: path,
                 password: password,
                 mnemonic: seed,
-                seedOffset: "",
+                seedOffset: seedOffset,
                 newWallet: false,
                 restoreHeight: 0, // ignored by core underlying code
                 kdfRounds: 1,
@@ -669,15 +671,18 @@ class MoneroWallet extends Wallet {
   }
 
   @override
-  String getSeed() {
+  String getSeed({String seedOffset = ""}) {
     final polySeed = xmr_ffi.getWalletPolyseed(
       _getWalletPointer(),
-      passphrase: "",
+      passphrase: seedOffset,
     );
     if (polySeed != "") {
       return polySeed;
     }
-    final legacy = xmr_ffi.getWalletSeed(_getWalletPointer(), seedOffset: "");
+    final legacy = xmr_ffi.getWalletSeed(
+      _getWalletPointer(),
+      seedOffset: seedOffset,
+    );
     return legacy;
   }
 
