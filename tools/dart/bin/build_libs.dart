@@ -19,16 +19,16 @@ void main(List<String> args) async {
     throw ArgumentError(args.first);
   }
 
-  final moneroCDir = Directory(envMoneroCDir);
+  final moneroCDir = Directory(envSalviumCDir);
   if (!moneroCDir.existsSync()) {
-    l("Did not find monero_c. Calling prepare_monero_c.dart...");
+    l("Did not find salvium_c. Calling prepare_salvium_c.dart...");
     await runAsync(
       "dart",
       [
         "$envToolsDir"
             "${Platform.pathSeparator}dart"
             "${Platform.pathSeparator}bin"
-            "${Platform.pathSeparator}prepare_monero_c.dart",
+            "${Platform.pathSeparator}prepare_salvium_c.dart",
       ],
     );
   }
@@ -43,7 +43,7 @@ void main(List<String> args) async {
   for (final triple in triples) {
     for (final coin in coins) {
       await runAsync("./build_single.sh", [coin, triple, "-j$nProc"]);
-      final path = "$envMoneroCDir"
+      final path = "$envSalviumCDir"
           "${Platform.pathSeparator}release"
           "${Platform.pathSeparator}$coin"
           "${Platform.pathSeparator}${triple}_libwallet2_api_c.$bt";
@@ -75,7 +75,7 @@ void main(List<String> args) async {
           await runAsync(
             "cp",
             [
-              "$envMoneroCDir"
+              "$envSalviumCDir"
                   "${Platform.pathSeparator}release"
                   "${Platform.pathSeparator}$coin"
                   "${Platform.pathSeparator}${triple}_libwallet2_api_c.so",
@@ -100,20 +100,20 @@ void main(List<String> args) async {
       final String xmrDylib;
       final String wowDylib;
       if (platform == "ios") {
-        xmrDylib = "$envMoneroCDir"
+        xmrDylib = "$envSalviumCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}monero"
             "${Platform.pathSeparator}host-apple-ios_libwallet2_api_c.dylib";
-        wowDylib = "$envMoneroCDir"
+        wowDylib = "$envSalviumCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}wownero"
             "${Platform.pathSeparator}host-apple-ios_libwallet2_api_c.dylib";
       } else {
-        xmrDylib = "$envMoneroCDir"
+        xmrDylib = "$envSalviumCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}monero"
             "${Platform.pathSeparator}host-apple-darwin_libwallet2_api_c.dylib";
-        wowDylib = "$envMoneroCDir"
+        wowDylib = "$envSalviumCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}wownero"
             "${Platform.pathSeparator}host-apple-darwin_libwallet2_api_c.dylib";
@@ -141,7 +141,7 @@ void main(List<String> args) async {
         await runAsync(
           "cp",
           [
-            "$envMoneroCDir"
+            "$envSalviumCDir"
                 "${Platform.pathSeparator}release"
                 "${Platform.pathSeparator}$coin"
                 "${Platform.pathSeparator}x86_64-linux-gnu_libwallet2_api_c.so",
@@ -160,7 +160,7 @@ void main(List<String> args) async {
       await runAsync(
         "cp",
         [
-          "$envMoneroCDir"
+          "$envSalviumCDir"
               "${Platform.pathSeparator}release"
               "${Platform.pathSeparator}monero"
               "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
@@ -171,7 +171,7 @@ void main(List<String> args) async {
       await runAsync(
         "cp",
         [
-          "$envMoneroCDir"
+          "$envSalviumCDir"
               "${Platform.pathSeparator}release"
               "${Platform.pathSeparator}wownero"
               "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
@@ -180,7 +180,7 @@ void main(List<String> args) async {
         ],
       );
 
-      final polyPath = "$envMoneroCDir"
+      final polyPath = "$envSalviumCDir"
           "${Platform.pathSeparator}release"
           "${Platform.pathSeparator}wownero"
           "${Platform.pathSeparator}x86_64-w64-mingw32_libpolyseed.dll";
@@ -196,7 +196,7 @@ void main(List<String> args) async {
         ],
       );
 
-      final sspPath = "$envMoneroCDir"
+      final sspPath = "$envSalviumCDir"
           "${Platform.pathSeparator}release"
           "${Platform.pathSeparator}wownero"
           "${Platform.pathSeparator}x86_64-w64-mingw32_libssp-0.dll";
@@ -213,7 +213,7 @@ void main(List<String> args) async {
         ],
       );
 
-      final pThreadPath = "$envMoneroCDir"
+      final pThreadPath = "$envSalviumCDir"
           "${Platform.pathSeparator}release"
           "${Platform.pathSeparator}wownero"
           "${Platform.pathSeparator}x86_64-w64-mingw32_libwinpthread-1.dll";

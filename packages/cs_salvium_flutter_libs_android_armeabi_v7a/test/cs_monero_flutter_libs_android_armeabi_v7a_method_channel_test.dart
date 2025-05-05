@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final platform = MethodChannelCsMoneroFlutterLibsAndroidArmeabiV7a();
+  final platform = MethodChannelCsSalviumFlutterLibsAndroidArmeabiV7a();
   const MethodChannel channel =
       MethodChannel('cs_monero_flutter_libs_android_armeabi_v7a');
 

@@ -1,4 +1,4 @@
-import 'package:cs_monero/cs_monero.dart';
+import 'package:cs_salvium/cs_salvium.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/info_item.dart';

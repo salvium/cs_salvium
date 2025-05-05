@@ -21,8 +21,8 @@ String get _libName {
   }
 }
 
-FfiMoneroC? _cachedBindings;
-FfiMoneroC get bindings => _cachedBindings ??= FfiMoneroC(
+FfiSalviumC? _cachedBindings;
+FfiSalviumC get bindings => _cachedBindings ??= FfiSalviumC(
       DynamicLibrary.open(
         _libName,
       ),

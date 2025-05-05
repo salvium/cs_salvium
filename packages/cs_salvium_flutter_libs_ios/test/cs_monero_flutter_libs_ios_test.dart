@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group("$CsMoneroFlutterLibsIos", () {
-    final platform = CsMoneroFlutterLibsIos();
+  group("$CsSalviumFlutterLibsIos", () {
+    final platform = CsSalviumFlutterLibsIos();
     const MethodChannel channel = MethodChannel("cs_monero_flutter_libs_ios");
 
     setUp(() {
@@ -31,10 +31,10 @@ void main() {
   });
 
   test("registerWith", () {
-    CsMoneroFlutterLibsIos.registerWith();
+    CsSalviumFlutterLibsIos.registerWith();
     expect(
-      CsMoneroFlutterLibsPlatform.instance,
-      isA<CsMoneroFlutterLibsIos>(),
+      CsSalviumFlutterLibsPlatform.instance,
+      isA<CsSalviumFlutterLibsIos>(),
     );
   });
 }

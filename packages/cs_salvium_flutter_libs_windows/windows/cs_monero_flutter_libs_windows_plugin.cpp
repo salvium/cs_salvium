@@ -16,14 +16,14 @@
 namespace cs_monero_flutter_libs_windows {
 
 // static
-void CsMoneroFlutterLibsWindowsPlugin::RegisterWithRegistrar(
+void CsSalviumFlutterLibsWindowsPlugin::RegisterWithRegistrar(
     flutter::PluginRegistrarWindows *registrar) {
   auto channel =
       std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
           registrar->messenger(), "cs_monero_flutter_libs_windows",
           &flutter::StandardMethodCodec::GetInstance());
 
-  auto plugin = std::make_unique<CsMoneroFlutterLibsWindowsPlugin>();
+  auto plugin = std::make_unique<CsSalviumFlutterLibsWindowsPlugin>();
 
   channel->SetMethodCallHandler(
       [plugin_pointer = plugin.get()](const auto &call, auto result) {
@@ -33,11 +33,11 @@ void CsMoneroFlutterLibsWindowsPlugin::RegisterWithRegistrar(
   registrar->AddPlugin(std::move(plugin));
 }
 
-CsMoneroFlutterLibsWindowsPlugin::CsMoneroFlutterLibsWindowsPlugin() {}
+CsSalviumFlutterLibsWindowsPlugin::CsSalviumFlutterLibsWindowsPlugin() {}
 
-CsMoneroFlutterLibsWindowsPlugin::~CsMoneroFlutterLibsWindowsPlugin() {}
+CsSalviumFlutterLibsWindowsPlugin::~CsSalviumFlutterLibsWindowsPlugin() {}
 
-void CsMoneroFlutterLibsWindowsPlugin::HandleMethodCall(
+void CsSalviumFlutterLibsWindowsPlugin::HandleMethodCall(
     const flutter::MethodCall<flutter::EncodableValue> &method_call,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
   if (method_call.method_name().compare("getPlatformVersion") == 0) {

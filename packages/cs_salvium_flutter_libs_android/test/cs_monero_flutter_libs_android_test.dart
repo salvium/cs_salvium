@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group("$CsMoneroFlutterLibsAndroid", () {
-    final platform = CsMoneroFlutterLibsAndroid();
+  group("$CsSalviumFlutterLibsAndroid", () {
+    final platform = CsSalviumFlutterLibsAndroid();
     const MethodChannel channel =
         MethodChannel("cs_monero_flutter_libs_android");
 
@@ -37,10 +37,10 @@ void main() {
   });
 
   test("registerWith", () {
-    CsMoneroFlutterLibsAndroid.registerWith();
+    CsSalviumFlutterLibsAndroid.registerWith();
     expect(
-      CsMoneroFlutterLibsPlatform.instance,
-      isA<CsMoneroFlutterLibsAndroid>(),
+      CsSalviumFlutterLibsPlatform.instance,
+      isA<CsSalviumFlutterLibsAndroid>(),
     );
   });
 }

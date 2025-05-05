@@ -6,19 +6,19 @@ import '../util.dart';
 void main() async {
   await createBuildDirs();
 
-  final moneroCDir = Directory(envMoneroCDir);
+  final moneroCDir = Directory(envSalviumCDir);
   if (moneroCDir.existsSync()) {
     // TODO: something?
-    l("monero_c dir already exists");
+    l("salvium_c dir already exists");
     return;
   } else {
     // Change directory to BUILD_DIR
     Directory.current = envBuildDir;
 
-    // Clone the monero_c repository
+    // Clone the salvium_c repository
     await runAsync('git', [
       'clone',
-      kMoneroCRepo,
+      kSalviumCRepo,
       '--branch',
       'apple-frameworks',
     ]);
@@ -27,7 +27,7 @@ void main() async {
     Directory.current = moneroCDir;
 
     // Checkout specific commit and reset
-    await runAsync('git', ['checkout', kMoneroCHash]);
+    await runAsync('git', ['checkout', kSalviumCHash]);
     await runAsync('git', ['reset', '--hard']);
 
     // Configure submodules

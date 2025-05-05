@@ -1,8 +1,8 @@
 import 'dart:core' as core;
 import 'dart:core';
 
-import 'package:cs_monero/cs_monero.dart';
-import 'package:cs_monero_flutter_libs/cs_monero_flutter_libs.dart';
+import 'package:cs_salvium/cs_salvium.dart';
+import 'package:cs_salvium_flutter_libs/cs_salvium_flutter_libs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -38,7 +38,7 @@ class _ExampleAppState extends State<ExampleApp> {
   Future<void> initPlatformState() async {
     String? platformVersion;
     try {
-      platformVersion = await CsMoneroFlutterLibs().getPlatformVersion();
+      platformVersion = await CsSalviumFlutterLibs().getPlatformVersion();
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -60,7 +60,7 @@ class _ExampleAppState extends State<ExampleApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('cs_monero example app'),
+        title: const Text('cs_salvium example app'),
         centerTitle: true,
       ),
       body: Column(

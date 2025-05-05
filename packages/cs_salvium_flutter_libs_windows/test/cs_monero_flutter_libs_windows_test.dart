@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group("$CsMoneroFlutterLibsWindows", () {
-    final platform = CsMoneroFlutterLibsWindows();
+  group("$CsSalviumFlutterLibsWindows", () {
+    final platform = CsSalviumFlutterLibsWindows();
     const MethodChannel channel =
         MethodChannel("cs_monero_flutter_libs_windows");
 
@@ -32,10 +32,10 @@ void main() {
   });
 
   test("registerWith", () {
-    CsMoneroFlutterLibsWindows.registerWith();
+    CsSalviumFlutterLibsWindows.registerWith();
     expect(
-      CsMoneroFlutterLibsPlatform.instance,
-      isA<CsMoneroFlutterLibsWindows>(),
+      CsSalviumFlutterLibsPlatform.instance,
+      isA<CsSalviumFlutterLibsWindows>(),
     );
   });
 }

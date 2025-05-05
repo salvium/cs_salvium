@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  cs_monero_flutter_libs_linux
+  cs_salvium_flutter_libs_linux
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

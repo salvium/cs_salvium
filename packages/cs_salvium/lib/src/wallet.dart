@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import '../cs_monero.dart';
+import '../cs_salvium.dart';
 
 abstract class Wallet {
   Timer? _pollingTimer;

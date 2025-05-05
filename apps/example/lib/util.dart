@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:cs_monero/cs_monero.dart';
+import 'package:cs_salvium/cs_salvium.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -17,7 +17,7 @@ Future<String> pathForWalletDir({
   }
 
   final walletsDir = Directory(
-    '${root.path}${Platform.pathSeparator}cs_monero_example_app${Platform.pathSeparator}wallets',
+    '${root.path}${Platform.pathSeparator}cs_salvium_example_app${Platform.pathSeparator}wallets',
   );
   final walletDire = Directory(
     '${walletsDir.path}${Platform.pathSeparator}$type${Platform.pathSeparator}$name',

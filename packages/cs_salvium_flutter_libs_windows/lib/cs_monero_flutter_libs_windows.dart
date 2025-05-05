@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 
 const _channel = MethodChannel('cs_monero_flutter_libs_windows');
 
-class CsMoneroFlutterLibsWindows extends CsMoneroFlutterLibsPlatform {
-  /// Registers this class as the default instance of [CsMoneroFlutterLibsPlatform].
+class CsSalviumFlutterLibsWindows extends CsSalviumFlutterLibsPlatform {
+  /// Registers this class as the default instance of [CsSalviumFlutterLibsPlatform].
   static void registerWith() {
-    CsMoneroFlutterLibsPlatform.instance = CsMoneroFlutterLibsWindows();
+    CsSalviumFlutterLibsPlatform.instance = CsSalviumFlutterLibsWindows();
   }
 
   @override

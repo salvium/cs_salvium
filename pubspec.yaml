@@ -1,4 +1,4 @@
-name: cs_monero_workspace
+name: cs_salvium_workspace
 
 environment:
   sdk: ^3.5.3

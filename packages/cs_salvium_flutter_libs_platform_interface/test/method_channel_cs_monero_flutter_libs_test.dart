@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group("$MethodChannelCsMoneroFlutterLibs", () {
+  group("$MethodChannelCsSalviumFlutterLibs", () {
     const channel = MethodChannel("cs_monero_flutter_libs");
     MethodCall? call;
 
@@ -18,8 +18,8 @@ void main() {
       },
     );
 
-    final MethodChannelCsMoneroFlutterLibs launcher =
-        MethodChannelCsMoneroFlutterLibs();
+    final MethodChannelCsSalviumFlutterLibs launcher =
+        MethodChannelCsSalviumFlutterLibs();
 
     tearDown(() {
       call = null;

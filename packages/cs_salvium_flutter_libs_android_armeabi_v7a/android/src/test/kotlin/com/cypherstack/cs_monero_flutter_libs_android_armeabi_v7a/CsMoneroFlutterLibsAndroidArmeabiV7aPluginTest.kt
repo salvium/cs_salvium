@@ -13,10 +13,10 @@ import org.mockito.Mockito
  * you can run them directly from IDEs that support JUnit such as Android Studio.
  */
 
-internal class CsMoneroFlutterLibsAndroidArmeabiV7aPluginTest {
+internal class CsSalviumFlutterLibsAndroidArmeabiV7aPluginTest {
   @Test
   fun onMethodCall_getPlatformVersion_returnsExpectedValue() {
-    val plugin = CsMoneroFlutterLibsAndroidArmeabiV7aPlugin()
+    val plugin = CsSalviumFlutterLibsAndroidArmeabiV7aPlugin()
 
     val call = MethodCall("getPlatformVersion", null)
     val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)

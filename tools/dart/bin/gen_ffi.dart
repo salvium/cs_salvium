@@ -4,9 +4,9 @@ import '../env.dart';
 import '../util.dart';
 
 void main() async {
-  final moneroCDir = Directory(envMoneroCDir);
+  final moneroCDir = Directory(envSalviumCDir);
   if (!moneroCDir.existsSync()) {
-    throw Exception("Missing monero_c!: Expected $envMoneroCDir");
+    throw Exception("Missing salvium_c!: Expected $envSalviumCDir");
   } else {
     final thisDir = Directory.current;
 
@@ -23,9 +23,9 @@ void main() async {
     }
     final moneroCHash = (result.stdout as String).trim();
 
-    if (moneroCHash != kMoneroCHash) {
+    if (moneroCHash != kSalviumCHash) {
       throw Exception(
-        "Current monero_c hash does not match expected commit!",
+        "Current salvium_c hash does not match expected commit!",
       );
     }
 
