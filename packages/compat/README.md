@@ -5,3 +5,5 @@ Compatibility layer to ease migration from
 [`cs_monero`](https://pub.dev/packages/cs_monero).  Uses code copied from 
 `flutter_libmonero`.  Refer to the main monorepo at 
 https://github.com/cypherstack/cs_monero for more context.
+
+Deprecated and not used for cs_salvium.  Preserved for reference.

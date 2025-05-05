@@ -1,9 +1,9 @@
-# `cs_monero`
+# `cs_salvium`
 [![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
 
 A [Melos](https://github.com/invertase/melos) monorepo for the
-[`cs_monero` package](https://pub.dev/packages/cs_monero), 
-the [`cs_monero_flutter_libs` package](https://pub.dev/packages/cs_monero), and their dependencies.
+[`cs_salvium` package](https://pub.dev/packages/cs_salvium), 
+the [`cs_salvium_flutter_libs` package](https://pub.dev/packages/cs_salvium), and their dependencies.
 
 # About
 - A simplified Flutter/Dart Monero (and Wownero) wallet library.
@@ -17,13 +17,12 @@ the [`cs_monero_flutter_libs` package](https://pub.dev/packages/cs_monero), and 
 run `melos bootstrap` (or `melos bs`) in this root directory to get started.
 
 ## Build libraries from source (optional but recommended)
-By default, `cs_monero_flutter_libs` will automatically include and download the
+By default, `cs_salvium_flutter_libs` will automatically include and download the
 appropriate platform-specific binaries when you run `flutter pub get`.  Use
 these at your own risk.  To build the libraries yourself:
 
-1. Add this repo as a git submodule to your project and add `cs_monero`and 
-   `cs_monero_flutter_libs` to your pubspec.yaml as relative/path dependencies. 
-   If you're migrating from `flutter_libmonero` to `cs_monero`, also add `compat`.
+1. Add this repo as a git submodule to your project and add `cs_salvium`and 
+   `cs_salvium_flutter_libs` to your pubspec.yaml as relative/path dependencies.
 2. Install [Melos](https://pub.dev/packages/melos)
    (`dart pub global activate melos`) and run `melos bootstrap` (or `melos bs`).
 3. Build the platform you want using one of the following commands:
