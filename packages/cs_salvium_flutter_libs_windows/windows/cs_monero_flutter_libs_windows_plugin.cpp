@@ -1,4 +1,4 @@
-#include "cs_monero_flutter_libs_windows_plugin.h"
+#include "cs_salvium_flutter_libs_windows_plugin.h"
 
 // This must be included before many other Windows headers.
 #include <windows.h>
@@ -13,14 +13,14 @@
 #include <memory>
 #include <sstream>
 
-namespace cs_monero_flutter_libs_windows {
+namespace cs_salvium_flutter_libs_windows {
 
 // static
 void CsSalviumFlutterLibsWindowsPlugin::RegisterWithRegistrar(
     flutter::PluginRegistrarWindows *registrar) {
   auto channel =
       std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-          registrar->messenger(), "cs_monero_flutter_libs_windows",
+          registrar->messenger(), "cs_salvium_flutter_libs_windows",
           &flutter::StandardMethodCodec::GetInstance());
 
   auto plugin = std::make_unique<CsSalviumFlutterLibsWindowsPlugin>();
@@ -56,4 +56,4 @@ void CsSalviumFlutterLibsWindowsPlugin::HandleMethodCall(
   }
 }
 
-}  // namespace cs_monero_flutter_libs_windows
+}  // namespace cs_salvium_flutter_libs_windows

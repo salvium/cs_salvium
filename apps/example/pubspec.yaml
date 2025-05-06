@@ -15,9 +15,9 @@ dependencies:
     sdk: flutter
   path_provider: ^2.1.4
   cs_salvium:
-    path: ../cs_salvium
+    path: ../../packages/cs_salvium
   cs_salvium_flutter_libs:
-    path: ../cs_salvium_flutter_libs
+    path: ../../packages/cs_salvium_flutter_libs
 
 dev_dependencies:
   flutter_test:

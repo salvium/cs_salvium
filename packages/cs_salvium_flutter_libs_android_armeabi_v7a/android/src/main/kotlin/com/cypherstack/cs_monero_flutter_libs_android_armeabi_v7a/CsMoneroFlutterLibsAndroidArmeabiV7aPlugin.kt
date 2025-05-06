@@ -1,4 +1,4 @@
-package com.cypherstack.cs_monero_flutter_libs_android_armeabi_v7a
+package com.cypherstack.cs_salvium_flutter_libs_android_armeabi_v7a
 
 import androidx.annotation.NonNull
 
@@ -17,7 +17,7 @@ class CsSalviumFlutterLibsAndroidArmeabiV7aPlugin: FlutterPlugin, MethodCallHand
   private lateinit var channel : MethodChannel
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "cs_monero_flutter_libs_android_armeabi_v7a")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "cs_salvium_flutter_libs_android_armeabi_v7a")
     channel.setMethodCallHandler(this)
   }
 

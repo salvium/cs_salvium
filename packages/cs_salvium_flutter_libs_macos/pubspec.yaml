@@ -1,9 +1,9 @@
-name: cs_monero_flutter_libs_macos
-description: Macos implementation of cs_monero_flutter_libs
+name: cs_salvium_flutter_libs_macos
+description: Macos implementation of cs_salvium_flutter_libs
 version: 1.0.0-pre
-repository: https://github.com/cypherstack/cs_monero
-homepage: https://github.com/cypherstack/cs_monero
-issue_tracker: https://github.com/cypherstack/cs_monero/issues
+repository: https://github.com/cypherstack/cs_salvium
+homepage: https://github.com/cypherstack/cs_salvium
+issue_tracker: https://github.com/cypherstack/cs_salvium/issues
 
 environment:
   sdk: ">=3.5.3 <4.0.0"
@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cs_monero_flutter_libs_platform_interface: 1.0.0-pre
+  cs_salvium_flutter_libs_platform_interface: 1.0.0-pre
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,4 @@
-package com.cypherstack.cs_monero_flutter_libs_android_x86_64
+package com.cypherstack.cs_salvium_flutter_libs_android_x86_64
 
 import androidx.annotation.NonNull
 
@@ -17,7 +17,7 @@ class CsSalviumFlutterLibsAndroidX8664Plugin: FlutterPlugin, MethodCallHandler {
   private lateinit var channel : MethodChannel
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "cs_monero_flutter_libs_android_x86_64")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "cs_salvium_flutter_libs_android_x86_64")
     channel.setMethodCallHandler(this)
   }
 

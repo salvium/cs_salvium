@@ -1,5 +1,5 @@
 
-import 'cs_monero_flutter_libs_android_armeabi_v7a_platform_interface.dart';
+import 'cs_salvium_flutter_libs_android_armeabi_v7a_platform_interface.dart';
 
 class CsSalviumFlutterLibsAndroidArmeabiV7a {
   Future<String?> getPlatformVersion() {

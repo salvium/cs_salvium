@@ -1,4 +1,4 @@
-package com.cypherstack.cs_monero_flutter_libs_android
+package com.cypherstack.cs_salvium_flutter_libs_android
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

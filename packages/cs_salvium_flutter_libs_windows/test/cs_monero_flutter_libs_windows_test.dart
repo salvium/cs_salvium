@@ -1,5 +1,5 @@
-import 'package:cs_monero_flutter_libs_platform_interface/cs_monero_flutter_libs_platform_interface.dart';
-import 'package:cs_monero_flutter_libs_windows/cs_monero_flutter_libs_windows.dart';
+import 'package:cs_salvium_flutter_libs_platform_interface/cs_salvium_flutter_libs_platform_interface.dart';
+import 'package:cs_salvium_flutter_libs_windows/cs_salvium_flutter_libs_windows.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,7 +9,7 @@ void main() {
   group("$CsSalviumFlutterLibsWindows", () {
     final platform = CsSalviumFlutterLibsWindows();
     const MethodChannel channel =
-        MethodChannel("cs_monero_flutter_libs_windows");
+        MethodChannel("cs_salvium_flutter_libs_windows");
 
     setUp(() {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

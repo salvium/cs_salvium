@@ -1,9 +1,9 @@
-name: cs_monero_flutter_libs
-description: "Binaries required to use cs_monero in a Flutter project"
+name: cs_salvium_flutter_libs
+description: "Binaries required to use cs_salvium in a Flutter project"
 version: 1.0.0-pre.0
-repository: https://github.com/cypherstack/cs_monero
-homepage: https://github.com/cypherstack/cs_monero
-issue_tracker: https://github.com/cypherstack/cs_monero/issues
+repository: https://github.com/cypherstack/cs_salvium
+homepage: https://github.com/cypherstack/cs_salvium
+issue_tracker: https://github.com/cypherstack/cs_salvium/issues
 
 environment:
   sdk: ">=3.5.3 <4.0.0"
@@ -12,12 +12,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cs_monero_flutter_libs_platform_interface: 1.0.0-pre
-  cs_monero_flutter_libs_android: 1.0.0-pre
-  cs_monero_flutter_libs_ios: 1.0.0-pre.0
-  cs_monero_flutter_libs_linux: 1.0.0-pre
-  cs_monero_flutter_libs_macos: 1.0.0-pre
-  cs_monero_flutter_libs_windows: 1.0.0-pre
+  cs_salvium_flutter_libs_platform_interface: 1.0.0-pre
+  cs_salvium_flutter_libs_android: 1.0.0-pre
+  cs_salvium_flutter_libs_ios: 1.0.0-pre.0
+  cs_salvium_flutter_libs_linux: 1.0.0-pre
+  cs_salvium_flutter_libs_macos: 1.0.0-pre
+  cs_salvium_flutter_libs_windows: 1.0.0-pre
 
 dev_dependencies:
   flutter_test:
@@ -28,12 +28,12 @@ flutter:
   plugin:
     platforms:
       android:
-        default_package: cs_monero_flutter_libs_android
+        default_package: cs_salvium_flutter_libs_android
       ios:
-        default_package: cs_monero_flutter_libs_ios
+        default_package: cs_salvium_flutter_libs_ios
       linux:
-        default_package: cs_monero_flutter_libs_linux
+        default_package: cs_salvium_flutter_libs_linux
       macos:
-        default_package: cs_monero_flutter_libs_macos
+        default_package: cs_salvium_flutter_libs_macos
       windows:
-        default_package: cs_monero_flutter_libs_windows
+        default_package: cs_salvium_flutter_libs_windows

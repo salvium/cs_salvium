@@ -1,6 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'cs_monero_flutter_libs_android_armeabi_v7a_method_channel.dart';
+import 'cs_salvium_flutter_libs_android_armeabi_v7a_method_channel.dart';
 
 abstract class CsSalviumFlutterLibsAndroidArmeabiV7aPlatform extends PlatformInterface {
   /// Constructs a CsSalviumFlutterLibsAndroidArmeabiV7aPlatform.

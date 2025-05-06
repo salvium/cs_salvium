@@ -1,6 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'method_channel_cs_monero_flutter_libs.dart';
+import 'method_channel_cs_salvium_flutter_libs.dart';
 
 abstract class CsSalviumFlutterLibsPlatform extends PlatformInterface {
   /// Constructs a CsSalviumFlutterLibsPlatformInterfacePlatform.

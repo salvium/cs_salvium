@@ -7,7 +7,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
-  - cs_salvium_flutter_libs_ios (from `.symlinks/plugins/cs_monero_flutter_libs_ios/ios`)
+  - cs_salvium_flutter_libs_ios (from `.symlinks/plugins/cs_salvium_flutter_libs_ios/ios`)
   - Flutter (from `Flutter`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
 

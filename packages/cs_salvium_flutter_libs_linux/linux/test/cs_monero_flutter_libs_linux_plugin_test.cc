@@ -2,8 +2,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "include/cs_monero_flutter_libs_linux/cs_monero_flutter_libs_linux_plugin.h"
-#include "cs_monero_flutter_libs_linux_plugin_private.h"
+#include "include/cs_salvium_flutter_libs_linux/cs_salvium_flutter_libs_linux_plugin.h"
+#include "cs_salvium_flutter_libs_linux_plugin_private.h"
 
 // This demonstrates a simple unit test of the C portion of this plugin's
 // implementation.
@@ -13,7 +13,7 @@
 // built for x64 debug, run:
 // $ build/linux/x64/debug/plugins/my_plugin/my_plugin_test
 
-namespace cs_monero_flutter_libs_linux {
+namespace cs_salvium_flutter_libs_linux {
 namespace test {
 
 TEST(CsSalviumFlutterLibsLinuxPlugin, GetPlatformVersion) {
@@ -28,4 +28,4 @@ TEST(CsSalviumFlutterLibsLinuxPlugin, GetPlatformVersion) {
 }
 
 }  // namespace test
-}  // namespace cs_monero_flutter_libs_linux
+}  // namespace cs_salvium_flutter_libs_linux

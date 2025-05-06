@@ -1,6 +1,6 @@
-import 'package:cs_monero_flutter_libs_android_x86_64/cs_monero_flutter_libs_android_x86_64.dart';
-import 'package:cs_monero_flutter_libs_android_x86_64/cs_monero_flutter_libs_android_x86_64_method_channel.dart';
-import 'package:cs_monero_flutter_libs_android_x86_64/cs_monero_flutter_libs_android_x86_64_platform_interface.dart';
+import 'package:cs_salvium_flutter_libs_android_x86_64/cs_salvium_flutter_libs_android_x86_64.dart';
+import 'package:cs_salvium_flutter_libs_android_x86_64/cs_salvium_flutter_libs_android_x86_64_method_channel.dart';
+import 'package:cs_salvium_flutter_libs_android_x86_64/cs_salvium_flutter_libs_android_x86_64_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 

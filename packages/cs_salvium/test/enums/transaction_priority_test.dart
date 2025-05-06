@@ -1,4 +1,4 @@
-import 'package:cs_salvium/cs_monero.dart';
+import 'package:cs_salvium/cs_salvium.dart';
 import 'package:test/test.dart';
 
 void main() {

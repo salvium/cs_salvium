@@ -1,10 +1,10 @@
-import 'package:cs_monero_flutter_libs_android_arm64_v8a/cs_monero_flutter_libs_android_arm64_v8a.dart';
-import 'package:cs_monero_flutter_libs_android_armeabi_v7a/cs_monero_flutter_libs_android_armeabi_v7a.dart';
-import 'package:cs_monero_flutter_libs_android_x86_64/cs_monero_flutter_libs_android_x86_64.dart';
-import 'package:cs_monero_flutter_libs_platform_interface/cs_monero_flutter_libs_platform_interface.dart';
+import 'package:cs_salvium_flutter_libs_android_arm64_v8a/cs_salvium_flutter_libs_android_arm64_v8a.dart';
+import 'package:cs_salvium_flutter_libs_android_armeabi_v7a/cs_salvium_flutter_libs_android_armeabi_v7a.dart';
+import 'package:cs_salvium_flutter_libs_android_x86_64/cs_salvium_flutter_libs_android_x86_64.dart';
+import 'package:cs_salvium_flutter_libs_platform_interface/cs_salvium_flutter_libs_platform_interface.dart';
 import 'package:flutter/services.dart';
 
-const _channel = MethodChannel('cs_monero_flutter_libs_android');
+const _channel = MethodChannel('cs_salvium_flutter_libs_android');
 
 class CsSalviumFlutterLibsAndroid extends CsSalviumFlutterLibsPlatform {
   /// Registers this class as the default instance of [CsSalviumFlutterLibsPlatform].

@@ -4,16 +4,16 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project-level configuration.
-set(PROJECT_NAME "cs_monero_flutter_libs_linux")
+set(PROJECT_NAME "cs_salvium_flutter_libs_linux")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
 # This value is used when generating builds using this plugin, so it must
 # not be changed.
-set(PLUGIN_NAME "cs_monero_flutter_libs_linux_plugin")
+set(PLUGIN_NAME "cs_salvium_flutter_libs_linux_plugin")
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
-  "cs_monero_flutter_libs_linux_plugin.cc"
+  "cs_salvium_flutter_libs_linux_plugin.cc"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
@@ -44,7 +44,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 # List of absolute paths to libraries that should be bundled with the plugin.
 # This list could contain prebuilt libraries, or libraries created by an
 # external build triggered from this build file.
-set(cs_monero_flutter_libs_linux_bundled_libraries
+set(cs_salvium_flutter_libs_linux_bundled_libraries
   "${CMAKE_CURRENT_SOURCE_DIR}/lib/monero_libwallet2_api_c.so"
   "${CMAKE_CURRENT_SOURCE_DIR}/lib/wownero_libwallet2_api_c.so"
   PARENT_SCOPE
@@ -78,7 +78,7 @@ FetchContent_MakeAvailable(googletest)
 # The plugin's exported API is not very useful for unit testing, so build the
 # sources directly into the test binary rather than using the shared library.
 add_executable(${TEST_RUNNER}
-  test/cs_monero_flutter_libs_linux_plugin_test.cc
+  test/cs_salvium_flutter_libs_linux_plugin_test.cc
   ${PLUGIN_SOURCES}
 )
 apply_standard_settings(${TEST_RUNNER})

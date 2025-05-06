@@ -3,12 +3,12 @@ import 'dart:isolate';
 
 import 'package:meta/meta.dart';
 
-import '../../cs_monero.dart';
+import '../../cs_salvium.dart';
 import '../deprecated/get_height_by_date.dart';
 import '../ffi_bindings/wownero_wallet_bindings.dart' as wow_ffi;
 import '../ffi_bindings/wownero_wallet_manager_bindings.dart' as wow_wm_ffi;
 
-const _kFourteenWordSeedCacheKey = "cs_monero.fourteen.seed";
+const _kFourteenWordSeedCacheKey = "cs_salvium.fourteen.seed";
 
 class WowneroWallet extends Wallet {
   // internal constructor

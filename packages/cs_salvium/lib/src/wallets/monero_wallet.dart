@@ -3,7 +3,7 @@ import 'dart:isolate';
 
 import 'package:meta/meta.dart';
 
-import '../../cs_monero.dart';
+import '../../cs_salvium.dart';
 import '../deprecated/get_height_by_date.dart';
 import '../ffi_bindings/monero_wallet_bindings.dart' as xmr_ffi;
 import '../ffi_bindings/monero_wallet_manager_bindings.dart' as xmr_wm_ffi;

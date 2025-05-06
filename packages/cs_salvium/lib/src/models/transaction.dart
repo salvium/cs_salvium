@@ -1,4 +1,4 @@
-import '../../cs_monero.dart';
+import '../../cs_salvium.dart';
 
 /// Represents a Monero (or Wownero) transaction for a given wallet.
 class Transaction {

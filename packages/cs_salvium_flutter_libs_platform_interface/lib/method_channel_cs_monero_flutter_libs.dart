@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 
-import 'cs_monero_flutter_libs_platform_interface.dart';
+import 'cs_salvium_flutter_libs_platform_interface.dart';
 
-const _channel = MethodChannel('cs_monero_flutter_libs');
+const _channel = MethodChannel('cs_salvium_flutter_libs');
 
 class MethodChannelCsSalviumFlutterLibs extends CsSalviumFlutterLibsPlatform {
   @override

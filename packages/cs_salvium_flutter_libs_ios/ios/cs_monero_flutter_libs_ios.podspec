@@ -1,13 +1,13 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint cs_monero_flutter_libs_ios.podspec` to validate before publishing.
+# Run `pod lib lint cs_salvium_flutter_libs_ios.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'cs_monero_flutter_libs_ios'
+  s.name             = 'cs_salvium_flutter_libs_ios'
   s.version          = '0.0.1'
-  s.summary          = 'Binaries required to use cs_monero in a Flutter project'
+  s.summary          = 'Binaries required to use cs_salvium in a Flutter project'
   s.description      = <<-DESC
-Binaries required to use cs_monero in a Flutter project
+Binaries required to use cs_salvium in a Flutter project
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
@@ -26,5 +26,5 @@ Binaries required to use cs_monero in a Flutter project
   # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your
   # plugin's privacy impact, and then uncomment this line. For more information,
   # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-  # s.resource_bundles = {'cs_monero_flutter_libs_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
+  # s.resource_bundles = {'cs_salvium_flutter_libs_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end
