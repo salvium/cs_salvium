@@ -17,7 +17,7 @@ Future<String> pathForWalletDir({
   }
 
   final walletsDir = Directory(
-    '${root.path}${Platform.pathSeparator}cs_monero_example_app${Platform.pathSeparator}wallets',
+    '${root.path}${Platform.pathSeparator}cs_salvium_example_app${Platform.pathSeparator}wallets',
   );
   final walletDire = Directory(
     '${walletsDir.path}${Platform.pathSeparator}$type${Platform.pathSeparator}$name',
@@ -72,9 +72,9 @@ String formattedAmount(BigInt value, Type walletType) {
     case const (MoneroWallet):
       decimalPlaces = 12;
       break;
-    case const (WowneroWallet):
-      decimalPlaces = 11;
-      break;
+    // case const (WowneroWallet):
+    //   decimalPlaces = 11;
+    //   break;
 
     default:
       return "error";

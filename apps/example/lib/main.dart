@@ -60,7 +60,7 @@ class _ExampleAppState extends State<ExampleApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('cs_monero example app'),
+        title: const Text('cs_salvium example app'),
         centerTitle: true,
       ),
       body: Column(

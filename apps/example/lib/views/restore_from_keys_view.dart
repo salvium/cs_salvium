@@ -23,7 +23,7 @@ class _RestoreFromKeysViewState extends State<RestoreFromKeysView> {
   final heightController = TextEditingController();
   final addressController = TextEditingController();
 
-  String _type = "monero";
+  String _type = "salvium";
   bool _locked = false;
 
   Future<Wallet> viewOnlyWallet(
@@ -45,7 +45,7 @@ class _RestoreFromKeysViewState extends State<RestoreFromKeysView> {
     try {
       final Wallet wallet;
       switch (type) {
-        case "monero":
+        case "salvium":
           wallet = await MoneroWallet.restoreWalletFromKeys(
             path: path,
             password: password,
@@ -57,17 +57,17 @@ class _RestoreFromKeysViewState extends State<RestoreFromKeysView> {
           );
           break;
 
-        case "wownero":
-          wallet = await WowneroWallet.restoreWalletFromKeys(
-            path: path,
-            password: password,
-            viewKey: viewKeyController.text,
-            spendKey: spendKeyController.text,
-            restoreHeight: int.tryParse(heightController.text) ?? 0,
-            address: addressController.text,
-            language: languageController.text,
-          );
-          break;
+        // case "wownero":
+        //   wallet = await WowneroWallet.restoreWalletFromKeys(
+        //     path: path,
+        //     password: password,
+        //     viewKey: viewKeyController.text,
+        //     spendKey: spendKeyController.text,
+        //     restoreHeight: int.tryParse(heightController.text) ?? 0,
+        //     address: addressController.text,
+        //     language: languageController.text,
+        //   );
+        //   break;
 
         default:
           throw Exception("Unknown wallet type: $type");

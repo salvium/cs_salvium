@@ -23,7 +23,7 @@ class _RestoreDeterministicFromSpendKeyViewState
   final languageController = TextEditingController()..text = "English";
   final heightController = TextEditingController();
 
-  String _type = "monero";
+  String _type = "salvium";
   bool _locked = false;
 
   Future<Wallet> viewOnlyWallet(
@@ -45,7 +45,7 @@ class _RestoreDeterministicFromSpendKeyViewState
     try {
       final Wallet wallet;
       switch (type) {
-        case "monero":
+        case "salvium":
           wallet = await MoneroWallet.restoreDeterministicWalletFromSpendKey(
             path: path,
             password: password,
@@ -55,15 +55,15 @@ class _RestoreDeterministicFromSpendKeyViewState
           );
           break;
 
-        case "wownero":
-          wallet = await WowneroWallet.restoreDeterministicWalletFromSpendKey(
-            path: path,
-            password: password,
-            spendKey: spendKeyController.text,
-            restoreHeight: int.tryParse(heightController.text) ?? 0,
-            language: languageController.text,
-          );
-          break;
+        // case "wownero":
+        //   wallet = await WowneroWallet.restoreDeterministicWalletFromSpendKey(
+        //     path: path,
+        //     password: password,
+        //     spendKey: spendKeyController.text,
+        //     restoreHeight: int.tryParse(heightController.text) ?? 0,
+        //     language: languageController.text,
+        //   );
+        //   break;
 
         default:
           throw Exception("Unknown wallet type: $type");

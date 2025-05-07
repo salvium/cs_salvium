@@ -13,13 +13,13 @@ class OpenWalletView extends StatefulWidget {
 
 class _OpenWalletViewState extends State<OpenWalletView> {
   Future<List<String>> getAll() async {
-    final monero = await loadWalletNames("monero");
-    final wownero = await loadWalletNames("wownero");
+    final salvium = await loadWalletNames("salvium");
+    // final wownero = await loadWalletNames("wownero");
 
-    return monero.map((e) => "Monero:  $e").toList()
-      ..addAll(
-        wownero.map((e) => "Wownero: $e"),
-      );
+    return salvium.map((e) => "Salvium: $e").toList();
+      // ..addAll(
+      //   wownero.map((e) => "Wownero: $e"),
+      // );
   }
 
   @override
@@ -61,11 +61,11 @@ class _OpenWalletViewState extends State<OpenWalletView> {
                       onTap: () {
                         final actualName = names![index].substring(9);
                         final String type;
-                        if (names![index].startsWith("Mon")) {
-                          type = "monero";
-                        } else {
-                          type = "wownero";
-                        }
+                        // if (names![index].startsWith("Sal")) {
+                          type = "salvium";
+                        // } else {
+                        //   type = "wownero";
+                        // }
                         showAdaptiveDialog<void>(
                           context: context,
                           builder: (context) => OpenWalletDialog(
@@ -107,21 +107,21 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
     final Wallet wallet;
     final String daemonAddress;
     switch (type) {
-      case "monero":
-        daemonAddress = "monero.stackwallet.com:18081";
+      case "salvium":
+        daemonAddress = "localhost:19081";
         wallet = await MoneroWallet.loadWallet(
           path: path,
           password: pw,
         );
         break;
 
-      case "wownero":
-        daemonAddress = "wownero.stackwallet.com:34568";
-        wallet = await WowneroWallet.loadWallet(
-          path: path,
-          password: pw,
-        );
-        break;
+      // case "wownero":
+      //   daemonAddress = "wownero.stackwallet.com:34568";
+      //   wallet = await WowneroWallet.loadWallet(
+      //     path: path,
+      //     password: pw,
+      //   );
+      //   break;
 
       default:
         throw Exception("Unknown wallet type: $type");

@@ -22,7 +22,7 @@ class _CreateViewOnlyWalletViewState extends State<CreateViewOnlyWalletView> {
   final heightController = TextEditingController();
   final addressController = TextEditingController();
 
-  String _type = "monero";
+  String _type = "salvium";
   bool _locked = false;
 
   Future<Wallet> viewOnlyWallet(
@@ -44,7 +44,7 @@ class _CreateViewOnlyWalletViewState extends State<CreateViewOnlyWalletView> {
     try {
       final Wallet wallet;
       switch (type) {
-        case "monero":
+        case "salvium":
           wallet = await MoneroWallet.createViewOnlyWallet(
             path: path,
             password: password,
@@ -54,15 +54,15 @@ class _CreateViewOnlyWalletViewState extends State<CreateViewOnlyWalletView> {
           );
           break;
 
-        case "wownero":
-          wallet = await WowneroWallet.createViewOnlyWallet(
-            path: path,
-            password: password,
-            viewKey: viewKeyController.text,
-            restoreHeight: int.tryParse(heightController.text) ?? 0,
-            address: addressController.text,
-          );
-          break;
+        // case "wownero":
+        //   wallet = await WowneroWallet.createViewOnlyWallet(
+        //     path: path,
+        //     password: password,
+        //     viewKey: viewKeyController.text,
+        //     restoreHeight: int.tryParse(heightController.text) ?? 0,
+        //     address: addressController.text,
+        //   );
+        //   break;
 
         default:
           throw Exception("Unknown wallet type: $type");

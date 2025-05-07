@@ -17,7 +17,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
   final nameController = TextEditingController();
   final pwController = TextEditingController();
 
-  String _type = "monero";
+  String _type = "salvium";
   bool _locked = false;
 
   WowneroSeedType? _selectedWowType;
@@ -38,7 +38,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
     try {
       final Wallet wallet;
       switch (type) {
-        case "monero":
+        case "salvium":
           if (_selectedXmrType == null) {
             throw Exception("Select seed length!");
           }
@@ -49,17 +49,17 @@ class _CreateWalletViewState extends State<CreateWalletView> {
           );
           break;
 
-        case "wownero":
-          if (_selectedWowType == null) {
-            throw Exception("Select seed length!");
-          }
-          wallet = await WowneroWallet.create(
-            path: path,
-            password: password,
-            seedType: _selectedWowType!,
-            overrideDeprecated14WordSeedException: true,
-          );
-          break;
+        // case "wownero":
+        //   if (_selectedWowType == null) {
+        //     throw Exception("Select seed length!");
+        //   }
+        //   wallet = await WowneroWallet.create(
+        //     path: path,
+        //     password: password,
+        //     seedType: _selectedWowType!,
+        //     overrideDeprecated14WordSeedException: true,
+        //   );
+        //   break;
 
         default:
           throw Exception("Unknown wallet type: $type");
@@ -148,21 +148,21 @@ class _CreateWalletViewState extends State<CreateWalletView> {
                     child: DropdownButton(
                       hint: const Text("Select seed length"),
                       isExpanded: true,
-                      value: _type == "wownero"
+                      value: /*_type == "wownero"
                           ? _selectedWowType
-                          : _selectedXmrType,
+                          :*/ _selectedXmrType,
                       items: [
-                        if (_type == "wownero")
-                          ...WowneroSeedType.values.map(
-                            (e) => DropdownMenuItem(
-                              value: e,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(e.name),
-                              ),
-                            ),
-                          ),
-                        if (_type == "monero")
+                        // if (_type == "wownero")
+                        //   ...WowneroSeedType.values.map(
+                        //     (e) => DropdownMenuItem(
+                        //       value: e,
+                        //       child: Padding(
+                        //         padding: const EdgeInsets.all(8.0),
+                        //         child: Text(e.name),
+                        //       ),
+                        //     ),
+                        //   ),
+                        if (_type == "salvium")
                           ...MoneroSeedType.values.map(
                             (e) => DropdownMenuItem(
                               value: e,
@@ -177,8 +177,8 @@ class _CreateWalletViewState extends State<CreateWalletView> {
                         setState(() {
                           if (value is MoneroSeedType) {
                             _selectedXmrType = value;
-                          } else if (value is WowneroSeedType) {
-                            _selectedWowType = value;
+                          // } else if (value is WowneroSeedType) {
+                          //   _selectedWowType = value;
                           }
                         });
                       },
