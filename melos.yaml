@@ -2,19 +2,19 @@ name: cs_monero
 repository: https://github.com/cypherstack/cs_monero
 
 packages:
-  - "compat"
-  - "cs_monero"
-  - "cs_monero_flutter_libs"
-  - "cs_monero_flutter_libs_android"
-  - "cs_monero_flutter_libs_android_x86_64"
-  - "cs_monero_flutter_libs_android_arm64_v8a"
-  - "cs_monero_flutter_libs_android_armeabi_v7a"
-  - "cs_monero_flutter_libs_ios"
-  - "cs_monero_flutter_libs_linux"
-  - "cs_monero_flutter_libs_macos"
-  - "cs_monero_flutter_libs_platform_interface"
-  - "cs_monero_flutter_libs_windows"
-  - "example_app"
+  - "packages/compat"
+  - "packages/cs_monero"
+  - "packages/cs_monero_flutter_libs"
+  - "packages/cs_monero_flutter_libs_android"
+  - "packages/cs_monero_flutter_libs_android_x86_64"
+  - "packages/cs_monero_flutter_libs_android_arm64_v8a"
+  - "packages/cs_monero_flutter_libs_android_armeabi_v7a"
+  - "packages/cs_monero_flutter_libs_ios"
+  - "packages/cs_monero_flutter_libs_linux"
+  - "packages/cs_monero_flutter_libs_macos"
+  - "packages/cs_monero_flutter_libs_platform_interface"
+  - "packages/cs_monero_flutter_libs_windows"
+  - "apps/example"
 
 command:
   version:
@@ -73,7 +73,7 @@ scripts:
     description: Generate the monero_c dart FFI bindings
 
   example:
-    run: melos exec --scope=example_app -- flutter run
+    run: melos exec --scope=apps/example -- flutter run
     description: Run the example app
 
   test:
