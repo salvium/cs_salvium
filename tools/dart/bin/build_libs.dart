@@ -7,7 +7,7 @@ import '../util.dart';
 
 void main(List<String> args) async {
   const platforms = ["android", "ios", "macos", "linux", "windows"];
-  const coins = ["monero", "wownero"];
+  const coins = ["salvium"/*, "wownero"*/];
 
   if (args.length != 1) {
     throw ArgumentError(

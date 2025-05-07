@@ -6,7 +6,7 @@ import '../util.dart';
 void main() async {
   final moneroCDir = Directory(envMoneroCDir);
   if (!moneroCDir.existsSync()) {
-    throw Exception("Missing monero_c!: Expected $envMoneroCDir");
+    throw Exception("Missing salvium_c!: Expected $envMoneroCDir");
   } else {
     final thisDir = Directory.current;
 
@@ -29,7 +29,7 @@ void main() async {
       );
     }
 
-    for (final coin in ["monero", "wownero"]) {
+    for (final coin in ["salvium"/*, "wownero"*/]) {
       await runAsync(
         "dart",
         [

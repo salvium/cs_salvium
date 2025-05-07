@@ -1,0 +1,11 @@
+name: FfiSalviumC
+description: salvium_c bindings
+output: "../../packages/cs_salvium/lib/src/ffi_bindings/generated_bindings_salvium.g.dart"
+headers:
+  entry-points:
+    - "../../build/salvium_c/salvium_libwallet2_api_c/src/main/cpp/wallet2_api_c.h"
+
+exclude-all-by-default: true
+functions:
+  include:
+    - "SALVIUM_.+"
