@@ -8,6 +8,6 @@ final envProjectDir =
 
 String get envToolsDir => "$envProjectDir${Platform.pathSeparator}tools";
 String get envBuildDir => "$envProjectDir${Platform.pathSeparator}build";
-String get envMoneroCDir => "$envBuildDir${Platform.pathSeparator}monero_c";
+String get envMoneroCDir => "$envBuildDir${Platform.pathSeparator}salvium_c";
 String get envOutputsDir =>
     "$envProjectDir${Platform.pathSeparator}built_outputs";
