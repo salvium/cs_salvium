@@ -210,6 +210,20 @@ final wowneroDates = {
   "2024-9": 661455,
 };
 
+final salviumDates = {
+  "2024-07": 1,
+  "2024-08": 23000,
+  "2024-09": 44650,
+  "2024-10": 65650,
+  "2024-11": 86750,
+  "2024-12": 108000,
+  "2025-01": 120950,
+  "2025-02": 152200,
+  "2025-03": 172300,
+  "2025-04": 194450,
+  "2025-05": 215900,
+};
+
 /* The data above was generated using this bash script:
 #!/bin/bash
 
@@ -226,6 +240,35 @@ do
     firstBlockOfTheMonth[$YRMO]=$HEIGHT # Like firstBlockOfTheMonth["2021-5"]=312769.
   fi
   sleep 0.1
+done
+
+Salvium's dates were generated from a similar script:
+
+#!/bin/bash
+
+declare -A firstBlockOfTheMonth
+STEP=1
+MAX_HEIGHT=222200
+
+for (( HEIGHT=0; HEIGHT<=MAX_HEIGHT; HEIGHT+=STEP ))
+do
+  RESPONSE=$(curl -s -X POST http://localhost:19081/json_rpc -d '{"jsonrpc":"2.0","id":"0","method":"getblock","params":{"height":'$HEIGHT'}}')
+
+  TIMESTAMP=$(echo "$RESPONSE" | jq -r '.result.block_header.timestamp')
+
+  # Skip invalid timestamps (like genesis block = 0)
+  if [ -z "$TIMESTAMP" ] || [ "$TIMESTAMP" = "null" ] || [ "$TIMESTAMP" -eq 0 ]; then
+    continue
+  fi
+
+  YRMO=$(date -u +'%Y-%m' -d "@$TIMESTAMP")
+
+  if [ -z "${firstBlockOfTheMonth[$YRMO]}" ]; then
+    echo "\"$YRMO\": $HEIGHT"
+    firstBlockOfTheMonth[$YRMO]=$HEIGHT
+  fi
+
+  sleep 0.00001
 done
 */
 
@@ -291,6 +334,43 @@ int getWowneroHeightByDate({required DateTime date}) {
       startHeight = wowneroDates[raw];
       final index = wowneroDates.values.toList().indexOf(startHeight!);
       endHeight = wowneroDates.values.toList()[index + 1];
+      final heightPerDay = ((endHeight - startHeight) / 31).round();
+      final daysHeight = (date.day - 1) * heightPerDay;
+      height = startHeight + daysHeight - heightPerDay;
+    }
+  } catch (e) {
+    // print(e);
+    rethrow;
+  }
+
+  return height;
+}
+
+@Deprecated("Something else should be used")
+int getSalviumHeightByDate({required DateTime date}) {
+  final raw = '${date.year}-${date.month}';
+  final lastHeight = salviumDates.values.last;
+  int? startHeight;
+  int? endHeight;
+  int height = 0;
+
+  try {
+    if ((salviumDates[raw] == null) || (salviumDates[raw] == lastHeight)) {
+      startHeight = salviumDates.values.toList()[salviumDates.length - 2];
+      endHeight = salviumDates.values.toList()[salviumDates.length - 1];
+      final heightPerDay = (endHeight - startHeight) / 31;
+      final endDateRaw =
+      salviumDates.keys.toList()[salviumDates.length - 1].split('-');
+      final endYear = int.parse(endDateRaw[0]);
+      final endMonth = int.parse(endDateRaw[1]);
+      final endDate = DateTime(endYear, endMonth);
+      final differenceInDays = date.difference(endDate).inDays;
+      final daysHeight = (differenceInDays * heightPerDay).round();
+      height = endHeight + daysHeight;
+    } else {
+      startHeight = salviumDates[raw];
+      final index = salviumDates.values.toList().indexOf(startHeight!);
+      endHeight = salviumDates.values.toList()[index + 1];
       final heightPerDay = ((endHeight - startHeight) / 31).round();
       final daysHeight = (date.day - 1) * heightPerDay;
       height = startHeight + daysHeight - heightPerDay;
