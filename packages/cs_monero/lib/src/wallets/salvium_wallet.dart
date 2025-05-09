@@ -6,10 +6,10 @@ import 'package:meta/meta.dart';
 import '../../cs_monero.dart';
 import '../deprecated/get_height_by_date.dart';
 import '../enums/salvium_seed_type.dart';
-import '../ffi_bindings/salvium_wallet_bindings.dart' as wow_ffi;
-import '../ffi_bindings/salvium_wallet_manager_bindings.dart' as wow_wm_ffi;
+import '../ffi_bindings/salvium_wallet_bindings.dart' as sal_ffi;
+import '../ffi_bindings/salvium_wallet_manager_bindings.dart' as sal_wm_ffi;
 
-const _kFourteenWordSeedCacheKey = "cs_monero.fourteen.seed";
+const _kTwentyFiveWordSeedCacheKey = "cs_monero.twentyFive.seed";
 
 class SalviumWallet extends Wallet {
   // internal constructor
@@ -21,7 +21,7 @@ class SalviumWallet extends Wallet {
     (() {
       try {
         // salvium.printStarts = true;
-        _walletManagerPointerCached ??= wow_wm_ffi.getWalletManager();
+        _walletManagerPointerCached ??= sal_wm_ffi.getWalletManager();
         Logging.log?.i("ptr: $_walletManagerPointerCached");
       } catch (e, s) {
         Logging.log?.e("Failed to initialize wm ptr", error: e, stackTrace: s);
@@ -48,20 +48,20 @@ class SalviumWallet extends Wallet {
 
   Transaction _transactionFrom(Pointer<Void> infoPointer) {
     return Transaction(
-      displayLabel: wow_ffi.getTransactionInfoLabel(infoPointer),
-      description: wow_ffi.getTransactionInfoDescription(infoPointer),
-      fee: BigInt.from(wow_ffi.getTransactionInfoFee(infoPointer)),
-      confirmations: wow_ffi.getTransactionInfoConfirmations(infoPointer),
-      blockHeight: wow_ffi.getTransactionInfoBlockHeight(infoPointer),
-      accountIndex: wow_ffi.getTransactionInfoAccount(infoPointer),
-      addressIndexes: wow_ffi.getTransactionSubaddressIndexes(infoPointer),
-      paymentId: wow_ffi.getTransactionInfoPaymentId(infoPointer),
-      amount: BigInt.from(wow_ffi.getTransactionInfoAmount(infoPointer)),
-      isSpend: wow_ffi.getTransactionInfoIsSpend(infoPointer),
-      hash: wow_ffi.getTransactionInfoHash(infoPointer),
-      key: getTxKey(wow_ffi.getTransactionInfoHash(infoPointer)),
+      displayLabel: sal_ffi.getTransactionInfoLabel(infoPointer),
+      description: sal_ffi.getTransactionInfoDescription(infoPointer),
+      fee: BigInt.from(sal_ffi.getTransactionInfoFee(infoPointer)),
+      confirmations: sal_ffi.getTransactionInfoConfirmations(infoPointer),
+      blockHeight: sal_ffi.getTransactionInfoBlockHeight(infoPointer),
+      accountIndex: sal_ffi.getTransactionInfoAccount(infoPointer),
+      addressIndexes: sal_ffi.getTransactionSubaddressIndexes(infoPointer),
+      paymentId: sal_ffi.getTransactionInfoPaymentId(infoPointer),
+      amount: BigInt.from(sal_ffi.getTransactionInfoAmount(infoPointer)),
+      isSpend: sal_ffi.getTransactionInfoIsSpend(infoPointer),
+      hash: sal_ffi.getTransactionInfoHash(infoPointer),
+      key: getTxKey(sal_ffi.getTransactionInfoHash(infoPointer)),
       timeStamp: DateTime.fromMillisecondsSinceEpoch(
-        wow_ffi.getTransactionInfoTimestamp(infoPointer) * 1000,
+        sal_ffi.getTransactionInfoTimestamp(infoPointer) * 1000,
       ),
       minConfirms: MinConfirms.monero,
     );
@@ -171,8 +171,7 @@ class SalviumWallet extends Wallet {
       case SalviumSeedType.twentyFive:
         walletPointer = Pointer<Void>.fromAddress(
           await Isolate.run(
-            () => wow_wm_ffi
-                .createWallet(
+            () => sal_wm_ffi.createWallet(
                   Pointer.fromAddress(walletManagerPointerAddress),
                   path: path,
                   password: password,
@@ -185,11 +184,11 @@ class SalviumWallet extends Wallet {
         break;
     }
 
-    wow_ffi.checkWalletStatus(walletPointer);
+    sal_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
     await Isolate.run(() {
-      wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
+      sal_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
     final wallet = SalviumWallet._(walletPointer);
@@ -237,8 +236,7 @@ class SalviumWallet extends Wallet {
     if (seedLength == 25) {
       walletPointer = Pointer<Void>.fromAddress(
         await Isolate.run(
-          () => wow_wm_ffi
-              .recoveryWallet(
+          () => sal_wm_ffi.recoveryWallet(
                 Pointer.fromAddress(walletManagerPointerAddress),
                 path: path,
                 password: password,
@@ -253,8 +251,7 @@ class SalviumWallet extends Wallet {
     } else if (seedLength == 16) {
       walletPointer = Pointer<Void>.fromAddress(
         await Isolate.run(
-          () => wow_wm_ffi
-              .createWalletFromPolyseed(
+          () => sal_wm_ffi.createWalletFromPolyseed(
                 Pointer.fromAddress(walletManagerPointerAddress),
                 path: path,
                 password: password,
@@ -269,28 +266,28 @@ class SalviumWallet extends Wallet {
         ),
       );
     } else if (seedLength == 14) {
-      walletPointer = wow_ffi.restore14WordSeed(
+      walletPointer = sal_ffi.restore14WordSeed(
         path: path,
         password: password,
         language: seed, // yes the "language" param is misnamed
         networkType: networkType,
       );
-      restoreHeight = wow_ffi.getWalletRefreshFromBlockHeight(walletPointer);
+      restoreHeight = sal_ffi.getWalletRefreshFromBlockHeight(walletPointer);
       // store seed with the correct cache key
-      wow_ffi.setWalletCacheAttribute(
+      sal_ffi.setWalletCacheAttribute(
         walletPointer,
-        key: _kFourteenWordSeedCacheKey,
+        key: _kTwentyFiveWordSeedCacheKey,
         value: seed,
       );
     } else {
       throw Exception("Bad seed length: $seedLength");
     }
 
-    wow_ffi.checkWalletStatus(walletPointer);
+    sal_ffi.checkWalletStatus(walletPointer);
 
     final address = walletPointer.address;
     await Isolate.run(() {
-      wow_ffi.storeWallet(Pointer.fromAddress(address), path: path);
+      sal_ffi.storeWallet(Pointer.fromAddress(address), path: path);
     });
 
     final wallet = SalviumWallet._(walletPointer);
@@ -414,8 +411,7 @@ class SalviumWallet extends Wallet {
     final walletManagerPointerAddress = _walletManagerPointer.address;
     final walletPointer = Pointer<Void>.fromAddress(
       await Isolate.run(
-        () => wow_wm_ffi
-            .createWalletFromKeys(
+        () => sal_wm_ffi.createWalletFromKeys(
               Pointer.fromAddress(walletManagerPointerAddress),
               path: path,
               password: password,
@@ -430,7 +426,7 @@ class SalviumWallet extends Wallet {
       ),
     );
 
-    wow_ffi.checkWalletStatus(walletPointer);
+    sal_ffi.checkWalletStatus(walletPointer);
 
     final wallet = SalviumWallet._(walletPointer);
     return wallet;
@@ -486,8 +482,7 @@ class SalviumWallet extends Wallet {
     final walletManagerPointerAddress = _walletManagerPointer.address;
     final walletPointer = Pointer<Void>.fromAddress(
       await Isolate.run(
-        () => wow_wm_ffi
-            .createDeterministicWalletFromSpendKey(
+        () => sal_wm_ffi.createDeterministicWalletFromSpendKey(
               Pointer.fromAddress(walletManagerPointerAddress),
               path: path,
               password: password,
@@ -501,7 +496,7 @@ class SalviumWallet extends Wallet {
       ),
     );
 
-    wow_ffi.checkWalletStatus(walletPointer);
+    sal_ffi.checkWalletStatus(walletPointer);
 
     final wallet = SalviumWallet._(walletPointer);
     await wallet.save();
@@ -541,8 +536,7 @@ class SalviumWallet extends Wallet {
     final walletManagerPointerAddress = _walletManagerPointer.address;
     final walletPointer = Pointer<Void>.fromAddress(
       await Isolate.run(
-        () => wow_wm_ffi
-            .openWallet(
+        () => sal_wm_ffi.openWallet(
               Pointer.fromAddress(walletManagerPointerAddress),
               path: path,
               password: password,
@@ -552,7 +546,7 @@ class SalviumWallet extends Wallet {
       ),
     );
 
-    wow_ffi.checkWalletStatus(walletPointer);
+    sal_ffi.checkWalletStatus(walletPointer);
 
     final wallet = SalviumWallet._(walletPointer);
 
@@ -561,7 +555,7 @@ class SalviumWallet extends Wallet {
 
   // ===========================================================================
   // special check to see if wallet exists
-  static bool isWalletExist(String path) => wow_wm_ffi.walletExists(
+  static bool isWalletExist(String path) => sal_wm_ffi.walletExists(
         _walletManagerPointer,
         path,
       );
@@ -572,10 +566,10 @@ class SalviumWallet extends Wallet {
   @override
   @protected
   Future<void> refreshOutputs() async {
-    _coinsPointer = wow_ffi.getCoinsPointer(_getWalletPointer());
+    _coinsPointer = sal_ffi.getCoinsPointer(_getWalletPointer());
     final pointerAddress = _coinsPointer!.address;
     await Isolate.run(() {
-      wow_ffi.refreshCoins(
+      sal_ffi.refreshCoins(
         Pointer.fromAddress(
           pointerAddress,
         ),
@@ -586,13 +580,13 @@ class SalviumWallet extends Wallet {
   @override
   @protected
   Future<void> refreshTransactions() async {
-    _transactionHistoryPointer = wow_ffi.getTransactionHistoryPointer(
+    _transactionHistoryPointer = sal_ffi.getTransactionHistoryPointer(
       _getWalletPointer(),
     );
     final pointerAddress = _transactionHistoryPointer!.address;
 
     await Isolate.run(() {
-      wow_ffi.refreshTransactionHistory(
+      sal_ffi.refreshTransactionHistory(
         Pointer.fromAddress(
           pointerAddress,
         ),
@@ -602,7 +596,7 @@ class SalviumWallet extends Wallet {
 
   @override
   @protected
-  int transactionCount() => wow_ffi.getTransactionHistoryCount(
+  int transactionCount() => sal_ffi.getTransactionHistoryCount(
         _transactionHistoryPointer!,
       );
 
@@ -611,7 +605,7 @@ class SalviumWallet extends Wallet {
 
   @override
   int getCurrentWalletSyncingHeight() =>
-      wow_ffi.getWalletBlockChainHeight(_getWalletPointer());
+      sal_ffi.getWalletBlockChainHeight(_getWalletPointer());
 
   @override
   int getBlockChainHeightByDate(DateTime date) {
@@ -635,7 +629,7 @@ class SalviumWallet extends Wallet {
     // TODO: do something with return value?
     // return value matters? If so, whats the point of checking status below?
     final _ = await Isolate.run(() {
-      return wow_ffi.initWallet(
+      return sal_ffi.initWallet(
         Pointer.fromAddress(pointerAddress),
         daemonAddress: daemonAddress,
         daemonUsername: daemonUsername ?? "",
@@ -646,9 +640,9 @@ class SalviumWallet extends Wallet {
       );
     });
 
-    wow_ffi.checkWalletStatus(_getWalletPointer());
+    sal_ffi.checkWalletStatus(_getWalletPointer());
 
-    wow_ffi.setTrustedDaemon(
+    sal_ffi.setTrustedDaemon(
       _getWalletPointer(),
       arg: trusted,
     );
@@ -672,7 +666,7 @@ class SalviumWallet extends Wallet {
 
   @override
   bool isViewOnly() {
-    final isWatchOnly = wow_ffi.isWatchOnly(_getWalletPointer());
+    final isWatchOnly = sal_ffi.isWatchOnly(_getWalletPointer());
     return isWatchOnly;
   }
 
@@ -685,7 +679,7 @@ class SalviumWallet extends Wallet {
   Future<bool> isConnectedToDaemon() async {
     final address = _getWalletPointer().address;
     final result = await Isolate.run(() {
-      return wow_ffi.isConnected(Pointer.fromAddress(address));
+      return sal_ffi.isConnected(Pointer.fromAddress(address));
     });
     return result == 1;
   }
@@ -704,7 +698,7 @@ class SalviumWallet extends Wallet {
     if (daemonHeight > 0 && daemonHeight - current < 10) {
       final address = _getWalletPointer().address;
       final result = await Isolate.run(() {
-        return wow_ffi.isSynchronized(Pointer.fromAddress(address));
+        return sal_ffi.isSynchronized(Pointer.fromAddress(address));
       });
       return result;
     }
@@ -714,28 +708,28 @@ class SalviumWallet extends Wallet {
 
   @override
   String getPath() {
-    final path = wow_ffi.getWalletPath(_getWalletPointer());
+    final path = sal_ffi.getWalletPath(_getWalletPointer());
     return path;
   }
 
   @override
   String getSeed({String seedOffset = ""}) {
-    final fourteen = wow_ffi.getWalletCacheAttribute(
+    final fourteen = sal_ffi.getWalletCacheAttribute(
       _getWalletPointer(),
-      key: _kFourteenWordSeedCacheKey,
+      key: _kTwentyFiveWordSeedCacheKey,
     );
     if (fourteen != "") {
       return fourteen;
     }
 
-    final polySeed = wow_ffi.getWalletPolyseed(
+    final polySeed = sal_ffi.getWalletPolyseed(
       _getWalletPointer(),
       passphrase: seedOffset,
     );
     if (polySeed != "") {
       return polySeed;
     }
-    final legacy = wow_ffi.getWalletSeed(
+    final legacy = sal_ffi.getWalletSeed(
       _getWalletPointer(),
       seedOffset: seedOffset,
     );
@@ -744,34 +738,34 @@ class SalviumWallet extends Wallet {
 
   @override
   String getSeedLanguage() {
-    final language = wow_ffi.getWalletSeedLanguage(_getWalletPointer());
+    final language = sal_ffi.getWalletSeedLanguage(_getWalletPointer());
     return language;
   }
 
   @override
   String getPrivateSpendKey() {
-    return wow_ffi.getWalletSecretSpendKey(_getWalletPointer());
+    return sal_ffi.getWalletSecretSpendKey(_getWalletPointer());
   }
 
   @override
   String getPrivateViewKey() {
-    return wow_ffi.getWalletSecretViewKey(_getWalletPointer());
+    return sal_ffi.getWalletSecretViewKey(_getWalletPointer());
   }
 
   @override
   String getPublicSpendKey() {
-    return wow_ffi.getWalletPublicSpendKey(_getWalletPointer());
+    return sal_ffi.getWalletPublicSpendKey(_getWalletPointer());
   }
 
   @override
   String getPublicViewKey() {
-    return wow_ffi.getWalletPublicViewKey(_getWalletPointer());
+    return sal_ffi.getWalletPublicViewKey(_getWalletPointer());
   }
 
   @override
   Address getAddress({int accountIndex = 0, int addressIndex = 0}) {
     final address = Address(
-      value: wow_ffi.getWalletAddress(
+      value: sal_ffi.getWalletAddress(
         _getWalletPointer(),
         accountIndex: accountIndex,
         addressIndex: addressIndex,
@@ -785,16 +779,16 @@ class SalviumWallet extends Wallet {
 
   @override
   int getDaemonHeight() {
-    return wow_ffi.getDaemonBlockChainHeight(_getWalletPointer());
+    return sal_ffi.getDaemonBlockChainHeight(_getWalletPointer());
   }
 
   @override
   int getRefreshFromBlockHeight() =>
-      wow_ffi.getWalletRefreshFromBlockHeight(_getWalletPointer());
+      sal_ffi.getWalletRefreshFromBlockHeight(_getWalletPointer());
 
   @override
   void setRefreshFromBlockHeight(int startHeight) {
-    wow_ffi.setWalletRefreshFromBlockHeight(
+    sal_ffi.setWalletRefreshFromBlockHeight(
       _getWalletPointer(),
       refreshFromBlockHeight: startHeight,
     );
@@ -803,18 +797,18 @@ class SalviumWallet extends Wallet {
   @override
   void startSyncing({Duration interval = const Duration(seconds: 10)}) {
     // 10 seconds seems to be the default in monero core
-    wow_ffi.setWalletAutoRefreshInterval(
+    sal_ffi.setWalletAutoRefreshInterval(
       _getWalletPointer(),
       millis: interval.inMilliseconds,
     );
-    wow_ffi.refreshWalletAsync(_getWalletPointer());
-    wow_ffi.startWalletRefresh(_getWalletPointer());
+    sal_ffi.refreshWalletAsync(_getWalletPointer());
+    sal_ffi.startWalletRefresh(_getWalletPointer());
   }
 
   @override
   void stopSyncing() {
-    wow_ffi.pauseWalletRefresh(_getWalletPointer());
-    wow_ffi.stopWallet(_getWalletPointer());
+    sal_ffi.pauseWalletRefresh(_getWalletPointer());
+    sal_ffi.stopWallet(_getWalletPointer());
   }
 
   // /// returns true on success
@@ -832,14 +826,14 @@ class SalviumWallet extends Wallet {
   Future<bool> rescanBlockchain() async {
     final address = _getWalletPointer().address;
     final result = await Isolate.run(() {
-      return wow_ffi.rescanWalletBlockchain(Pointer.fromAddress(address));
+      return sal_ffi.rescanWalletBlockchain(Pointer.fromAddress(address));
     });
     return result;
   }
 
   @override
   BigInt getBalance({int accountIndex = 0}) => BigInt.from(
-        wow_ffi.getWalletBalance(
+        sal_ffi.getWalletBalance(
           _getWalletPointer(),
           accountIndex: accountIndex,
         ),
@@ -847,7 +841,7 @@ class SalviumWallet extends Wallet {
 
   @override
   BigInt getUnlockedBalance({int accountIndex = 0}) => BigInt.from(
-        wow_ffi.getWalletUnlockedBalance(
+        sal_ffi.getWalletUnlockedBalance(
           _getWalletPointer(),
           accountIndex: accountIndex,
         ),
@@ -925,7 +919,7 @@ class SalviumWallet extends Wallet {
 
   @override
   String getTxKey(String txid) {
-    return wow_ffi.getTxKey(_getWalletPointer(), txid: txid);
+    return sal_ffi.getTxKey(_getWalletPointer(), txid: txid);
   }
 
   @override
@@ -935,7 +929,7 @@ class SalviumWallet extends Wallet {
     }
 
     return _transactionFrom(
-      wow_ffi.getTransactionInfoPointerByTxid(
+      sal_ffi.getTransactionInfoPointerByTxid(
         _transactionHistoryPointer!,
         txid: txid,
       ),
@@ -973,7 +967,7 @@ class SalviumWallet extends Wallet {
     return List.generate(
       size,
       (index) => _transactionFrom(
-        wow_ffi.getTransactionInfoPointer(
+        sal_ffi.getTransactionInfoPointer(
           _transactionHistoryPointer!,
           index: index,
         ),
@@ -991,8 +985,8 @@ class SalviumWallet extends Wallet {
 
     return List.generate(
       size,
-      (index) => wow_ffi.getTransactionInfoHash(
-        wow_ffi.getTransactionInfoPointer(
+      (index) => sal_ffi.getTransactionInfoHash(
+        sal_ffi.getTransactionInfoPointer(
           _transactionHistoryPointer!,
           index: index,
         ),
@@ -1009,36 +1003,36 @@ class SalviumWallet extends Wallet {
       if (refresh) {
         await refreshOutputs();
       }
-      final count = wow_ffi.getCoinsCount(_coinsPointer!);
+      final count = sal_ffi.getCoinsCount(_coinsPointer!);
 
       Logging.log?.i("salvium outputs found=$count");
 
       final List<Output> result = [];
 
       for (int i = 0; i < count; i++) {
-        final coinInfoPointer = wow_ffi.getCoinInfoPointer(_coinsPointer!, i);
+        final coinInfoPointer = sal_ffi.getCoinInfoPointer(_coinsPointer!, i);
 
-        final hash = wow_ffi.getHashForCoinsInfo(coinInfoPointer);
+        final hash = sal_ffi.getHashForCoinsInfo(coinInfoPointer);
 
         if (hash.isNotEmpty) {
-          final spent = wow_ffi.isSpentCoinsInfo(coinInfoPointer);
+          final spent = sal_ffi.isSpentCoinsInfo(coinInfoPointer);
 
           if (includeSpent || !spent) {
             final utxo = Output(
-              address: wow_ffi.getAddressForCoinsInfo(coinInfoPointer),
+              address: sal_ffi.getAddressForCoinsInfo(coinInfoPointer),
               hash: hash,
-              keyImage: wow_ffi.getKeyImageForCoinsInfo(coinInfoPointer),
+              keyImage: sal_ffi.getKeyImageForCoinsInfo(coinInfoPointer),
               value:
-                  BigInt.from(wow_ffi.getAmountForCoinsInfo(coinInfoPointer)),
-              isFrozen: wow_ffi.isFrozenCoinsInfo(coinInfoPointer),
-              isUnlocked: wow_ffi.isUnlockedCoinsInfo(coinInfoPointer),
-              vout: wow_ffi.getInternalOutputIndexForCoinsInfo(coinInfoPointer),
+                  BigInt.from(sal_ffi.getAmountForCoinsInfo(coinInfoPointer)),
+              isFrozen: sal_ffi.isFrozenCoinsInfo(coinInfoPointer),
+              isUnlocked: sal_ffi.isUnlockedCoinsInfo(coinInfoPointer),
+              vout: sal_ffi.getInternalOutputIndexForCoinsInfo(coinInfoPointer),
               spent: spent,
               spentHeight: spent
-                  ? wow_ffi.getSpentHeightForCoinsInfo(coinInfoPointer)
+                  ? sal_ffi.getSpentHeightForCoinsInfo(coinInfoPointer)
                   : null,
-              height: wow_ffi.getBlockHeightForCoinsInfo(coinInfoPointer),
-              coinbase: wow_ffi.isCoinbaseCoinsInfo(coinInfoPointer),
+              height: sal_ffi.getBlockHeightForCoinsInfo(coinInfoPointer),
+              coinbase: sal_ffi.isCoinbaseCoinsInfo(coinInfoPointer),
             );
 
             result.add(utxo);
@@ -1062,7 +1056,7 @@ class SalviumWallet extends Wallet {
   }) async {
     final pointerAddress = _getWalletPointer().address;
     return await Isolate.run(() {
-      return wow_ffi.exportWalletKeyImages(
+      return sal_ffi.exportWalletKeyImages(
         Pointer<Void>.fromAddress(pointerAddress),
         filename,
         all: all,
@@ -1074,7 +1068,7 @@ class SalviumWallet extends Wallet {
   Future<bool> importKeyImages({required String filename}) async {
     final pointerAddress = _getWalletPointer().address;
     return await Isolate.run(() {
-      return wow_ffi.importWalletKeyImages(
+      return sal_ffi.importWalletKeyImages(
         Pointer<Void>.fromAddress(pointerAddress),
         filename,
       );
@@ -1087,13 +1081,13 @@ class SalviumWallet extends Wallet {
       throw Exception("Attempted freeze of empty keyImage.");
     }
 
-    final count = wow_ffi.getAllCoinsSize(_coinsPointer!);
+    final count = sal_ffi.getAllCoinsSize(_coinsPointer!);
     for (int i = 0; i < count; i++) {
       if (keyImage ==
-          wow_ffi.getKeyImageForCoinsInfo(
-            wow_ffi.getCoinInfoPointer(_coinsPointer!, i),
+          sal_ffi.getKeyImageForCoinsInfo(
+            sal_ffi.getCoinInfoPointer(_coinsPointer!, i),
           )) {
-        wow_ffi.freezeCoin(_coinsPointer!, index: i);
+        sal_ffi.freezeCoin(_coinsPointer!, index: i);
         return;
       }
     }
@@ -1109,13 +1103,13 @@ class SalviumWallet extends Wallet {
       throw Exception("Attempted thaw of empty keyImage.");
     }
 
-    final count = wow_ffi.getAllCoinsSize(_coinsPointer!);
+    final count = sal_ffi.getAllCoinsSize(_coinsPointer!);
     for (int i = 0; i < count; i++) {
       if (keyImage ==
-          wow_ffi.getKeyImageForCoinsInfo(
-            wow_ffi.getCoinInfoPointer(_coinsPointer!, i),
+          sal_ffi.getKeyImageForCoinsInfo(
+            sal_ffi.getCoinInfoPointer(_coinsPointer!, i),
           )) {
-        wow_ffi.thawCoin(_coinsPointer!, index: i);
+        sal_ffi.thawCoin(_coinsPointer!, index: i);
         return;
       }
     }
@@ -1150,7 +1144,7 @@ class SalviumWallet extends Wallet {
       final walletPointerAddress = _getWalletPointer().address;
       final pendingTxPointer = Pointer<Void>.fromAddress(
         await Isolate.run(() {
-          final tx = wow_ffi.createTransaction(
+          final tx = sal_ffi.createTransaction(
             Pointer.fromAddress(walletPointerAddress),
             address: output.address,
             paymentId: paymentId,
@@ -1163,14 +1157,14 @@ class SalviumWallet extends Wallet {
         }),
       );
 
-      wow_ffi.checkPendingTransactionStatus(pendingTxPointer);
+      sal_ffi.checkPendingTransactionStatus(pendingTxPointer);
 
       return PendingTransaction(
         amount:
-            BigInt.from(wow_ffi.getPendingTransactionAmount(pendingTxPointer)),
-        fee: BigInt.from(wow_ffi.getPendingTransactionFee(pendingTxPointer)),
-        txid: wow_ffi.getPendingTransactionTxid(pendingTxPointer),
-        hex: wow_ffi.getPendingTransactionHex(pendingTxPointer),
+            BigInt.from(sal_ffi.getPendingTransactionAmount(pendingTxPointer)),
+        fee: BigInt.from(sal_ffi.getPendingTransactionFee(pendingTxPointer)),
+        txid: sal_ffi.getPendingTransactionTxid(pendingTxPointer),
+        hex: sal_ffi.getPendingTransactionHex(pendingTxPointer),
         pointerAddress: pendingTxPointer.address,
       );
     } finally {
@@ -1208,7 +1202,7 @@ class SalviumWallet extends Wallet {
       final walletPointerAddress = _getWalletPointer().address;
       final pendingTxPointer = Pointer<Void>.fromAddress(
         await Isolate.run(() {
-          final tx = wow_ffi.createTransactionMultiDest(
+          final tx = sal_ffi.createTransactionMultiDest(
             Pointer.fromAddress(walletPointerAddress),
             paymentId: paymentId,
             addresses: outputs.map((e) => e.address).toList(),
@@ -1222,16 +1216,16 @@ class SalviumWallet extends Wallet {
         }),
       );
 
-      wow_ffi.checkPendingTransactionStatus(pendingTxPointer);
+      sal_ffi.checkPendingTransactionStatus(pendingTxPointer);
 
       return PendingTransaction(
         amount:
-            BigInt.from(wow_ffi.getPendingTransactionAmount(pendingTxPointer)),
-        fee: BigInt.from(wow_ffi.getPendingTransactionFee(pendingTxPointer)),
-        txid: wow_ffi.getPendingTransactionTxid(
+            BigInt.from(sal_ffi.getPendingTransactionAmount(pendingTxPointer)),
+        fee: BigInt.from(sal_ffi.getPendingTransactionFee(pendingTxPointer)),
+        txid: sal_ffi.getPendingTransactionTxid(
           pendingTxPointer,
         ),
-        hex: wow_ffi.getPendingTransactionHex(
+        hex: sal_ffi.getPendingTransactionHex(
           pendingTxPointer,
         ),
         pointerAddress: pendingTxPointer.address,
@@ -1247,14 +1241,14 @@ class SalviumWallet extends Wallet {
   Future<void> commitTx(PendingTransaction tx) async {
     // TODO: check if the return value should be used in any way or if it is ok to rely on the status check below?
     final _ = await Isolate.run(() {
-      return wow_ffi.commitPendingTransaction(
+      return sal_ffi.commitPendingTransaction(
         Pointer<Void>.fromAddress(
           tx.pointerAddress,
         ),
       );
     });
 
-    wow_ffi.checkPendingTransactionStatus(
+    sal_ffi.checkPendingTransactionStatus(
       Pointer<Void>.fromAddress(
         tx.pointerAddress,
       ),
@@ -1268,7 +1262,7 @@ class SalviumWallet extends Wallet {
   ) async {
     final pointerAddress = _getWalletPointer().address;
     return await Isolate.run(() {
-      return wow_ffi.signMessageWith(
+      return sal_ffi.signMessageWith(
         Pointer.fromAddress(pointerAddress),
         message: message,
         address: address,
@@ -1284,7 +1278,7 @@ class SalviumWallet extends Wallet {
   ) async {
     final pointerAddress = _getWalletPointer().address;
     return await Isolate.run(() {
-      return wow_ffi.verifySignedMessageWithWallet(
+      return sal_ffi.verifySignedMessageWithWallet(
         Pointer.fromAddress(pointerAddress),
         message: message,
         address: address,
@@ -1307,7 +1301,7 @@ class SalviumWallet extends Wallet {
 
       // if that parse succeeded the following should produce a valid result
 
-      return BigInt.from(wow_ffi.amountFromString(value));
+      return BigInt.from(sal_ffi.amountFromString(value));
     } catch (e, s) {
       Logging.log?.w(
         "amountFromString failed to parse \"$value\"",
@@ -1320,19 +1314,19 @@ class SalviumWallet extends Wallet {
 
   @override
   String getPassword() {
-    return wow_ffi.getWalletPassword(_getWalletPointer());
+    return sal_ffi.getWalletPassword(_getWalletPointer());
   }
 
   @override
   void changePassword(String newPassword) {
-    wow_ffi.setWalletPassword(_getWalletPointer(), password: newPassword);
+    sal_ffi.setWalletPassword(_getWalletPointer(), password: newPassword);
   }
 
   @override
   Future<void> save() async {
     final pointerAddress = _getWalletPointer().address;
     await Isolate.run(() {
-      wow_ffi.storeWallet(Pointer.fromAddress(pointerAddress), path: "");
+      sal_ffi.storeWallet(Pointer.fromAddress(pointerAddress), path: "");
     });
   }
 
@@ -1349,7 +1343,7 @@ class SalviumWallet extends Wallet {
       await this.save();
     }
 
-    wow_wm_ffi.closeWallet(_walletManagerPointer, _getWalletPointer(), save);
+    sal_wm_ffi.closeWallet(_walletManagerPointer, _getWalletPointer(), save);
     _walletPointer = null;
     isClosing = false;
   }

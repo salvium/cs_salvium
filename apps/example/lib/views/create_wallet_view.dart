@@ -20,8 +20,9 @@ class _CreateWalletViewState extends State<CreateWalletView> {
   String _type = "salvium";
   bool _locked = false;
 
-  WowneroSeedType? _selectedWowType;
-  MoneroSeedType? _selectedXmrType;
+  // WowneroSeedType? _selectedWowType;
+  // MoneroSeedType? _selectedXmrType;
+  SalviumSeedType? _selectedSalType;
 
   Future<Wallet> createWallet(String type, String name, String password) async {
     final existing = await loadWalletNames(type);
@@ -39,13 +40,13 @@ class _CreateWalletViewState extends State<CreateWalletView> {
       final Wallet wallet;
       switch (type) {
         case "salvium":
-          if (_selectedXmrType == null) {
+          if (_selectedSalType == null) {
             throw Exception("Select seed length!");
           }
-          wallet = await MoneroWallet.create(
+          wallet = await SalviumWallet.create(
             path: path,
             password: password,
-            seedType: _selectedXmrType!,
+            seedType: _selectedSalType!,
           );
           break;
 
@@ -150,7 +151,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
                       isExpanded: true,
                       value: /*_type == "wownero"
                           ? _selectedWowType
-                          :*/ _selectedXmrType,
+                          :*/ _selectedSalType,
                       items: [
                         // if (_type == "wownero")
                         //   ...WowneroSeedType.values.map(
@@ -163,7 +164,7 @@ class _CreateWalletViewState extends State<CreateWalletView> {
                         //     ),
                         //   ),
                         if (_type == "salvium")
-                          ...MoneroSeedType.values.map(
+                          ...SalviumSeedType.values.map(
                             (e) => DropdownMenuItem(
                               value: e,
                               child: Padding(
@@ -175,8 +176,8 @@ class _CreateWalletViewState extends State<CreateWalletView> {
                       ],
                       onChanged: (value) {
                         setState(() {
-                          if (value is MoneroSeedType) {
-                            _selectedXmrType = value;
+                          if (value is SalviumSeedType) {
+                            _selectedSalType = value;
                           // } else if (value is WowneroSeedType) {
                           //   _selectedWowType = value;
                           }
