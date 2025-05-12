@@ -97,38 +97,38 @@ void main(List<String> args) async {
           recursive: true,
         );
 
-      final String xmrDylib;
-      final String wowDylib;
+      final String salDylib;
+      // final String wowDylib;
       if (platform == "ios") {
-        xmrDylib = "$envMoneroCDir"
+        salDylib = "$envMoneroCDir"
             "${Platform.pathSeparator}release"
-            "${Platform.pathSeparator}monero"
+            "${Platform.pathSeparator}salvium"
             "${Platform.pathSeparator}host-apple-ios_libwallet2_api_c.dylib";
-        wowDylib = "$envMoneroCDir"
-            "${Platform.pathSeparator}release"
-            "${Platform.pathSeparator}wownero"
-            "${Platform.pathSeparator}host-apple-ios_libwallet2_api_c.dylib";
+        // wowDylib = "$envMoneroCDir"
+        //     "${Platform.pathSeparator}release"
+        //     "${Platform.pathSeparator}wownero"
+        //     "${Platform.pathSeparator}host-apple-ios_libwallet2_api_c.dylib";
       } else {
-        xmrDylib = "$envMoneroCDir"
+        salDylib = "$envMoneroCDir"
             "${Platform.pathSeparator}release"
-            "${Platform.pathSeparator}monero"
+            "${Platform.pathSeparator}salvium"
             "${Platform.pathSeparator}host-apple-darwin_libwallet2_api_c.dylib";
-        wowDylib = "$envMoneroCDir"
-            "${Platform.pathSeparator}release"
-            "${Platform.pathSeparator}wownero"
-            "${Platform.pathSeparator}host-apple-darwin_libwallet2_api_c.dylib";
+        // wowDylib = "$envMoneroCDir"
+        //     "${Platform.pathSeparator}release"
+        //     "${Platform.pathSeparator}wownero"
+        //     "${Platform.pathSeparator}host-apple-darwin_libwallet2_api_c.dylib";
       }
 
       await createFramework(
-        frameworkName: "MoneroWallet",
-        pathToDylib: xmrDylib,
+        frameworkName: "SalviumWallet",
+        pathToDylib: salDylib,
         targetDirFrameworks: dir.path,
       );
-      await createFramework(
-        frameworkName: "WowneroWallet",
-        pathToDylib: wowDylib,
-        targetDirFrameworks: dir.path,
-      );
+      // await createFramework(
+      //   frameworkName: "WowneroWallet",
+      //   pathToDylib: wowDylib,
+      //   targetDirFrameworks: dir.path,
+      // );
 
       break;
 
@@ -162,74 +162,74 @@ void main(List<String> args) async {
         [
           "$envMoneroCDir"
               "${Platform.pathSeparator}release"
-              "${Platform.pathSeparator}monero"
+              "${Platform.pathSeparator}salvium"
               "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
           "${dir.path}"
-              "${Platform.pathSeparator}monero_libwallet2_api_c.dll",
+              "${Platform.pathSeparator}salvium_libwallet2_api_c.dll",
         ],
       );
-      await runAsync(
-        "cp",
-        [
-          "$envMoneroCDir"
-              "${Platform.pathSeparator}release"
-              "${Platform.pathSeparator}wownero"
-              "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
-          "${dir.path}"
-              "${Platform.pathSeparator}wownero_libwallet2_api_c.dll",
-        ],
-      );
+      // await runAsync(
+      //   "cp",
+      //   [
+      //     "$envMoneroCDir"
+      //         "${Platform.pathSeparator}release"
+      //         "${Platform.pathSeparator}wownero"
+      //         "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
+      //     "${dir.path}"
+      //         "${Platform.pathSeparator}wownero_libwallet2_api_c.dll",
+      //   ],
+      // );
 
-      final polyPath = "$envMoneroCDir"
-          "${Platform.pathSeparator}release"
-          "${Platform.pathSeparator}wownero"
-          "${Platform.pathSeparator}x86_64-w64-mingw32_libpolyseed.dll";
-      if (File("$polyPath.xz").existsSync()) {
-        await runAsync("unxz", ["-f", "$polyPath.xz"]);
-      }
-      await runAsync(
-        "cp",
-        [
-          polyPath,
-          "${dir.path}"
-              "${Platform.pathSeparator}libpolyseed.dll",
-        ],
-      );
+      // final polyPath = "$envMoneroCDir"
+      //     "${Platform.pathSeparator}release"
+      //     "${Platform.pathSeparator}wownero"
+      //     "${Platform.pathSeparator}x86_64-w64-mingw32_libpolyseed.dll";
+      // if (File("$polyPath.xz").existsSync()) {
+      //   await runAsync("unxz", ["-f", "$polyPath.xz"]);
+      // }
+      // await runAsync(
+      //   "cp",
+      //   [
+      //     polyPath,
+      //     "${dir.path}"
+      //         "${Platform.pathSeparator}libpolyseed.dll",
+      //   ],
+      // );
 
-      final sspPath = "$envMoneroCDir"
-          "${Platform.pathSeparator}release"
-          "${Platform.pathSeparator}wownero"
-          "${Platform.pathSeparator}x86_64-w64-mingw32_libssp-0.dll";
+      // final sspPath = "$envMoneroCDir"
+      //     "${Platform.pathSeparator}release"
+      //     "${Platform.pathSeparator}wownero"
+      //     "${Platform.pathSeparator}x86_64-w64-mingw32_libssp-0.dll";
 
-      if (File("$sspPath.xz").existsSync()) {
-        await runAsync("unxz", ["-f", "$sspPath.xz"]);
-      }
-      await runAsync(
-        "cp",
-        [
-          sspPath,
-          "${dir.path}"
-              "${Platform.pathSeparator}libssp-0.dll",
-        ],
-      );
+      // if (File("$sspPath.xz").existsSync()) {
+      //   await runAsync("unxz", ["-f", "$sspPath.xz"]);
+      // }
+      // await runAsync(
+      //   "cp",
+      //   [
+      //     sspPath,
+      //     "${dir.path}"
+      //         "${Platform.pathSeparator}libssp-0.dll",
+      //   ],
+      // );
 
-      final pThreadPath = "$envMoneroCDir"
-          "${Platform.pathSeparator}release"
-          "${Platform.pathSeparator}wownero"
-          "${Platform.pathSeparator}x86_64-w64-mingw32_libwinpthread-1.dll";
-
-      if (File("$pThreadPath.xz").existsSync()) {
-        await runAsync("unxz", ["-f", "$pThreadPath.xz"]);
-      }
-      await runAsync(
-        "cp",
-        [
-          pThreadPath,
-          "${dir.path}"
-              "${Platform.pathSeparator}libwinpthread-1.dll",
-        ],
-      );
-      break;
+      // final pThreadPath = "$envMoneroCDir"
+      //     "${Platform.pathSeparator}release"
+      //     "${Platform.pathSeparator}wownero"
+      //     "${Platform.pathSeparator}x86_64-w64-mingw32_libwinpthread-1.dll";
+      //
+      // if (File("$pThreadPath.xz").existsSync()) {
+      //   await runAsync("unxz", ["-f", "$pThreadPath.xz"]);
+      // }
+      // await runAsync(
+      //   "cp",
+      //   [
+      //     pThreadPath,
+      //     "${dir.path}"
+      //         "${Platform.pathSeparator}libwinpthread-1.dll",
+      //   ],
+      // );
+      // break;
 
     default:
       throw Exception("Not sure how you got this far tbh");
