@@ -1,23 +1,23 @@
 name: example_app
 description: "A cs_monero Flutter example app"
-repository: https://github.com/cypherstack/cs_monero
-homepage: https://github.com/cypherstack/cs_monero
-issue_tracker: https://github.com/cypherstack/cs_monero/issues
+repository: https://github.com/cypherstack/cs_salvium
+homepage: https://github.com/cypherstack/cs_salvium
+issue_tracker: https://github.com/cypherstack/cs_salvium/issues
 publish_to: none
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.3
+  sdk: ">=3.5.3 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   path_provider: ^2.1.4
-  cs_monero:
-    path: ../../packages/cs_monero
-  cs_monero_flutter_libs:
-    path: ../../packages/cs_monero_flutter_libs
+  cs_salvium:
+    path: ../../packages/cs_salvium
+  cs_salvium_flutter_libs:
+    path: ../../packages/cs_salvium_flutter_libs
 
 dev_dependencies:
   flutter_test:

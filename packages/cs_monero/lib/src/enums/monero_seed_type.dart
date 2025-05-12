@@ -1,1 +1,0 @@
-enum MoneroSeedType { sixteen, twentyFive }

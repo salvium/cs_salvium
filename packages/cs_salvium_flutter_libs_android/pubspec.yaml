@@ -1,0 +1,32 @@
+name: cs_salvium_flutter_libs_android
+description: Android implementation of cs_salvium_flutter_libs
+version: 1.0.0-pre
+repository: https://github.com/cypherstack/cs_salvium
+homepage: https://github.com/cypherstack/cs_salvium
+issue_tracker: https://github.com/cypherstack/cs_salvium/issues
+
+environment:
+  sdk: ">=3.5.3 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cs_salvium_flutter_libs_platform_interface: 1.0.0-pre
+  cs_salvium_flutter_libs_android_x86_64: 1.0.0-pre
+  cs_salvium_flutter_libs_android_armeabi_v7a: 1.0.0-pre
+  cs_salvium_flutter_libs_android_arm64_v8a: 1.0.0-pre
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  plugin:
+    implements: cs_salvium_flutter_libs
+    platforms:
+      android:
+        package: com.cypherstack.cs_salvium_flutter_libs_android
+        pluginClass: CsMoneroFlutterLibsAndroidPlugin
+        dartPluginClass: CsMoneroFlutterLibsAndroid
