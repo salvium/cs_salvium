@@ -3,11 +3,11 @@
 # Run `pod lib lint cs_monero_flutter_libs_macos.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'cs_monero_flutter_libs_macos'
+  s.name             = 'cs_salvium_flutter_libs_macos'
   s.version          = '0.0.1'
-  s.summary          = 'Binaries required to use cs_monero in a Flutter project'
+  s.summary          = 'Binaries required to use cs_salvium in a Flutter project'
   s.description      = <<-DESC
-Binaries required to use cs_monero in a Flutter project
+Binaries required to use cs_salvium in a Flutter project
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }

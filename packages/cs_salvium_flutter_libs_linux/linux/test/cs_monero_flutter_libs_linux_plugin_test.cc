@@ -2,8 +2,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "include/cs_monero_flutter_libs_linux/cs_monero_flutter_libs_linux_plugin.h"
-#include "cs_monero_flutter_libs_linux_plugin_private.h"
+#include "include/cs_salvium_flutter_libs_linux/cs_salvium_flutter_libs_linux_plugin.h"
+#include "cs_salvium_flutter_libs_linux_plugin_private.h"
 
 // This demonstrates a simple unit test of the C portion of this plugin's
 // implementation.

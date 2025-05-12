@@ -1,4 +1,4 @@
-#include "include/cs_monero_flutter_libs_linux/cs_monero_flutter_libs_linux_plugin.h"
+#include "include/cs_salvium_flutter_libs_linux/cs_salvium_flutter_libs_linux_plugin.h"
 
 #include <flutter_linux/flutter_linux.h>
 #include <gtk/gtk.h>
@@ -6,20 +6,20 @@
 
 #include <cstring>
 
-#include "cs_monero_flutter_libs_linux_plugin_private.h"
+#include "cs_salvium_flutter_libs_linux_plugin_private.h"
 
 #define CS_MONERO_FLUTTER_LIBS_LINUX_PLUGIN(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST((obj), cs_monero_flutter_libs_linux_plugin_get_type(), \
+  (G_TYPE_CHECK_INSTANCE_CAST((obj), cs_salvium_flutter_libs_linux_plugin_get_type(), \
                               CsMoneroFlutterLibsLinuxPlugin))
 
 struct _CsMoneroFlutterLibsLinuxPlugin {
   GObject parent_instance;
 };
 
-G_DEFINE_TYPE(CsMoneroFlutterLibsLinuxPlugin, cs_monero_flutter_libs_linux_plugin, g_object_get_type())
+G_DEFINE_TYPE(CsMoneroFlutterLibsLinuxPlugin, cs_salvium_flutter_libs_linux_plugin, g_object_get_type())
 
 // Called when a method call is received from Flutter.
-static void cs_monero_flutter_libs_linux_plugin_handle_method_call(
+static void cs_salvium_flutter_libs_linux_plugin_handle_method_call(
     CsMoneroFlutterLibsLinuxPlugin* self,
     FlMethodCall* method_call) {
   g_autoptr(FlMethodResponse) response = nullptr;
@@ -43,23 +43,23 @@ FlMethodResponse* get_platform_version() {
   return FL_METHOD_RESPONSE(fl_method_success_response_new(result));
 }
 
-static void cs_monero_flutter_libs_linux_plugin_dispose(GObject* object) {
-  G_OBJECT_CLASS(cs_monero_flutter_libs_linux_plugin_parent_class)->dispose(object);
+static void cs_salvium_flutter_libs_linux_plugin_dispose(GObject* object) {
+  G_OBJECT_CLASS(cs_salvium_flutter_libs_linux_plugin_parent_class)->dispose(object);
 }
 
-static void cs_monero_flutter_libs_linux_plugin_class_init(CsMoneroFlutterLibsLinuxPluginClass* klass) {
-  G_OBJECT_CLASS(klass)->dispose = cs_monero_flutter_libs_linux_plugin_dispose;
+static void cs_salvium_flutter_libs_linux_plugin_class_init(CsMoneroFlutterLibsLinuxPluginClass* klass) {
+  G_OBJECT_CLASS(klass)->dispose = cs_salvium_flutter_libs_linux_plugin_dispose;
 }
 
-static void cs_monero_flutter_libs_linux_plugin_init(CsMoneroFlutterLibsLinuxPlugin* self) {}
+static void cs_salvium_flutter_libs_linux_plugin_init(CsMoneroFlutterLibsLinuxPlugin* self) {}
 
 static void method_call_cb(FlMethodChannel* channel, FlMethodCall* method_call,
                            gpointer user_data) {
   CsMoneroFlutterLibsLinuxPlugin* plugin = CS_MONERO_FLUTTER_LIBS_LINUX_PLUGIN(user_data);
-  cs_monero_flutter_libs_linux_plugin_handle_method_call(plugin, method_call);
+    cs_salvium_flutter_libs_linux_plugin_handle_method_call(plugin, method_call);
 }
 
-void cs_monero_flutter_libs_linux_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
+void cs_salvium_flutter_libs_linux_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
   CsMoneroFlutterLibsLinuxPlugin* plugin = CS_MONERO_FLUTTER_LIBS_LINUX_PLUGIN(
       g_object_new(cs_monero_flutter_libs_linux_plugin_get_type(), nullptr));
 

@@ -1,5 +1,5 @@
 name: cs_salvium_flutter_libs_macos
-description: Macos implementation of cs_monero_flutter_libs
+description: Macos implementation of cs_salvium_flutter_libs
 version: 1.0.0-pre
 repository: https://github.com/cypherstack/cs_salvium
 homepage: https://github.com/cypherstack/cs_salvium

@@ -1,6 +1,6 @@
 #include <flutter_linux/flutter_linux.h>
 
-#include "include/cs_monero_flutter_libs_linux/cs_monero_flutter_libs_linux_plugin.h"
+#include "include/cs_salvium_flutter_libs_linux/cs_salvium_flutter_libs_linux_plugin.h"
 
 // This file exposes some plugin internals for unit testing. See
 // https://github.com/flutter/flutter/issues/88724 for current limitations

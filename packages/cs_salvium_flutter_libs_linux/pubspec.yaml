@@ -22,7 +22,7 @@ dev_dependencies:
 
 flutter:
   plugin:
-    implements: cs_monero_flutter_libs
+    implements: cs_salvium_flutter_libs
     platforms:
       linux:
         pluginClass: CsMoneroFlutterLibsLinuxPlugin

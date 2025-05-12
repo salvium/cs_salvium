@@ -1,6 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'cs_monero_flutter_libs_android_x86_64_method_channel.dart';
+import 'cs_salvium_flutter_libs_android_x86_64_method_channel.dart';
 
 abstract class CsMoneroFlutterLibsAndroidX8664Platform extends PlatformInterface {
   /// Constructs a CsMoneroFlutterLibsAndroidX8664Platform.

@@ -16,9 +16,9 @@ typedef struct {
   GObjectClass parent_class;
 } CsMoneroFlutterLibsLinuxPluginClass;
 
-FLUTTER_PLUGIN_EXPORT GType cs_monero_flutter_libs_linux_plugin_get_type();
+FLUTTER_PLUGIN_EXPORT GType cs_salvium_flutter_libs_linux_plugin_get_type();
 
-FLUTTER_PLUGIN_EXPORT void cs_monero_flutter_libs_linux_plugin_register_with_registrar(
+FLUTTER_PLUGIN_EXPORT void cs_salvium_flutter_libs_linux_plugin_register_with_registrar(
     FlPluginRegistrar* registrar);
 
 G_END_DECLS
