@@ -47,7 +47,7 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE PkgConfig::GTK)
 set(cs_salvium_flutter_libs_linux_bundled_libraries
 #  "${CMAKE_CURRENT_SOURCE_DIR}/lib/monero_libwallet2_api_c.so"
 #  "${CMAKE_CURRENT_SOURCE_DIR}/lib/wownero_libwallet2_api_c.so"
-  "${CMAKE_CURRENT_SOURCE_DIR}/../lib/salvium_libwallet2_api_c.so"
+  "${CMAKE_CURRENT_SOURCE_DIR}/lib/salvium_libwallet2_api_c.so"
   PARENT_SCOPE
 )
 

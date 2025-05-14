@@ -16,7 +16,7 @@ Future<void> _copyCompiledToFinalLocations(Directory compiledLibsDir) async {
   }
 
   final libsPackagePrefix =
-      "$envProjectDir${Platform.pathSeparator}packages${Platform.pathSeparator}cs_monero_flutter_libs";
+      "$envProjectDir${Platform.pathSeparator}packages${Platform.pathSeparator}cs_salvium_flutter_libs";
 
   // Android
   for (final arch in ["armeabi-v7a", "arm64-v8a", "x86_64"]) {
