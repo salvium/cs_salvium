@@ -5,7 +5,7 @@
 import FlutterMacOS
 import Foundation
 
-import cs_monero_flutter_libs_macos
+import cs_salvium_flutter_libs_macos
 import path_provider_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {

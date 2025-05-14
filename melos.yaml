@@ -1,19 +1,19 @@
-name: cs_monero
+name: cs_salvium
 repository: https://github.com/cypherstack/cs_monero
 
 packages:
   - "packages/compat"
-  - "packages/cs_monero"
-  - "packages/cs_monero_flutter_libs"
-  - "packages/cs_monero_flutter_libs_android"
-  - "packages/cs_monero_flutter_libs_android_x86_64"
-  - "packages/cs_monero_flutter_libs_android_arm64_v8a"
-  - "packages/cs_monero_flutter_libs_android_armeabi_v7a"
-  - "packages/cs_monero_flutter_libs_ios"
-  - "packages/cs_monero_flutter_libs_linux"
-  - "packages/cs_monero_flutter_libs_macos"
-  - "packages/cs_monero_flutter_libs_platform_interface"
-  - "packages/cs_monero_flutter_libs_windows"
+  - "packages/cs_salvium"
+  - "packages/cs_salvium_flutter_libs"
+  - "packages/cs_salvium_flutter_libs_android"
+  - "packages/cs_salvium_flutter_libs_android_x86_64"
+  - "packages/cs_salvium_flutter_libs_android_arm64_v8a"
+  - "packages/cs_salvium_flutter_libs_android_armeabi_v7a"
+  - "packages/cs_salvium_flutter_libs_ios"
+  - "packages/cs_salvium_flutter_libs_linux"
+  - "packages/cs_salvium_flutter_libs_macos"
+  - "packages/cs_salvium_flutter_libs_platform_interface"
+  - "packages/cs_salvium_flutter_libs_windows"
   - "apps/example"
 
 command:
@@ -73,7 +73,7 @@ scripts:
     description: Generate the monero_c dart FFI bindings
 
   example:
-    run: melos exec --scope=apps/example -- flutter run
+    run: melos exec --scope=apps/example -- flutter run -d linux
     description: Run the example app
 
   test:

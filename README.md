@@ -2,8 +2,8 @@
 [![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
 
 A [Melos](https://github.com/invertase/melos) monorepo for the
-[`cs_monero` package](https://pub.dev/packages/cs_monero), 
-the [`cs_monero_flutter_libs` package](https://pub.dev/packages/cs_monero), and their dependencies.
+[`cs_monero` package](https://pub.dev/packages/cs_salvium), 
+the [`cs_monero_flutter_libs` package](https://pub.dev/packages/cs_salvium), and their dependencies.
 
 # About
 - A simplified Flutter/Dart Monero (and Wownero) wallet library.

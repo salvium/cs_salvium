@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:cs_monero/cs_monero.dart';
+import 'package:cs_salvium/cs_monero.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 

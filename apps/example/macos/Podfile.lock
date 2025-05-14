@@ -12,7 +12,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
 
 EXTERNAL SOURCES:
-  cs_monero_flutter_libs:
+  cs_salvium_flutter_libs:
     :path: Flutter/ephemeral/.symlinks/plugins/cs_monero_flutter_libs/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
 
 SPEC CHECKSUMS:
-  cs_monero_flutter_libs: e91a436103857259f5855cad4971301a5a29b38d
+  cs_salvium_flutter_libs: e91a436103857259f5855cad4971301a5a29b38d
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
 
