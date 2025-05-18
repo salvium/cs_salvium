@@ -1,5 +1,5 @@
-#ifndef FLUTTER_PLUGIN_CS_MONERO_FLUTTER_LIBS_LINUX_PLUGIN_H_
-#define FLUTTER_PLUGIN_CS_MONERO_FLUTTER_LIBS_LINUX_PLUGIN_H_
+#ifndef FLUTTER_PLUGIN_cs_salvium_flutter_libs_linux_PLUGIN_H_
+#define FLUTTER_PLUGIN_cs_salvium_flutter_libs_linux_PLUGIN_H_
 
 #include <flutter_linux/flutter_linux.h>
 
@@ -16,11 +16,11 @@ typedef struct {
   GObjectClass parent_class;
 } CsMoneroFlutterLibsLinuxPluginClass;
 
-FLUTTER_PLUGIN_EXPORT GType cs_monero_flutter_libs_linux_plugin_get_type();
+FLUTTER_PLUGIN_EXPORT GType cs_salvium_flutter_libs_linux_plugin_get_type();
 
-FLUTTER_PLUGIN_EXPORT void cs_monero_flutter_libs_linux_plugin_register_with_registrar(
+FLUTTER_PLUGIN_EXPORT void cs_salvium_flutter_libs_linux_plugin_register_with_registrar(
     FlPluginRegistrar* registrar);
 
 G_END_DECLS
 
-#endif  // FLUTTER_PLUGIN_CS_MONERO_FLUTTER_LIBS_LINUX_PLUGIN_H_
+#endif  // FLUTTER_PLUGIN_cs_salvium_flutter_libs_linux_PLUGIN_H_

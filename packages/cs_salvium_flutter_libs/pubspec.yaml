@@ -32,7 +32,7 @@ flutter:
       ios:
         default_package: cs_monero_flutter_libs_ios
       linux:
-        default_package: cs_monero_flutter_libs_linux
+        default_package: cs_salvium_flutter_libs_linux
       macos:
         default_package: cs_monero_flutter_libs_macos
       windows:

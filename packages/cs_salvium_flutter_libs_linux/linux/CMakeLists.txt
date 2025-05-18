@@ -13,7 +13,7 @@ set(PLUGIN_NAME "cs_salvium_flutter_libs_linux_plugin")
 
 # Any new source files that you add to the plugin should be added here.
 list(APPEND PLUGIN_SOURCES
-  "cs_monero_flutter_libs_linux_plugin.cc"
+  "cs_salvium_flutter_libs_linux_plugin.cc"
 )
 
 # Define the plugin library target. Its name must not be changed (see comment
@@ -79,7 +79,7 @@ FetchContent_MakeAvailable(googletest)
 # The plugin's exported API is not very useful for unit testing, so build the
 # sources directly into the test binary rather than using the shared library.
 add_executable(${TEST_RUNNER}
-  test/cs_monero_flutter_libs_linux_plugin_test.cc
+  test/cs_salvium_flutter_libs_linux_plugin_test.cc
   ${PLUGIN_SOURCES}
 )
 apply_standard_settings(${TEST_RUNNER})

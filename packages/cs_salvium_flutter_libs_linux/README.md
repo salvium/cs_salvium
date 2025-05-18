@@ -1,4 +1,4 @@
-# `cs_monero_flutter_libs_linux`
+# `cs_salvium_flutter_libs_linux`
 Linux implementation of `cs_monero_flutter_libs` for the 
 [`cs_monero` package](https://pub.dev/packages/cs_salvium).  Refer to the main 
 monorepo at https://github.com/cypherstack/cs_monero for more context.
