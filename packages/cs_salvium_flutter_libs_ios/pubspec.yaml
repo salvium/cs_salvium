@@ -23,5 +23,5 @@ flutter:
   plugin:
     platforms:
       ios:
-        pluginClass: CsMoneroFlutterLibsIosPlugin
-        dartPluginClass: CsMoneroFlutterLibsIos
+        pluginClass: CsSalviumFlutterLibsIosPlugin
+        dartPluginClass: CsSalviumFlutterLibsIos
