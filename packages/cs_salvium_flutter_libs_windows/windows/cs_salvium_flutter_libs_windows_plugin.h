@@ -1,5 +1,5 @@
-#ifndef FLUTTER_PLUGIN_CS_MONERO_FLUTTER_LIBS_WINDOWS_PLUGIN_H_
-#define FLUTTER_PLUGIN_CS_MONERO_FLUTTER_LIBS_WINDOWS_PLUGIN_H_
+#ifndef FLUTTER_PLUGIN_CS_SALVIUM_FLUTTER_LIBS_WINDOWS_PLUGIN_H_
+#define FLUTTER_PLUGIN_CS_SALVIUM_FLUTTER_LIBS_WINDOWS_PLUGIN_H_
 
 #include <flutter/method_channel.h>
 #include <flutter/plugin_registrar_windows.h>
@@ -28,4 +28,4 @@ class CsSalviumFlutterLibsWindowsPlugin : public flutter::Plugin {
 
 }  // namespace cs_salvium_flutter_libs_windows
 
-#endif  // FLUTTER_PLUGIN_CS_MONERO_FLUTTER_LIBS_WINDOWS_PLUGIN_H_
+#endif  // FLUTTER_PLUGIN_CS_SALVIUM_FLUTTER_LIBS_WINDOWS_PLUGIN_H_
