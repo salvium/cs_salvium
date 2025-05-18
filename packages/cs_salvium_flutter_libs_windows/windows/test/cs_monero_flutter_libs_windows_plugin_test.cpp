@@ -8,9 +8,9 @@
 #include <string>
 #include <variant>
 
-#include "cs_monero_flutter_libs_windows_plugin.h"
+#include "cs_salvium_flutter_libs_windows_plugin.h"
 
-namespace cs_monero_flutter_libs_windows {
+namespace cs_salvium_flutter_libs_windows {
 namespace test {
 
 namespace {
@@ -40,4 +40,4 @@ TEST(CsMoneroFlutterLibsWindowsPlugin, GetPlatformVersion) {
 }
 
 }  // namespace test
-}  // namespace cs_monero_flutter_libs_windows
+}  // namespace cs_salvium_flutter_libs_windows

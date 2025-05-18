@@ -4,7 +4,7 @@ import 'package:cs_salvium_flutter_libs_android_x86_64/cs_salvium_flutter_libs_a
 import 'package:cs_salvium_flutter_libs_platform_interface/cs_salvium_flutter_libs_platform_interface.dart';
 import 'package:flutter/services.dart';
 
-const _channel = MethodChannel('cs_monero_flutter_libs_android');
+const _channel = MethodChannel('cs_salvium_flutter_libs_android');
 
 class CsMoneroFlutterLibsAndroid extends CsSalviumFlutterLibsPlatform {
   /// Registers this class as the default instance of [CsSalviumFlutterLibsPlatform].

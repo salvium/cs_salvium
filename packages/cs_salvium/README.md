@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://pub.dev/packages/cs_salvium">
-    <img src="https://img.shields.io/pub/v/cs_monero?label=pub.dev&labelColor=333940&logo=dart">
+    <img src="https://img.shields.io/pub/v/cs_salvium?label=pub.dev&labelColor=333940&logo=dart">
   </a>
   <a href="https://github.com/invertase/melos">
     <img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square">
@@ -8,10 +8,10 @@
 </p>
 
 # About
-- A simplified Flutter/Dart Monero (and Wownero) wallet library.
+- A simplified Flutter/Dart Salvium wallet library.
 - Uses https://github.com/MrCyjaneK/monero_c/ for the compiled native libs.
 - If you do not trust the binaries hosted on https://pub.dev you can build from
-  source. Refer to [`cs_monero/README.md`](https://github.com/cypherstack/cs_monero/tree/main/cs_monero/README.md).
+  source. Refer to [`cs_salvium/README.md`](https://github.com/cypherstack/cs_salvium/tree/main/cs_salvium/README.md).
 
 ## Quickstart
 1. Add to pubspec.yaml

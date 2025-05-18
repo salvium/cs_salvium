@@ -3,7 +3,7 @@ import FlutterMacOS
 
 public class CsMoneroFlutterLibsMacosPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "cs_monero_flutter_libs_macos", binaryMessenger: registrar.messenger)
+    let channel = FlutterMethodChannel(name: "cs_salvium_flutter_libs_macos", binaryMessenger: registrar.messenger)
     let instance = CsMoneroFlutterLibsMacosPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }

@@ -6,7 +6,7 @@
 
 #include <memory>
 
-namespace cs_monero_flutter_libs_windows {
+namespace cs_salvium_flutter_libs_windows {
 
 class CsMoneroFlutterLibsWindowsPlugin : public flutter::Plugin {
  public:
@@ -26,6 +26,6 @@ class CsMoneroFlutterLibsWindowsPlugin : public flutter::Plugin {
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
 };
 
-}  // namespace cs_monero_flutter_libs_windows
+}  // namespace cs_salvium_flutter_libs_windows
 
 #endif  // FLUTTER_PLUGIN_CS_MONERO_FLUTTER_LIBS_WINDOWS_PLUGIN_H_

@@ -7,7 +7,7 @@ void main() {
 
   final platform = MethodChannelCsMoneroFlutterLibsAndroidArmeabiV7a();
   const MethodChannel channel =
-      MethodChannel('cs_monero_flutter_libs_android_armeabi_v7a');
+      MethodChannel('cs_salvium_flutter_libs_android_armeabi_v7a');
 
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

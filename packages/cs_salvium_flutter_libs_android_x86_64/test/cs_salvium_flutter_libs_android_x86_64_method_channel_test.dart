@@ -7,7 +7,7 @@ void main() {
 
   final platform = MethodChannelCsMoneroFlutterLibsAndroidX8664();
   const MethodChannel channel =
-      MethodChannel('cs_monero_flutter_libs_android_x86_64');
+      MethodChannel('cs_salvium_flutter_libs_android_x86_64');
 
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

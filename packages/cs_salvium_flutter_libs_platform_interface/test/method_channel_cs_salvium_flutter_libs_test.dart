@@ -6,7 +6,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group("$MethodChannelCsMoneroFlutterLibs", () {
-    const channel = MethodChannel("cs_monero_flutter_libs");
+    const channel = MethodChannel("cs_salvium_flutter_libs");
     MethodCall? call;
 
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

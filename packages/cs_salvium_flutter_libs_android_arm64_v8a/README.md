@@ -11,9 +11,9 @@ You only need to add this package to your `pubspec.yaml` if you want to import
 and use any of its APIs directly.
 
 ## Optional
-This package and its bundled binaries are not required to use `cs_monero`, but
+This package and its bundled binaries are not required to use `cs_salvium`, but
 is is provided as a quick and convenient way to start coding with the library.  
-Refer to `cs_monero`'s documentation for more information on building the
+Refer to `cs_salvium`'s documentation for more information on building the
 libraries from source and use this package as a template or example for bundling
 the required binaries.
 

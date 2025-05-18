@@ -9,7 +9,7 @@ import '../enums/salvium_seed_type.dart';
 import '../ffi_bindings/salvium_wallet_bindings.dart' as sal_ffi;
 import '../ffi_bindings/salvium_wallet_manager_bindings.dart' as sal_wm_ffi;
 
-const _kTwentyFiveWordSeedCacheKey = "cs_monero.twentyFive.seed";
+const _kTwentyFiveWordSeedCacheKey = "cs_salvium.twentyFive.seed";
 
 class SalviumWallet extends Wallet {
   // internal constructor

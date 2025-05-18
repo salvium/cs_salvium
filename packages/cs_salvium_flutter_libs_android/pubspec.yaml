@@ -1,9 +1,9 @@
 name: cs_salvium_flutter_libs_android
-description: Android implementation of cs_monero_flutter_libs
+description: Android implementation of cs_salvium_flutter_libs
 version: 1.0.0-pre
-repository: https://github.com/cypherstack/cs_monero
-homepage: https://github.com/cypherstack/cs_monero
-issue_tracker: https://github.com/cypherstack/cs_monero/issues
+repository: https://github.com/cypherstack/cs_salvium
+homepage: https://github.com/cypherstack/cs_salvium
+issue_tracker: https://github.com/cypherstack/cs_salvium/issues
 
 environment:
   sdk: ">=3.5.3 <4.0.0"
@@ -24,9 +24,9 @@ dev_dependencies:
 
 flutter:
   plugin:
-    implements: cs_monero_flutter_libs
+    implements: cs_salvium_flutter_libs
     platforms:
       android:
-        package: com.cypherstack.cs_monero_flutter_libs_android
+        package: com.cypherstack.cs_salvium_flutter_libs_android
         pluginClass: CsSalviumFlutterLibsAndroidPlugin
         dartPluginClass: CsMoneroFlutterLibsAndroid

@@ -9,7 +9,7 @@ void main() {
   group("$CsMoneroFlutterLibsAndroid", () {
     final platform = CsMoneroFlutterLibsAndroid();
     const MethodChannel channel =
-        MethodChannel("cs_monero_flutter_libs_android");
+        MethodChannel("cs_salvium_flutter_libs_android");
 
     setUp(() {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
