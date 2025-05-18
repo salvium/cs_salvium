@@ -1,11 +1,11 @@
-# `cs_monero_flutter_libs_ios`
-iOS implementation of `cs_monero_flutter_libs` for the
+# `cs_salvium_flutter_libs_ios`
+iOS implementation of `cs_salvium_flutter_libs` for the
 [`cs_monero` package](https://pub.dev/packages/cs_salvium).  Refer to the main
 monorepo at https://github.com/cypherstack/cs_monero for more context.
 
 ## Usage
 This package is [endorsed](https://flutter.dev/to/endorsed-federated-plugin), which means you can simply
-`flutter pub add cs_monero_flutter_libs` and this package will be automatically
+`flutter pub add cs_salvium_flutter_libs` and this package will be automatically
 included in your app as needed without any explicit reference in `pubspec.yaml`.  
 You only need to add this package to your `pubspec.yaml` if you want to import
 and use any of its APIs directly.
