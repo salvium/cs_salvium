@@ -49,7 +49,6 @@ void main() async {
     );
 
     // Apply patches
-    await runAsync('./apply_patches.sh', ['monero']);
-    await runAsync('./apply_patches.sh', ['wownero']);
+    await runAsync('./apply_patches.sh', ['salvium']);
   }
 }
