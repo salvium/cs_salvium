@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 
 const _channel = MethodChannel('cs_salvium_flutter_libs_android');
 
-class CsMoneroFlutterLibsAndroid extends CsSalviumFlutterLibsPlatform {
+class CsSalviumFlutterLibsAndroid extends CsSalviumFlutterLibsPlatform {
   /// Registers this class as the default instance of [CsSalviumFlutterLibsPlatform].
   static void registerWith() {
-    CsSalviumFlutterLibsPlatform.instance = CsMoneroFlutterLibsAndroid();
+    CsSalviumFlutterLibsPlatform.instance = CsSalviumFlutterLibsAndroid();
   }
 
   @override
@@ -20,8 +20,8 @@ class CsMoneroFlutterLibsAndroid extends CsSalviumFlutterLibsPlatform {
       // make calls so flutter doesn't tree shake
       await Future.wait([
         CsSalviumFlutterLibsAndroidArm64V8a().getPlatformVersion(),
-        CsMoneroFlutterLibsAndroidArmeabiV7a().getPlatformVersion(),
-        CsMoneroFlutterLibsAndroidX8664().getPlatformVersion(),
+        CsSalviumFlutterLibsAndroidArmeabiV7a().getPlatformVersion(),
+        CsSalviumFlutterLibsAndroidX8664().getPlatformVersion(),
       ]);
     }
 

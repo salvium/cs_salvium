@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 
 const _channel = MethodChannel('cs_salvium_flutter_libs_linux');
 
-class CsMoneroFlutterLibsLinux extends CsSalviumFlutterLibsPlatform {
+class CsSalviumFlutterLibsLinux extends CsSalviumFlutterLibsPlatform {
   /// Registers this class as the default instance of [CsSalviumFlutterLibsPlatform].
   static void registerWith() {
-    CsSalviumFlutterLibsPlatform.instance = CsMoneroFlutterLibsLinux();
+    CsSalviumFlutterLibsPlatform.instance = CsSalviumFlutterLibsLinux();
   }
 
   @override

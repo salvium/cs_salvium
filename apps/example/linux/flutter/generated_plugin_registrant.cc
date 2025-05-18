@@ -10,6 +10,6 @@
 
 void fl_register_plugins(FlPluginRegistry* registry) {
   g_autoptr(FlPluginRegistrar) cs_salvium_flutter_libs_linux_registrar =
-      fl_plugin_registry_get_registrar_for_plugin(registry, "CsMoneroFlutterLibsLinuxPlugin");
+      fl_plugin_registry_get_registrar_for_plugin(registry, "CsSalviumFlutterLibsLinuxPlugin");
   cs_salvium_flutter_libs_linux_plugin_register_with_registrar(cs_salvium_flutter_libs_linux_registrar);
 }

@@ -4,7 +4,7 @@ A common platform interface for the
 
 # Usage
 To implement a new platform-specific implementation of `cs_salvium`, extend 
-`CsMoneroFlutterLibsPlatform` with an implementation that performs the 
+`CsSalviumFlutterLibsPlatform` with an implementation that performs the 
 platform-specific behavior, and when you register your plugin, set the default 
-`CsMoneroFlutterLibsPlatform` by calling 
-`CsMoneroFlutterLibsPlatform.instance = CsMoneroFlutterLibsPlatform()`.
+`CsSalviumFlutterLibsPlatform` by calling 
+`CsSalviumFlutterLibsPlatform.instance = CsSalviumFlutterLibsPlatform()`.

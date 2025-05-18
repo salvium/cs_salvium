@@ -38,7 +38,7 @@ class _ExampleAppState extends State<ExampleApp> {
   Future<void> initPlatformState() async {
     String? platformVersion;
     try {
-      platformVersion = await CsMoneroFlutterLibs().getPlatformVersion();
+      platformVersion = await CsSalviumFlutterLibs().getPlatformVersion();
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }

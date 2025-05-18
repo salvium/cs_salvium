@@ -16,17 +16,17 @@ void main() {
       CsSalviumFlutterLibsAndroidArmeabiV7aPlatform.instance;
 
   test(
-      '$MethodChannelCsMoneroFlutterLibsAndroidArmeabiV7a is the default instance',
+      '$MethodChannelCsSalviumFlutterLibsAndroidArmeabiV7a is the default instance',
       () {
     expect(
       initialPlatform,
-      isInstanceOf<MethodChannelCsMoneroFlutterLibsAndroidArmeabiV7a>(),
+      isInstanceOf<MethodChannelCsSalviumFlutterLibsAndroidArmeabiV7a>(),
     );
   });
 
   test('getPlatformVersion', () async {
     final csMoneroFlutterLibsAndroidArmeabiV7aPlugin =
-        CsMoneroFlutterLibsAndroidArmeabiV7a();
+        CsSalviumFlutterLibsAndroidArmeabiV7a();
     final fakePlatform = MockCsSalviumFlutterLibsAndroidArmeabiV7aPlatform();
     CsSalviumFlutterLibsAndroidArmeabiV7aPlatform.instance = fakePlatform;
 

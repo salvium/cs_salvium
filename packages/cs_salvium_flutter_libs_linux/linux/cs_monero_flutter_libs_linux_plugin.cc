@@ -10,17 +10,17 @@
 
 #define cs_salvium_flutter_libs_linux_PLUGIN(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), cs_salvium_flutter_libs_linux_plugin_get_type(), \
-                              CsMoneroFlutterLibsLinuxPlugin))
+                              CsSalviumFlutterLibsLinuxPlugin))
 
-struct _CsMoneroFlutterLibsLinuxPlugin {
+struct _CsSalviumFlutterLibsLinuxPlugin {
   GObject parent_instance;
 };
 
-G_DEFINE_TYPE(CsMoneroFlutterLibsLinuxPlugin, cs_salvium_flutter_libs_linux_plugin, g_object_get_type())
+G_DEFINE_TYPE(CsSalviumFlutterLibsLinuxPlugin, cs_salvium_flutter_libs_linux_plugin, g_object_get_type())
 
 // Called when a method call is received from Flutter.
 static void cs_salvium_flutter_libs_linux_plugin_handle_method_call(
-    CsMoneroFlutterLibsLinuxPlugin* self,
+    CsSalviumFlutterLibsLinuxPlugin* self,
     FlMethodCall* method_call) {
   g_autoptr(FlMethodResponse) response = nullptr;
 
@@ -47,20 +47,20 @@ static void cs_salvium_flutter_libs_linux_plugin_dispose(GObject* object) {
   G_OBJECT_CLASS(cs_salvium_flutter_libs_linux_plugin_parent_class)->dispose(object);
 }
 
-static void cs_salvium_flutter_libs_linux_plugin_class_init(CsMoneroFlutterLibsLinuxPluginClass* klass) {
+static void cs_salvium_flutter_libs_linux_plugin_class_init(CsSalviumFlutterLibsLinuxPluginClass* klass) {
   G_OBJECT_CLASS(klass)->dispose = cs_salvium_flutter_libs_linux_plugin_dispose;
 }
 
-static void cs_salvium_flutter_libs_linux_plugin_init(CsMoneroFlutterLibsLinuxPlugin* self) {}
+static void cs_salvium_flutter_libs_linux_plugin_init(CsSalviumFlutterLibsLinuxPlugin* self) {}
 
 static void method_call_cb(FlMethodChannel* channel, FlMethodCall* method_call,
                            gpointer user_data) {
-  CsMoneroFlutterLibsLinuxPlugin* plugin = cs_salvium_flutter_libs_linux_PLUGIN(user_data);
+  CsSalviumFlutterLibsLinuxPlugin* plugin = cs_salvium_flutter_libs_linux_PLUGIN(user_data);
   cs_salvium_flutter_libs_linux_plugin_handle_method_call(plugin, method_call);
 }
 
 void cs_salvium_flutter_libs_linux_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
-  CsMoneroFlutterLibsLinuxPlugin* plugin = cs_salvium_flutter_libs_linux_PLUGIN(
+  CsSalviumFlutterLibsLinuxPlugin* plugin = cs_salvium_flutter_libs_linux_PLUGIN(
       g_object_new(cs_salvium_flutter_libs_linux_plugin_get_type(), nullptr));
 
   g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();

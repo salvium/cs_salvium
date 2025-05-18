@@ -22,8 +22,8 @@ using flutter::MethodResultFunctions;
 
 }  // namespace
 
-TEST(CsMoneroFlutterLibsWindowsPlugin, GetPlatformVersion) {
-  CsMoneroFlutterLibsWindowsPlugin plugin;
+TEST(CsSalviumFlutterLibsWindowsPlugin, GetPlatformVersion) {
+  CsSalviumFlutterLibsWindowsPlugin plugin;
   // Save the reply value from the success callback.
   std::string result_string;
   plugin.HandleMethodCall(

@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-FLUTTER_PLUGIN_EXPORT void CsMoneroFlutterLibsWindowsPluginCApiRegisterWithRegistrar(
+FLUTTER_PLUGIN_EXPORT void CsSalviumFlutterLibsWindowsPluginCApiRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar);
 
 #if defined(__cplusplus)

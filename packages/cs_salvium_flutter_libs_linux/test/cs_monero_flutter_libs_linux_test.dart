@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group("$CsMoneroFlutterLibsLinux", () {
-    final platform = CsMoneroFlutterLibsLinux();
+  group("$CsSalviumFlutterLibsLinux", () {
+    final platform = CsSalviumFlutterLibsLinux();
     const MethodChannel channel = MethodChannel('cs_salvium_flutter_libs_linux');
 
     setUp(() {
@@ -31,10 +31,10 @@ void main() {
   });
 
   test("registerWith", () {
-    CsMoneroFlutterLibsLinux.registerWith();
+    CsSalviumFlutterLibsLinux.registerWith();
     expect(
       CsSalviumFlutterLibsPlatform.instance,
-      isA<CsMoneroFlutterLibsLinux>(),
+      isA<CsSalviumFlutterLibsLinux>(),
     );
   });
 }

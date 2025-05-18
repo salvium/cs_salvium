@@ -3,17 +3,17 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'method_channel_cs_salvium_flutter_libs.dart';
 
 abstract class CsSalviumFlutterLibsPlatform extends PlatformInterface {
-  /// Constructs a CsMoneroFlutterLibsPlatformInterfacePlatform.
+  /// Constructs a CsSalviumFlutterLibsPlatformInterfacePlatform.
   CsSalviumFlutterLibsPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
   static CsSalviumFlutterLibsPlatform _instance =
-      MethodChannelCsMoneroFlutterLibs();
+      MethodChannelCsSalviumFlutterLibs();
 
   /// The default instance of [CsSalviumFlutterLibsPlatform] to use.
   ///
-  /// Defaults to [MethodChannelCsMoneroFlutterLibs].
+  /// Defaults to [MethodChannelCsSalviumFlutterLibs].
   static CsSalviumFlutterLibsPlatform get instance => _instance;
 
   /// Platform-specific implementations should set this with their own

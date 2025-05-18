@@ -4,9 +4,9 @@
 
 #include "cs_salvium_flutter_libs_windows_plugin.h"
 
-void CsMoneroFlutterLibsWindowsPluginCApiRegisterWithRegistrar(
+void CsSalviumFlutterLibsWindowsPluginCApiRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar) {
-    cs_salvium_flutter_libs_windows::CsMoneroFlutterLibsWindowsPlugin::RegisterWithRegistrar(
+    cs_salvium_flutter_libs_windows::CsSalviumFlutterLibsWindowsPlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarManager::GetInstance()
           ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar));
 }

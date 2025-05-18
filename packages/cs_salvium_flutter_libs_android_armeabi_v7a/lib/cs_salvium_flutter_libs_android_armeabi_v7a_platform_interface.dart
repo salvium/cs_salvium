@@ -3,16 +3,16 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'cs_salvium_flutter_libs_android_armeabi_v7a_method_channel.dart';
 
 abstract class CsSalviumFlutterLibsAndroidArmeabiV7aPlatform extends PlatformInterface {
-  /// Constructs a CsMoneroFlutterLibsAndroidArmeabiV7aPlatform.
+  /// Constructs a CsSalviumFlutterLibsAndroidArmeabiV7aPlatform.
   CsSalviumFlutterLibsAndroidArmeabiV7aPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static CsSalviumFlutterLibsAndroidArmeabiV7aPlatform _instance = MethodChannelCsMoneroFlutterLibsAndroidArmeabiV7a();
+  static CsSalviumFlutterLibsAndroidArmeabiV7aPlatform _instance = MethodChannelCsSalviumFlutterLibsAndroidArmeabiV7a();
 
   /// The default instance of [CsSalviumFlutterLibsAndroidArmeabiV7aPlatform] to use.
   ///
-  /// Defaults to [MethodChannelCsMoneroFlutterLibsAndroidArmeabiV7a].
+  /// Defaults to [MethodChannelCsSalviumFlutterLibsAndroidArmeabiV7a].
   static CsSalviumFlutterLibsAndroidArmeabiV7aPlatform get instance => _instance;
 
   /// Platform-specific implementations should set this with their own

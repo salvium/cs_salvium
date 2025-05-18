@@ -23,5 +23,5 @@ flutter:
   plugin:
     platforms:
       windows:
-        pluginClass: CsMoneroFlutterLibsWindowsPluginCApi
-        dartPluginClass: CsMoneroFlutterLibsWindows
+        pluginClass: CsSalviumFlutterLibsWindowsPluginCApi
+        dartPluginClass: CsSalviumFlutterLibsWindows

@@ -23,5 +23,5 @@ flutter:
   plugin:
     platforms:
       macos:
-        pluginClass: CsMoneroFlutterLibsMacosPlugin
-        dartPluginClass: CsMoneroFlutterLibsMacos
+        pluginClass: CsSalviumFlutterLibsMacosPlugin
+        dartPluginClass: CsSalviumFlutterLibsMacos

@@ -25,5 +25,5 @@ flutter:
     implements: cs_salvium_flutter_libs
     platforms:
       linux:
-        pluginClass: CsMoneroFlutterLibsLinuxPlugin
-        dartPluginClass: CsMoneroFlutterLibsLinux
+        pluginClass: CsSalviumFlutterLibsLinuxPlugin
+        dartPluginClass: CsSalviumFlutterLibsLinux

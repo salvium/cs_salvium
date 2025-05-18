@@ -1,10 +1,10 @@
 import Cocoa
 import FlutterMacOS
 
-public class CsMoneroFlutterLibsMacosPlugin: NSObject, FlutterPlugin {
+public class CsSalviumFlutterLibsMacosPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "cs_salvium_flutter_libs_macos", binaryMessenger: registrar.messenger)
-    let instance = CsMoneroFlutterLibsMacosPlugin()
+    let instance = CsSalviumFlutterLibsMacosPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

@@ -16,11 +16,11 @@ void main() {
       CsSalviumFlutterLibsAndroidArm64V8aPlatform.instance;
 
   test(
-      '$MethodChannelCsMoneroFlutterLibsAndroidArm64V8a is the default instance',
+      '$MethodChannelCsSalviumFlutterLibsAndroidArm64V8a is the default instance',
       () {
     expect(
       initialPlatform,
-      isInstanceOf<MethodChannelCsMoneroFlutterLibsAndroidArm64V8a>(),
+      isInstanceOf<MethodChannelCsSalviumFlutterLibsAndroidArm64V8a>(),
     );
   });
 
