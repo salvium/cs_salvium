@@ -1,7 +1,7 @@
 import 'dart:core' as core;
 import 'dart:core';
 
-import 'package:cs_salvium/cs_monero.dart';
+import 'package:cs_salvium/cs_salvium.dart';
 import 'package:cs_salvium_flutter_libs/cs_salvium_flutter_libs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

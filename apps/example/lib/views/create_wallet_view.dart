@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cs_salvium/cs_monero.dart';
+import 'package:cs_salvium/cs_salvium.dart';
 import 'package:flutter/material.dart';
 
 import '../util.dart';

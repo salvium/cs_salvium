@@ -3,7 +3,7 @@ import 'dart:isolate';
 
 import 'package:meta/meta.dart';
 
-import '../../cs_monero.dart';
+import '../../cs_salvium.dart';
 import '../deprecated/get_height_by_date.dart';
 import '../enums/salvium_seed_type.dart';
 import '../ffi_bindings/salvium_wallet_bindings.dart' as sal_ffi;
