@@ -17,8 +17,8 @@
 1. Add to pubspec.yaml
     ```yaml
     dependencies:
-      cs_monero: 0.0.1
-      cs_monero_flutter_libs: 0.0.1 # Contains native libs required by cs_monero.
+      cs_salvium: 0.0.1
+      cs_salvium_flutter_libs: 0.0.1 # Contains native libs required by cs_salvium.
     ```
 2. Create a wallet
    ```dart

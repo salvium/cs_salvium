@@ -1,9 +1,9 @@
 name: cs_salvium_flutter_libs_android_arm64_v8a
-description: "Android arm64-v8a bins for cs_monero_flutter_libs"
+description: "Android arm64-v8a bins for cs_salvium_flutter_libs"
 version: 1.0.0-pre
-repository: https://github.com/cypherstack/cs_monero
-homepage: https://github.com/cypherstack/cs_monero
-issue_tracker: https://github.com/cypherstack/cs_monero/issues
+repository: https://github.com/cypherstack/cs_salvium
+homepage: https://github.com/cypherstack/cs_salvium
+issue_tracker: https://github.com/cypherstack/cs_salvium/issues
 
 environment:
   sdk: ">=3.5.3 <4.0.0"
@@ -25,5 +25,5 @@ flutter:
     platforms:
       android:
         package: com.cypherstack.cs_monero_flutter_libs_android_arm64_v8a
-        pluginClass: CsMoneroFlutterLibsAndroidArm64V8aPlugin
+        pluginClass: CsSalviumFlutterLibsAndroidArm64V8aPlugin
                                       

@@ -1,4 +1,4 @@
-import 'package:cs_salvium_flutter_libs_platform_interface/cs_monero_flutter_libs_platform_interface.dart';
+import 'package:cs_salvium_flutter_libs_platform_interface/cs_salvium_flutter_libs_platform_interface.dart';
 import 'package:cs_salvium_flutter_libs_windows/cs_salvium_flutter_libs_windows.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -34,7 +34,7 @@ void main() {
   test("registerWith", () {
     CsMoneroFlutterLibsWindows.registerWith();
     expect(
-      CsMoneroFlutterLibsPlatform.instance,
+      CsSalviumFlutterLibsPlatform.instance,
       isA<CsMoneroFlutterLibsWindows>(),
     );
   });

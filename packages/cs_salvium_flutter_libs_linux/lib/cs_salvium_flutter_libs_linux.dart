@@ -1,12 +1,12 @@
-import 'package:cs_salvium_flutter_libs_platform_interface/cs_monero_flutter_libs_platform_interface.dart';
+import 'package:cs_salvium_flutter_libs_platform_interface/cs_salvium_flutter_libs_platform_interface.dart';
 import 'package:flutter/services.dart';
 
 const _channel = MethodChannel('cs_salvium_flutter_libs_linux');
 
-class CsMoneroFlutterLibsLinux extends CsMoneroFlutterLibsPlatform {
-  /// Registers this class as the default instance of [CsMoneroFlutterLibsPlatform].
+class CsMoneroFlutterLibsLinux extends CsSalviumFlutterLibsPlatform {
+  /// Registers this class as the default instance of [CsSalviumFlutterLibsPlatform].
   static void registerWith() {
-    CsMoneroFlutterLibsPlatform.instance = CsMoneroFlutterLibsLinux();
+    CsSalviumFlutterLibsPlatform.instance = CsMoneroFlutterLibsLinux();
   }
 
   @override

@@ -25,5 +25,5 @@ flutter:
     platforms:
       android:
         package: com.cypherstack.cs_monero_flutter_libs_android_armeabi_v7a
-        pluginClass: CsMoneroFlutterLibsAndroidArmeabiV7aPlugin
+        pluginClass: CsSalviumFlutterLibsAndroidArmeabiV7aPlugin
                                       

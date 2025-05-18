@@ -1,5 +1,5 @@
 PODS:
-  - cs_monero_flutter_libs_ios (0.0.1):
+  - cs_salvium_flutter_libs_ios (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - path_provider_foundation (0.0.1):
@@ -7,13 +7,13 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
-  - cs_monero_flutter_libs_ios (from `.symlinks/plugins/cs_monero_flutter_libs_ios/ios`)
+  - cs_salvium_flutter_libs_ios (from `.symlinks/plugins/cs_salvium_flutter_libs_ios/ios`)
   - Flutter (from `Flutter`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
 
 EXTERNAL SOURCES:
   cs_salvium_flutter_libs_ios:
-    :path: ".symlinks/plugins/cs_monero_flutter_libs_ios/ios"
+    :path: ".symlinks/plugins/cs_salvium_flutter_libs_ios/ios"
   Flutter:
     :path: Flutter
   path_provider_foundation:

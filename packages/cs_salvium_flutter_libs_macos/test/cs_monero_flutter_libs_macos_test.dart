@@ -1,5 +1,5 @@
 import 'package:cs_salvium_flutter_libs_macos/cs_salvium_flutter_libs_macos.dart';
-import 'package:cs_salvium_flutter_libs_platform_interface/cs_monero_flutter_libs_platform_interface.dart';
+import 'package:cs_salvium_flutter_libs_platform_interface/cs_salvium_flutter_libs_platform_interface.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -33,7 +33,7 @@ void main() {
   test("registerWith", () {
     CsMoneroFlutterLibsMacos.registerWith();
     expect(
-      CsMoneroFlutterLibsPlatform.instance,
+      CsSalviumFlutterLibsPlatform.instance,
       isA<CsMoneroFlutterLibsMacos>(),
     );
   });

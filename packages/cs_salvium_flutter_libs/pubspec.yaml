@@ -28,12 +28,12 @@ flutter:
   plugin:
     platforms:
       android:
-        default_package: cs_monero_flutter_libs_android
+        default_package: cs_salvium_flutter_libs_android
       ios:
-        default_package: cs_monero_flutter_libs_ios
+        default_package: cs_salvium_flutter_libs_ios
       linux:
         default_package: cs_salvium_flutter_libs_linux
       macos:
-        default_package: cs_monero_flutter_libs_macos
+        default_package: cs_salvium_flutter_libs_macos
       windows:
-        default_package: cs_monero_flutter_libs_windows
+        default_package: cs_salvium_flutter_libs_windows
