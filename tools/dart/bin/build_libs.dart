@@ -7,7 +7,7 @@ import '../util.dart';
 
 void main(List<String> args) async {
   const platforms = ["android", "ios", "macos", "linux", "windows"];
-  const coins = ["salvium"/*, "wownero"*/];
+  const coins = ["salvium" /*, "wownero"*/];
 
   if (args.length != 1) {
     throw ArgumentError(
@@ -103,20 +103,20 @@ void main(List<String> args) async {
         salDylib = "$envMoneroCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}salvium"
-            "${Platform.pathSeparator}host-apple-ios_libwallet2_api_c.dylib";
+            "${Platform.pathSeparator}aarch64-apple-ios_libwallet2_api_c.dylib";
         // wowDylib = "$envMoneroCDir"
         //     "${Platform.pathSeparator}release"
         //     "${Platform.pathSeparator}wownero"
-        //     "${Platform.pathSeparator}host-apple-ios_libwallet2_api_c.dylib";
+        //     "${Platform.pathSeparator}aarch64-apple-ios_libwallet2_api_c.dylib";
       } else {
         salDylib = "$envMoneroCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}salvium"
-            "${Platform.pathSeparator}host-apple-darwin_libwallet2_api_c.dylib";
+            "${Platform.pathSeparator}aarch64-apple-darwin_libwallet2_api_c.dylib";
         // wowDylib = "$envMoneroCDir"
         //     "${Platform.pathSeparator}release"
         //     "${Platform.pathSeparator}wownero"
-        //     "${Platform.pathSeparator}host-apple-darwin_libwallet2_api_c.dylib";
+        //     "${Platform.pathSeparator}aarch64-apple-darwin_libwallet2_api_c.dylib";
       }
 
       await createFramework(
@@ -168,68 +168,68 @@ void main(List<String> args) async {
               "${Platform.pathSeparator}salvium_libwallet2_api_c.dll",
         ],
       );
-      // await runAsync(
-      //   "cp",
-      //   [
-      //     "$envMoneroCDir"
-      //         "${Platform.pathSeparator}release"
-      //         "${Platform.pathSeparator}wownero"
-      //         "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
-      //     "${dir.path}"
-      //         "${Platform.pathSeparator}wownero_libwallet2_api_c.dll",
-      //   ],
-      // );
+    // await runAsync(
+    //   "cp",
+    //   [
+    //     "$envMoneroCDir"
+    //         "${Platform.pathSeparator}release"
+    //         "${Platform.pathSeparator}wownero"
+    //         "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
+    //     "${dir.path}"
+    //         "${Platform.pathSeparator}wownero_libwallet2_api_c.dll",
+    //   ],
+    // );
 
-      // final polyPath = "$envMoneroCDir"
-      //     "${Platform.pathSeparator}release"
-      //     "${Platform.pathSeparator}wownero"
-      //     "${Platform.pathSeparator}x86_64-w64-mingw32_libpolyseed.dll";
-      // if (File("$polyPath.xz").existsSync()) {
-      //   await runAsync("unxz", ["-f", "$polyPath.xz"]);
-      // }
-      // await runAsync(
-      //   "cp",
-      //   [
-      //     polyPath,
-      //     "${dir.path}"
-      //         "${Platform.pathSeparator}libpolyseed.dll",
-      //   ],
-      // );
+    // final polyPath = "$envMoneroCDir"
+    //     "${Platform.pathSeparator}release"
+    //     "${Platform.pathSeparator}wownero"
+    //     "${Platform.pathSeparator}x86_64-w64-mingw32_libpolyseed.dll";
+    // if (File("$polyPath.xz").existsSync()) {
+    //   await runAsync("unxz", ["-f", "$polyPath.xz"]);
+    // }
+    // await runAsync(
+    //   "cp",
+    //   [
+    //     polyPath,
+    //     "${dir.path}"
+    //         "${Platform.pathSeparator}libpolyseed.dll",
+    //   ],
+    // );
 
-      // final sspPath = "$envMoneroCDir"
-      //     "${Platform.pathSeparator}release"
-      //     "${Platform.pathSeparator}wownero"
-      //     "${Platform.pathSeparator}x86_64-w64-mingw32_libssp-0.dll";
+    // final sspPath = "$envMoneroCDir"
+    //     "${Platform.pathSeparator}release"
+    //     "${Platform.pathSeparator}wownero"
+    //     "${Platform.pathSeparator}x86_64-w64-mingw32_libssp-0.dll";
 
-      // if (File("$sspPath.xz").existsSync()) {
-      //   await runAsync("unxz", ["-f", "$sspPath.xz"]);
-      // }
-      // await runAsync(
-      //   "cp",
-      //   [
-      //     sspPath,
-      //     "${dir.path}"
-      //         "${Platform.pathSeparator}libssp-0.dll",
-      //   ],
-      // );
+    // if (File("$sspPath.xz").existsSync()) {
+    //   await runAsync("unxz", ["-f", "$sspPath.xz"]);
+    // }
+    // await runAsync(
+    //   "cp",
+    //   [
+    //     sspPath,
+    //     "${dir.path}"
+    //         "${Platform.pathSeparator}libssp-0.dll",
+    //   ],
+    // );
 
-      // final pThreadPath = "$envMoneroCDir"
-      //     "${Platform.pathSeparator}release"
-      //     "${Platform.pathSeparator}wownero"
-      //     "${Platform.pathSeparator}x86_64-w64-mingw32_libwinpthread-1.dll";
-      //
-      // if (File("$pThreadPath.xz").existsSync()) {
-      //   await runAsync("unxz", ["-f", "$pThreadPath.xz"]);
-      // }
-      // await runAsync(
-      //   "cp",
-      //   [
-      //     pThreadPath,
-      //     "${dir.path}"
-      //         "${Platform.pathSeparator}libwinpthread-1.dll",
-      //   ],
-      // );
-      // break;
+    // final pThreadPath = "$envMoneroCDir"
+    //     "${Platform.pathSeparator}release"
+    //     "${Platform.pathSeparator}wownero"
+    //     "${Platform.pathSeparator}x86_64-w64-mingw32_libwinpthread-1.dll";
+    //
+    // if (File("$pThreadPath.xz").existsSync()) {
+    //   await runAsync("unxz", ["-f", "$pThreadPath.xz"]);
+    // }
+    // await runAsync(
+    //   "cp",
+    //   [
+    //     pThreadPath,
+    //     "${dir.path}"
+    //         "${Platform.pathSeparator}libwinpthread-1.dll",
+    //   ],
+    // );
+    // break;
 
     default:
       throw Exception("Not sure how you got this far tbh");
@@ -259,10 +259,10 @@ List<String> _getTriples(String platform) {
       ];
 
     case "ios":
-      return ["host-apple-ios"];
+      return ["aarch64-apple-ios"];
 
     case "macos":
-      return ["host-apple-darwin"];
+      return ["aarch64-apple-darwin"];
 
     case "linux":
       return ["x86_64-linux-gnu"];

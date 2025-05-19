@@ -1,5 +1,5 @@
 PODS:
-  - cs_salvium_flutter_libs (0.0.1):
+  - cs_salvium_flutter_libs_macos (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - path_provider_foundation (0.0.1):
@@ -7,23 +7,23 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
-  - cs_salvium_flutter_libs (from `Flutter/ephemeral/.symlinks/plugins/cs_salvium_flutter_libs/macos`)
+  - cs_salvium_flutter_libs_macos (from `Flutter/ephemeral/.symlinks/plugins/cs_salvium_flutter_libs_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
 
 EXTERNAL SOURCES:
-  cs_salvium_flutter_libs:
-    :path: Flutter/ephemeral/.symlinks/plugins/cs_salvium_flutter_libs/macos
+  cs_salvium_flutter_libs_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/cs_salvium_flutter_libs_macos/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
 
 SPEC CHECKSUMS:
-  cs_salvium_flutter_libs: e91a436103857259f5855cad4971301a5a29b38d
+  cs_salvium_flutter_libs_macos: 3c7b30fb8c82ee0fb0195280ddcc10c65ab5e082
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
