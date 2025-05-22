@@ -38,8 +38,9 @@ these at your own risk.  To build the libraries yourself:
 - This repo's build scripts are just wrappers around `monero_c`'s build scripts.
   For details and requirements see https://github.com/MrCyjaneK/monero_c/
 - To do a clean/fresh build, just the delete the top level `build` dir.
-- Windows: Builds have been tested on Windows 11 with Ubuntu 20.04 in WSL2.  Do 
-  not install Flutter via Snap, follow one of these guides instead:
+- Windows:  Builds have been tested on Windows 11 with Ubuntu 24.04 in WSL with
+  these dependencies: `libtool build-essential autoconf lbzip2 g++-mingw-w64`.  
+  Do not install Flutter via Snap, follow one of these guides instead:
   https://docs.flutter.dev/get-started/install/linux/desktop
 
 ## TODO
