@@ -1,6 +1,5 @@
 enum MinConfirms {
-  monero(10),
-  wownero(15);
+  salvium(10);
 
   final int value;
   const MinConfirms(this.value);
