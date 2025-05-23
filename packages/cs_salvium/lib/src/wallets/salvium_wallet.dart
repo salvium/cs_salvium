@@ -63,7 +63,7 @@ class SalviumWallet extends Wallet {
       timeStamp: DateTime.fromMillisecondsSinceEpoch(
         sal_ffi.getTransactionInfoTimestamp(infoPointer) * 1000,
       ),
-      minConfirms: MinConfirms.monero,
+      minConfirms: MinConfirms.salvium,
     );
   }
 

@@ -17,6 +17,4 @@ export 'src/models/recipient.dart';
 export 'src/models/transaction.dart';
 export 'src/models/wallet_listener.dart';
 export 'src/wallet.dart';
-export 'src/wallets/monero_wallet.dart';
-export 'src/wallets/wownero_wallet.dart';
 export 'src/wallets/salvium_wallet.dart';
