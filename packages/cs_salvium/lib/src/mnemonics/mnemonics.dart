@@ -1,20 +1,18 @@
-import 'monero/chinese_simplified.dart';
-import 'monero/dutch.dart';
-import 'monero/english.dart' as monero;
-import 'monero/french.dart';
-import 'monero/german.dart';
-import 'monero/italian.dart';
-import 'monero/japanese.dart';
-import 'monero/portuguese.dart';
-import 'monero/russian.dart';
-import 'monero/spanish.dart';
-import 'wownero/english14.dart';
-import 'wownero/english25.dart';
+import 'salvium//chinese_simplified.dart';
+import 'salvium/dutch.dart';
+import 'salvium/english.dart' as salvium;
+import 'salvium/french.dart';
+import 'salvium/german.dart';
+import 'salvium/italian.dart';
+import 'salvium/japanese.dart';
+import 'salvium/portuguese.dart';
+import 'salvium/russian.dart';
+import 'salvium/spanish.dart';
 
-List<String> getMoneroWordList(String language) {
+List<String> getSalviumWordList(String language) {
   switch (language.toLowerCase()) {
     case 'english':
-      return monero.EnglishMnemonics.words;
+      return salvium.EnglishMnemonics.words;
     case 'chinese (simplified)':
       return ChineseSimplifiedMnemonics.words;
     case 'dutch':
@@ -34,25 +32,6 @@ List<String> getMoneroWordList(String language) {
     case 'italian':
       return ItalianMnemonics.words;
     default:
-      return monero.EnglishMnemonics.words;
-  }
-}
-
-List<String> getWowneroWordList(String language, {int seedWordsLength = 14}) {
-  switch (language.toLowerCase()) {
-    case 'english':
-      switch (seedWordsLength) {
-        case 25:
-          return EnglishMnemonics25.words;
-        default:
-          return EnglishMnemonics14.words;
-      }
-    default:
-      switch (seedWordsLength) {
-        case 25:
-          return EnglishMnemonics25.words;
-        default:
-          return EnglishMnemonics14.words;
-      }
+      return salvium.EnglishMnemonics.words;
   }
 }

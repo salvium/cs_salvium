@@ -1,5 +1,6 @@
-class EnglishMnemonics25 {
+class EnglishMnemonics {
   static const words = [
+
     "abbey",
     "abducts",
     "ability",
