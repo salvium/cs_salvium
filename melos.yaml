@@ -2,19 +2,8 @@ name: cs_salvium
 repository: https://github.com/cypherstack/cs_salvium
 
 packages:
-  - "packages/compat"
-  - "packages/cs_salvium"
-  - "packages/cs_salvium_flutter_libs"
-  - "packages/cs_salvium_flutter_libs_android"
-  - "packages/cs_salvium_flutter_libs_android_x86_64"
-  - "packages/cs_salvium_flutter_libs_android_arm64_v8a"
-  - "packages/cs_salvium_flutter_libs_android_armeabi_v7a"
-  - "packages/cs_salvium_flutter_libs_ios"
-  - "packages/cs_salvium_flutter_libs_linux"
-  - "packages/cs_salvium_flutter_libs_macos"
-  - "packages/cs_salvium_flutter_libs_platform_interface"
-  - "packages/cs_salvium_flutter_libs_windows"
-  - "apps/example"
+  - packages/**
+  - apps/**
 
 command:
   version:
