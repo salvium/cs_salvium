@@ -18,7 +18,7 @@ void main() {
         hash: 'transaction_hash',
         key: 'transaction_key',
         timeStamp: DateTime.now(),
-        minConfirms: MinConfirms.monero,
+        minConfirms: MinConfirms.salvium,
       );
 
       expect(transaction.displayLabel, 'Transaction 1');
@@ -32,7 +32,7 @@ void main() {
       expect(transaction.isSpend, true);
       expect(transaction.hash, 'transaction_hash');
       expect(transaction.key, 'transaction_key');
-      expect(transaction.minConfirms, MinConfirms.monero);
+      expect(transaction.minConfirms, MinConfirms.salvium);
     });
 
     test('should throw an exception for negative fee', () {
@@ -51,7 +51,7 @@ void main() {
           hash: 'transaction_hash',
           key: 'transaction_key',
           timeStamp: DateTime.now(),
-          minConfirms: MinConfirms.monero,
+          minConfirms: MinConfirms.salvium,
         ),
         throwsA(
           isA<Exception>().having(
@@ -79,7 +79,7 @@ void main() {
           hash: 'transaction_hash',
           key: 'transaction_key',
           timeStamp: DateTime.now(),
-          minConfirms: MinConfirms.monero,
+          minConfirms: MinConfirms.salvium,
         ),
         throwsA(
           isA<Exception>().having(
@@ -107,7 +107,7 @@ void main() {
           hash: 'transaction_hash',
           key: 'transaction_key',
           timeStamp: DateTime.now(),
-          minConfirms: MinConfirms.monero,
+          minConfirms: MinConfirms.salvium,
         ),
         throwsA(
           isA<Exception>().having(
@@ -135,7 +135,7 @@ void main() {
           hash: 'transaction_hash',
           key: 'transaction_key',
           timeStamp: DateTime.now(),
-          minConfirms: MinConfirms.monero,
+          minConfirms: MinConfirms.salvium,
         ),
         throwsA(
           isA<Exception>().having(
@@ -162,7 +162,7 @@ void main() {
         hash: 'transaction_hash',
         key: 'transaction_key',
         timeStamp: DateTime.now(),
-        minConfirms: MinConfirms.monero,
+        minConfirms: MinConfirms.salvium,
       );
 
       expect(transaction.isConfirmed, true);
@@ -183,7 +183,7 @@ void main() {
         hash: 'transaction_hash',
         key: 'transaction_key',
         timeStamp: DateTime.now(),
-        minConfirms: MinConfirms.monero,
+        minConfirms: MinConfirms.salvium,
       );
 
       expect(transaction.isPending, true);

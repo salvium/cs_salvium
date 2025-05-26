@@ -46,7 +46,7 @@ class _RestoreFromKeysViewState extends State<RestoreFromKeysView> {
       final Wallet wallet;
       switch (type) {
         case "salvium":
-          wallet = await MoneroWallet.restoreWalletFromKeys(
+          wallet = await SalviumWallet.restoreWalletFromKeys(
             path: path,
             password: password,
             viewKey: viewKeyController.text,

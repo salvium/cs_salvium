@@ -43,7 +43,7 @@ class _RestoreFromSeedViewState extends State<RestoreFromSeedView> {
       final Wallet wallet;
       switch (type) {
         case "salvium":
-          wallet = await MoneroWallet.restoreWalletFromSeed(
+          wallet = await SalviumWallet.restoreWalletFromSeed(
             path: path,
             password: password,
             seed: seedController.text,

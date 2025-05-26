@@ -45,7 +45,7 @@ class _CreateViewOnlyWalletViewState extends State<CreateViewOnlyWalletView> {
       final Wallet wallet;
       switch (type) {
         case "salvium":
-          wallet = await MoneroWallet.createViewOnlyWallet(
+          wallet = await SalviumWallet.createViewOnlyWallet(
             path: path,
             password: password,
             viewKey: viewKeyController.text,

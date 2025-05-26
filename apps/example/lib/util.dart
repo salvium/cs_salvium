@@ -69,7 +69,7 @@ Future<List<String>> loadWalletNames(String walletType) async {
 String formattedAmount(BigInt value, Type walletType) {
   final int decimalPlaces;
   switch (walletType) {
-    case const (MoneroWallet):
+    case const (SalviumWallet):
       decimalPlaces = 12;
       break;
     // case const (WowneroWallet):

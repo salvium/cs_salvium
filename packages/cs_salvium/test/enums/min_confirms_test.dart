@@ -4,22 +4,19 @@ import 'package:test/test.dart';
 void main() {
   group("$MinConfirms", () {
     test("contains two values", () {
-      expect(MinConfirms.values.length, 2);
+      expect(MinConfirms.values.length, 1);
     });
 
     test("each confirmation type has the correct associated value", () {
-      expect(MinConfirms.monero.value, 10);
-      expect(MinConfirms.wownero.value, 15);
+      expect(MinConfirms.salvium.value, 10);
     });
 
     test("values are accessible by index", () {
-      expect(MinConfirms.values[0], MinConfirms.monero);
-      expect(MinConfirms.values[1], MinConfirms.wownero);
+      expect(MinConfirms.values[0], MinConfirms.salvium);
     });
 
     test("toString returns correct value", () {
-      expect(MinConfirms.monero.toString(), "MinConfirms.monero");
-      expect(MinConfirms.wownero.toString(), "MinConfirms.wownero");
+      expect(MinConfirms.salvium.toString(), "MinConfirms.salvium");
     });
   });
 }

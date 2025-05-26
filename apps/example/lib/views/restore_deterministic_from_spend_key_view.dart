@@ -46,7 +46,7 @@ class _RestoreDeterministicFromSpendKeyViewState
       final Wallet wallet;
       switch (type) {
         case "salvium":
-          wallet = await MoneroWallet.restoreDeterministicWalletFromSpendKey(
+          wallet = await SalviumWallet.restoreDeterministicWalletFromSpendKey(
             path: path,
             password: password,
             spendKey: spendKeyController.text,
