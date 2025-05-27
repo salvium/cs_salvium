@@ -1,1 +1,1 @@
-enum SalviumSeedType { twentyFive }
+enum SalviumSeedType { sixteen, twentyFive }

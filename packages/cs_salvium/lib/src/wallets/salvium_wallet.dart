@@ -148,25 +148,25 @@ class SalviumWallet extends Wallet {
       //   );
       //   break;
       //
-      // case SalviumSeedType.sixteen:
-      //   final seed = wow_ffi.createPolyseed(language: language);
-      //   walletPointer = Pointer<Void>.fromAddress(
-      //     await Isolate.run(
-      //       () => wow_wm_ffi
-      //           .createWalletFromPolyseed(
-      //             Pointer.fromAddress(walletManagerPointerAddress),
-      //             path: path,
-      //             password: password,
-      //             mnemonic: seed,
-      //             seedOffset: seedOffset,
-      //             newWallet: true,
-      //             restoreHeight: 0, // ignored by core underlying code
-      //             kdfRounds: 1,
-      //           )
-      //           .address,
-      //     ),
-      //   );
-      //   break;
+      case SalviumSeedType.sixteen:
+        final seed = sal_ffi.createPolyseed(language: language);
+        walletPointer = Pointer<Void>.fromAddress(
+          await Isolate.run(
+            () => sal_wm_ffi
+                .createWalletFromPolyseed(
+                  Pointer.fromAddress(walletManagerPointerAddress),
+                  path: path,
+                  password: password,
+                  mnemonic: seed,
+                  seedOffset: seedOffset,
+                  newWallet: true,
+                  restoreHeight: 0, // ignored by core underlying code
+                  kdfRounds: 1,
+                )
+                .address,
+          ),
+        );
+        break;
 
       case SalviumSeedType.twentyFive:
         walletPointer = Pointer<Void>.fromAddress(
