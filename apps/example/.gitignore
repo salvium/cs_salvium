@@ -45,3 +45,4 @@ app.*.map.json
 /android/app/release
 
 coverage/
+/android/app/.cxx/Debug/1a1k82i4/
