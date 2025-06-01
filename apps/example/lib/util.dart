@@ -70,7 +70,7 @@ String formattedAmount(BigInt value, Type walletType) {
   final int decimalPlaces;
   switch (walletType) {
     case const (SalviumWallet):
-      decimalPlaces = 12;
+      decimalPlaces = 8;
       break;
     // case const (WowneroWallet):
     //   decimalPlaces = 11;
