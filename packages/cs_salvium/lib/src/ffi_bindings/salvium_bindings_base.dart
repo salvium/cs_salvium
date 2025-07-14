@@ -6,7 +6,7 @@ import 'package:ffi/ffi.dart';
 import 'generated_bindings_salvium.g.dart';
 
 String get _libName {
-  if (Platform.isIOS || Platform.isMacOS) {
+  if (Platform.isMacOS) {
     return 'SalviumWallet.framework/SalviumWallet';
   } else if (Platform.isAndroid) {
     return 'libsalvium_libwallet2_api_c.so';
@@ -23,9 +23,11 @@ String get _libName {
 
 FfiSalviumC? _cachedBindings;
 FfiSalviumC get bindings => _cachedBindings ??= FfiSalviumC(
-      DynamicLibrary.open(
-        _libName,
-      ),
+      Platform.isIOS
+          ? DynamicLibrary.process()
+          : DynamicLibrary.open(
+              _libName,
+            ),
     );
 
 final defaultSeparatorStr = ";";
