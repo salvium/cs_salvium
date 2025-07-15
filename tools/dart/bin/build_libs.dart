@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import '../create_framework.dart';
+import '../create_ios_xcframework.dart';
 import '../env.dart';
 import '../util.dart';
 
@@ -21,7 +22,7 @@ void main(List<String> args) async {
 
   final moneroCDir = Directory(envMoneroCDir);
   if (!moneroCDir.existsSync()) {
-    l("Did not find monero_c. Calling prepare_monero_c.dart...");
+    l("Did not find salvium_c. Calling prepare_monero_c.dart...");
     await runAsync(
       "dart",
       [
@@ -89,6 +90,50 @@ void main(List<String> args) async {
       break;
 
     case "ios":
+      final triples = _getTriples("ios");
+      final fwName = "SalviumWallet";
+
+      final dir = Directory(
+        "$builtOutputsDirPath"
+        "${Platform.pathSeparator}Frameworks",
+      )..createSync(
+          recursive: true,
+        );
+
+      // assume only 2 triples, one of which is simulator
+      for (final triple in triples) {
+        final salDylib = "$envMoneroCDir"
+            "${Platform.pathSeparator}release"
+            "${Platform.pathSeparator}salvium"
+            "${Platform.pathSeparator}${triple}_libwallet2_api_c.dylib";
+
+        final isSim = triple.endsWith("ios");
+        await createIosFramework(
+          frameworkName: fwName,
+          pathToDylib: salDylib,
+          targetDirFrameworks:
+              dir.path + Platform.pathSeparator + (isSim ? "sim" : "ios"),
+          isSim: isSim,
+        );
+      }
+
+      await createIosXCFramework(
+        dir,
+        fwName,
+        Directory(
+          "${dir.path}"
+          "${Platform.pathSeparator}ios"
+          "${Platform.pathSeparator}$fwName.framework",
+        ),
+        Directory(
+          "${dir.path}"
+          "${Platform.pathSeparator}sim"
+          "${Platform.pathSeparator}$fwName.framework",
+        ),
+      );
+
+      break;
+
     case "macos":
       final dir = Directory(
         "$builtOutputsDirPath"
@@ -98,25 +143,16 @@ void main(List<String> args) async {
         );
 
       final String salDylib;
-      // final String wowDylib;
       if (platform == "ios") {
         salDylib = "$envMoneroCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}salvium"
             "${Platform.pathSeparator}aarch64-apple-ios_libwallet2_api_c.dylib";
-        // wowDylib = "$envMoneroCDir"
-        //     "${Platform.pathSeparator}release"
-        //     "${Platform.pathSeparator}wownero"
-        //     "${Platform.pathSeparator}aarch64-apple-ios_libwallet2_api_c.dylib";
       } else {
         salDylib = "$envMoneroCDir"
             "${Platform.pathSeparator}release"
             "${Platform.pathSeparator}salvium"
             "${Platform.pathSeparator}aarch64-apple-darwin_libwallet2_api_c.dylib";
-        // wowDylib = "$envMoneroCDir"
-        //     "${Platform.pathSeparator}release"
-        //     "${Platform.pathSeparator}wownero"
-        //     "${Platform.pathSeparator}aarch64-apple-darwin_libwallet2_api_c.dylib";
       }
 
       await createFramework(
@@ -124,11 +160,6 @@ void main(List<String> args) async {
         pathToDylib: salDylib,
         targetDirFrameworks: dir.path,
       );
-      // await createFramework(
-      //   frameworkName: "WowneroWallet",
-      //   pathToDylib: wowDylib,
-      //   targetDirFrameworks: dir.path,
-      // );
 
       break;
 
@@ -168,68 +199,6 @@ void main(List<String> args) async {
               "${Platform.pathSeparator}salvium_libwallet2_api_c.dll",
         ],
       );
-    // await runAsync(
-    //   "cp",
-    //   [
-    //     "$envMoneroCDir"
-    //         "${Platform.pathSeparator}release"
-    //         "${Platform.pathSeparator}wownero"
-    //         "${Platform.pathSeparator}x86_64-w64-mingw32_libwallet2_api_c.dll",
-    //     "${dir.path}"
-    //         "${Platform.pathSeparator}wownero_libwallet2_api_c.dll",
-    //   ],
-    // );
-
-    // final polyPath = "$envMoneroCDir"
-    //     "${Platform.pathSeparator}release"
-    //     "${Platform.pathSeparator}wownero"
-    //     "${Platform.pathSeparator}x86_64-w64-mingw32_libpolyseed.dll";
-    // if (File("$polyPath.xz").existsSync()) {
-    //   await runAsync("unxz", ["-f", "$polyPath.xz"]);
-    // }
-    // await runAsync(
-    //   "cp",
-    //   [
-    //     polyPath,
-    //     "${dir.path}"
-    //         "${Platform.pathSeparator}libpolyseed.dll",
-    //   ],
-    // );
-
-    // final sspPath = "$envMoneroCDir"
-    //     "${Platform.pathSeparator}release"
-    //     "${Platform.pathSeparator}wownero"
-    //     "${Platform.pathSeparator}x86_64-w64-mingw32_libssp-0.dll";
-
-    // if (File("$sspPath.xz").existsSync()) {
-    //   await runAsync("unxz", ["-f", "$sspPath.xz"]);
-    // }
-    // await runAsync(
-    //   "cp",
-    //   [
-    //     sspPath,
-    //     "${dir.path}"
-    //         "${Platform.pathSeparator}libssp-0.dll",
-    //   ],
-    // );
-
-    // final pThreadPath = "$envMoneroCDir"
-    //     "${Platform.pathSeparator}release"
-    //     "${Platform.pathSeparator}wownero"
-    //     "${Platform.pathSeparator}x86_64-w64-mingw32_libwinpthread-1.dll";
-    //
-    // if (File("$pThreadPath.xz").existsSync()) {
-    //   await runAsync("unxz", ["-f", "$pThreadPath.xz"]);
-    // }
-    // await runAsync(
-    //   "cp",
-    //   [
-    //     pThreadPath,
-    //     "${dir.path}"
-    //         "${Platform.pathSeparator}libwinpthread-1.dll",
-    //   ],
-    // );
-    // break;
 
     default:
       throw Exception("Not sure how you got this far tbh");
@@ -259,7 +228,7 @@ List<String> _getTriples(String platform) {
       ];
 
     case "ios":
-      return ["aarch64-apple-ios"];
+      return ["aarch64-apple-ios", "aarch64-apple-iossimulator"];
 
     case "macos":
       return ["aarch64-apple-darwin"];
