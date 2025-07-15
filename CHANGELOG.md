@@ -15,6 +15,34 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`cs_salvium_flutter_libs_ios` - `v1.1.1`](#cs_salvium_flutter_libs_ios---v111)
+ - [`cs_salvium_flutter_libs` - `v1.0.4`](#cs_salvium_flutter_libs---v104)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `cs_salvium_flutter_libs` - `v1.0.4`
+
+---
+
+#### `cs_salvium_flutter_libs_ios` - `v1.1.1`
+
+ - **FIX**(ios): release build crash fix. ([0e54c42f](https://github.com/cypherstack/cs_salvium/commit/0e54c42fd6fd9c94ff225d045b9a1e7c6fbf4757))
+
+
+## 2025-07-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`cs_salvium` - `v1.2.1`](#cs_salvium---v121)
  - [`cs_salvium_flutter_libs_ios` - `v1.1.0`](#cs_salvium_flutter_libs_ios---v110)
  - [`cs_salvium_flutter_libs` - `v1.0.3`](#cs_salvium_flutter_libs---v103)
