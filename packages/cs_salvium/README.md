@@ -54,5 +54,5 @@
    ```
 
 ## Known Limitations
-- No iOS simulator support
+- No x86_64 iOS simulator (or MacOS) support
 - No Android i686 support
