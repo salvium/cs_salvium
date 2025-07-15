@@ -1,3 +1,7 @@
+## 1.2.1
+
+ - ios framework fix
+
 ## 1.2.0
 
  - **FIX**: remove monero and wownero wallets. ([e00a36bd](https://github.com/cypherstack/cs_salvium/commit/e00a36bd7c8a79b1e11fea8495af3d13ae00f826))
