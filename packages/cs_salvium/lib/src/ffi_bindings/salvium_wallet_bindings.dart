@@ -684,6 +684,10 @@ int getTransactionInfoAccount(Pointer<Void> txInfoPointer) {
   return bindings.SALVIUM_TransactionInfo_subaddrAccount(txInfoPointer);
 }
 
+int getTransactionInfoType(Pointer<Void> txInfoPointer) {
+  return bindings.SALVIUM_TransactionInfo_type(txInfoPointer);
+}
+
 Set<int> getTransactionSubaddressIndexes(Pointer<Void> txInfoPointer) {
   final stringPointer = bindings.SALVIUM_TransactionInfo_subaddrIndex(
     txInfoPointer,
@@ -697,6 +701,13 @@ Set<int> getTransactionSubaddressIndexes(Pointer<Void> txInfoPointer) {
 bool getTransactionInfoIsSpend(Pointer<Void> txInfoPointer) {
   // 0 is incoming, 1 is outgoing
   return bindings.SALVIUM_TransactionInfo_direction(txInfoPointer) == 1;
+}
+
+String getTransactionInfoAsset(Pointer<Void> txInfoPointer) {
+  final stringPointer = bindings.SALVIUM_TransactionInfo_asset(
+    txInfoPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
 }
 
 String getTransactionInfoLabel(Pointer<Void> txInfoPointer) {

@@ -48,6 +48,7 @@ class SalviumWallet extends Wallet {
 
   Transaction _transactionFrom(Pointer<Void> infoPointer) {
     return Transaction(
+      asset: sal_ffi.getTransactionInfoAsset(infoPointer),
       displayLabel: sal_ffi.getTransactionInfoLabel(infoPointer),
       description: sal_ffi.getTransactionInfoDescription(infoPointer),
       fee: BigInt.from(sal_ffi.getTransactionInfoFee(infoPointer)),
@@ -63,6 +64,7 @@ class SalviumWallet extends Wallet {
       timeStamp: DateTime.fromMillisecondsSinceEpoch(
         sal_ffi.getTransactionInfoTimestamp(infoPointer) * 1000,
       ),
+      type: sal_ffi.getTransactionInfoType(infoPointer),
       minConfirms: MinConfirms.salvium,
     );
   }
