@@ -20,7 +20,7 @@ void main() async {
       'clone',
       kMoneroCRepo,
       '--branch',
-      'apple-frameworks',
+      'salvium_one',
     ]);
 
     // Change directory to MONERO_C_DIR
