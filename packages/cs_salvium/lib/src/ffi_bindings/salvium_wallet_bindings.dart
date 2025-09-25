@@ -446,6 +446,10 @@ int getBlockHeightForCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.SALVIUM_CoinsInfo_blockHeight(coinsInfoPointer);
 }
 
+int getTypeForCoinsInfo(Pointer<Void> coinsInfoPointer) {
+  return bindings.SALVIUM_CoinsInfo_type(coinsInfoPointer);
+}
+
 bool isUnlockedCoinsInfo(Pointer<Void> coinsInfoPointer) {
   return bindings.SALVIUM_CoinsInfo_unlocked(coinsInfoPointer);
 }
@@ -470,6 +474,13 @@ String getKeyImageForCoinsInfo(Pointer<Void> coinsInfoPointer) {
 
 String getHashForCoinsInfo(Pointer<Void> coinsInfoPointer) {
   final stringPointer = bindings.SALVIUM_CoinsInfo_hash(
+    coinsInfoPointer,
+  ).cast<Utf8>();
+  return convertAndFree(stringPointer);
+}
+
+String getAssetForCoinsInfo(Pointer<Void> coinsInfoPointer) {
+  final stringPointer = bindings.SALVIUM_CoinsInfo_asset(
     coinsInfoPointer,
   ).cast<Utf8>();
   return convertAndFree(stringPointer);

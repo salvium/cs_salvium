@@ -129,7 +129,7 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
     await wallet.connect(
       daemonAddress: daemonAddress,
       trusted: true,
-      useSSL: true,
+      useSSL: false,
     );
 
     return wallet;

@@ -502,6 +502,21 @@ class FfiSalviumC {
       _SALVIUM_TransactionInfo_directionPtr.asFunction<
           int Function(ffi.Pointer<ffi.Void>)>();
 
+  int SALVIUM_TransactionInfo_type(
+    ffi.Pointer<ffi.Void> txInfo_ptr,
+  ) {
+    return _SALVIUM_TransactionInfo_type(
+      txInfo_ptr,
+    );
+  }
+
+  late final _SALVIUM_TransactionInfo_typePtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>)>>(
+          'SALVIUM_TransactionInfo_type');
+  late final _SALVIUM_TransactionInfo_type =
+      _SALVIUM_TransactionInfo_typePtr.asFunction<
+          int Function(ffi.Pointer<ffi.Void>)>();
+
   bool SALVIUM_TransactionInfo_isPending(
     ffi.Pointer<ffi.Void> txInfo_ptr,
   ) {
@@ -605,6 +620,22 @@ class FfiSalviumC {
               ffi.Pointer<ffi.Void>)>>('SALVIUM_TransactionInfo_description');
   late final _SALVIUM_TransactionInfo_description =
       _SALVIUM_TransactionInfo_descriptionPtr.asFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Void>)>();
+
+  ffi.Pointer<ffi.Char> SALVIUM_TransactionInfo_asset(
+    ffi.Pointer<ffi.Void> txInfo_ptr,
+  ) {
+    return _SALVIUM_TransactionInfo_asset(
+      txInfo_ptr,
+    );
+  }
+
+  late final _SALVIUM_TransactionInfo_assetPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Void>)>>('SALVIUM_TransactionInfo_asset');
+  late final _SALVIUM_TransactionInfo_asset =
+      _SALVIUM_TransactionInfo_assetPtr.asFunction<
           ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Void>)>();
 
   ffi.Pointer<ffi.Char> SALVIUM_TransactionInfo_subaddrIndex(
@@ -1223,6 +1254,20 @@ class FfiSalviumC {
   late final _SALVIUM_CoinsInfo_amount = _SALVIUM_CoinsInfo_amountPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
+  int SALVIUM_CoinsInfo_type(
+    ffi.Pointer<ffi.Void> coinsInfo_ptr,
+  ) {
+    return _SALVIUM_CoinsInfo_type(
+      coinsInfo_ptr,
+    );
+  }
+
+  late final _SALVIUM_CoinsInfo_typePtr =
+      _lookup<ffi.NativeFunction<ffi.Uint64 Function(ffi.Pointer<ffi.Void>)>>(
+          'SALVIUM_CoinsInfo_type');
+  late final _SALVIUM_CoinsInfo_type = _SALVIUM_CoinsInfo_typePtr
+      .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
+
   bool SALVIUM_CoinsInfo_rct(
     ffi.Pointer<ffi.Void> coinsInfo_ptr,
   ) {
@@ -1412,6 +1457,21 @@ class FfiSalviumC {
           ffi.Pointer<ffi.Char> Function(
               ffi.Pointer<ffi.Void>)>>('SALVIUM_CoinsInfo_description');
   late final _SALVIUM_CoinsInfo_description = _SALVIUM_CoinsInfo_descriptionPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Void>)>();
+
+  ffi.Pointer<ffi.Char> SALVIUM_CoinsInfo_asset(
+    ffi.Pointer<ffi.Void> coinsInfo_ptr,
+  ) {
+    return _SALVIUM_CoinsInfo_asset(
+      coinsInfo_ptr,
+    );
+  }
+
+  late final _SALVIUM_CoinsInfo_assetPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Void>)>>('SALVIUM_CoinsInfo_asset');
+  late final _SALVIUM_CoinsInfo_asset = _SALVIUM_CoinsInfo_assetPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Void>)>();
 
   int SALVIUM_Coins_count(

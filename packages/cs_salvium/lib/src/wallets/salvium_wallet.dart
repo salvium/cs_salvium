@@ -1014,6 +1014,8 @@ class SalviumWallet extends Wallet {
       for (int i = 0; i < count; i++) {
         final coinInfoPointer = sal_ffi.getCoinInfoPointer(_coinsPointer!, i);
 
+        final asset_type = sal_ffi.getAssetForCoinsInfo(coinInfoPointer);
+        final tx_type = sal_ffi.getTypeForCoinsInfo(coinInfoPointer);
         final hash = sal_ffi.getHashForCoinsInfo(coinInfoPointer);
 
         if (hash.isNotEmpty) {
