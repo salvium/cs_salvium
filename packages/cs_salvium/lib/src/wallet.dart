@@ -403,7 +403,7 @@ abstract class Wallet {
   /// Create a single recipient transaction.
   ///
   /// Returns a [PendingTransaction], required for [commitTx].
-  Future<PendingTransaction> stakeTx({
+  Future<PendingTransaction> createStakeTx({
     required Recipient output,
     required TransactionPriority priority,
     required int accountIndex,

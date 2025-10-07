@@ -1,6 +1,7 @@
 import 'package:cs_salvium/cs_salvium.dart';
 import 'package:flutter/material.dart';
 
+import '../app_config.dart';
 import '../widgets/info_item.dart';
 import 'create_transaction_view.dart';
 import 'create_stake_view.dart';
@@ -195,6 +196,7 @@ class _WalletViewState extends State<WalletView> {
             child: ListView(
               shrinkWrap: true,
               children: [
+                InfoItem(label: "Network Type", value: AppConfig.modeString),
                 InfoItem(label: "Is view only", value: isViewOnly),
                 InfoItem(label: "Connected", value: connected),
                 InfoItem(label: "outputCount", value: outputCount),

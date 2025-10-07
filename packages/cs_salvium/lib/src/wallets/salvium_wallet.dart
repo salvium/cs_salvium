@@ -1179,7 +1179,7 @@ class SalviumWallet extends Wallet {
   }
 
   @override
-  Future<PendingTransaction> stakeTx({
+  Future<PendingTransaction> createStakeTx({
     required Recipient output,
     required TransactionPriority priority,
     required int accountIndex,
