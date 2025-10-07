@@ -26,7 +26,7 @@ class _CreateStakeViewState extends State<CreateStakeView> {
       bool didError = false;
 
       final tx = await showLoading(
-        whileFuture: widget.wallet.stakeTx(
+        whileFuture: widget.wallet.createStakeTx(
           output: Recipient(
             address: widget.wallet.getAddress().value,
             amount: widget.wallet.amountFromString(_amountController.text)!,
