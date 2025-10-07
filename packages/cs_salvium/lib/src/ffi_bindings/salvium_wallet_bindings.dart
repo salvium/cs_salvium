@@ -266,6 +266,43 @@ Pointer<Void> createTransaction(
   }
 }
 
+Pointer<Void> createStakeTransaction(
+  Pointer<Void> walletPointer, {
+  required String address,
+  required String paymentId,
+  required int amount,
+  required int pendingTransactionPriority,
+  required int subaddressAccount,
+  List<String> preferredInputs = const [],
+}) {
+  final addressPointer = address.toNativeUtf8().cast<Char>();
+  final paymentIdPointer = paymentId.toNativeUtf8().cast<Char>();
+  final preferredInputsPointer = preferredInputs
+      .join(
+        defaultSeparatorStr,
+      )
+      .toNativeUtf8()
+      .cast<Char>();
+
+  try {
+    return bindings.SALVIUM_Wallet_createStakeTransaction(
+      walletPointer,
+      addressPointer,
+      paymentIdPointer,
+      amount,
+      0, // mixin count/ring size. Ignored here, core code will use appropriate value
+      pendingTransactionPriority,
+      subaddressAccount,
+      preferredInputsPointer,
+      defaultSeparator,
+    );
+  } finally {
+    calloc.free(addressPointer);
+    calloc.free(paymentIdPointer);
+    calloc.free(preferredInputsPointer);
+  }
+}
+
 Pointer<Void> createTransactionMultiDest(
   Pointer<Void> walletPointer, {
   required List<String> addresses,
