@@ -108,10 +108,11 @@ class _OpenWalletDialogState extends State<OpenWalletDialog> {
     final String daemonAddress;
     switch (type) {
       case "salvium":
-        daemonAddress = "localhost:19081"; // seed01.salvium.io seed02.salvium.io seed03.salvium.io
+        daemonAddress = "localhost:29081"; // seed01.salvium.io seed02.salvium.io seed03.salvium.io
         wallet = await SalviumWallet.loadWallet(
           path: path,
           password: pw,
+          networkType: 1 // testnet
         );
         break;
 

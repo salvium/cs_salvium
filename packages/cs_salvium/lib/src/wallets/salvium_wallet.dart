@@ -1179,6 +1179,60 @@ class SalviumWallet extends Wallet {
   }
 
   @override
+  Future<PendingTransaction> stakeTx({
+    required Recipient output,
+    required TransactionPriority priority,
+    required int accountIndex,
+    List<Output>? preferredInputs,
+    String paymentId = "",
+  }) async {
+    final List<String>? processedInputs;
+    if (preferredInputs != null) {
+      processedInputs = await checkAndProcessInputs(
+        inputs: preferredInputs,
+        sendAmount: output.amount,
+        sweep: false,
+      );
+    } else {
+      processedInputs = null;
+    }
+    final inputsToUse = preferredInputs ?? <Output>[];
+
+    try {
+      final walletPointerAddress = _getWalletPointer().address;
+      final pendingTxPointer = Pointer<Void>.fromAddress(
+        await Isolate.run(() {
+          final tx = sal_ffi.createStakeTransaction(
+            Pointer.fromAddress(walletPointerAddress),
+            address: output.address,
+            paymentId: paymentId,
+            amount: output.amount.toInt(),
+            pendingTransactionPriority: priority.value,
+            subaddressAccount: accountIndex,
+            preferredInputs: inputsToUse.map((e) => e.keyImage).toList(),
+          );
+          return tx.address;
+        }),
+      );
+
+      sal_ffi.checkPendingTransactionStatus(pendingTxPointer);
+
+      return PendingTransaction(
+        amount:
+            BigInt.from(sal_ffi.getPendingTransactionAmount(pendingTxPointer)),
+        fee: BigInt.from(sal_ffi.getPendingTransactionFee(pendingTxPointer)),
+        txid: sal_ffi.getPendingTransactionTxid(pendingTxPointer),
+        hex: sal_ffi.getPendingTransactionHex(pendingTxPointer),
+        pointerAddress: pendingTxPointer.address,
+      );
+    } finally {
+      if (processedInputs != null) {
+        await postProcessInputs(keyImages: processedInputs);
+      }
+    }
+  }
+
+  @override
   Future<PendingTransaction> createTxMultiDest({
     required List<Recipient> outputs,
     required TransactionPriority priority,
