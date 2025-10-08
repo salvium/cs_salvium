@@ -20,7 +20,7 @@ void main() async {
       'clone',
       kMoneroCRepo,
       '--branch',
-      'salvium_one',
+      'wallet_api_carrot_fixes',
     ]);
 
     // Change directory to MONERO_C_DIR
